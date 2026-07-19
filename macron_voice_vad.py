@@ -11,7 +11,7 @@ from collections import deque
 
 class MacronVoiceVAD:
     def __init__(self, sample_rate=16000, chunk_duration=0.03, 
-                 vad_threshold=0.015, silence_timeout=1.5,
+                 vad_threshold=0.015, silence_timeout=0.8,
                  min_speech_duration=0.5, max_recording_duration=10):
         self.sample_rate = sample_rate
         self.chunk_samples = int(sample_rate * chunk_duration)
@@ -50,6 +50,7 @@ class MacronVoiceVAD:
         self.silence_start = None
         self.speech_start = None
         self.energy_history.clear()
+        self._stop_recording = False
         start_time = time.time()
 
         def callback(indata, frames, time_info, status):
@@ -74,6 +75,7 @@ class MacronVoiceVAD:
                         self.silence_start = time.time()
                     elif time.time() - self.silence_start > self.silence_timeout:
                         print("[VAD] Silencio detectado, deteniendo...")
+                        self._stop_recording = True
                         raise sd.CallbackStop()
                 if time.time() - start_time > self.max_recording_duration:
                     print("[VAD] Timeout maximo alcanzado")
@@ -87,7 +89,7 @@ class MacronVoiceVAD:
                 blocksize=self.chunk_samples,
                 callback=callback
             ):
-                while True:
+                while not self._stop_recording:
                     time.sleep(0.1)
         except sd.CallbackStop:
             pass
@@ -200,7 +202,7 @@ class MacronVoiceVAD:
 class MacronVoiceInterface:
     def __init__(self):
         self.vad = MacronVoiceVAD(
-            vad_threshold=0.015,
+            vad_threshold=0.01,
             silence_timeout=1.2,
             min_speech_duration=0.6,
             max_recording_duration=8

@@ -26,7 +26,10 @@ def get_macron():
 
 # Executor de UN SOLO thread para MLX - todas las llamadas al LLM van aqui
 # Esto garantiza que el stream GPU de MLX siempre este en el mismo thread
+
 _llm_executor = ThreadPoolExecutor(max_workers=1)
+
+# Voice interface (lazy loading)
 _voice_interface = None
 _voice_lock = threading.Lock()
 
@@ -224,23 +227,26 @@ function clearChat() {
     messageHistory = [];
 }
 
-async function toggleVoice() { const btn=document.getElementById("voiceBtn");const input=document.getElementById("messageInput");btn.disabled=true;btn.classList.add("recording");btn.title="Grabando...";try{const r=await fetch("/api/voice/transcribe",{method:"POST"});const d=await r.json();console.log("[DEBUG] Voice:",d);if(d.text&&d.text.trim()){input.value=d.text;sendMessage();}}catch(e){console.error("[DEBUG] Voice error:",e);}finally{btn.disabled=false;btn.classList.remove("recording");btn.title="Grabar voz";}}
+async function toggleVoice() {
     const btn = document.getElementById('voiceBtn');
-    if (!isRecording) {
-        btn.classList.add('recording');
-        isRecording = true;
-        try { await fetch('/api/voice/start', {method: 'POST'}); } catch(e) {}
-    } else {
+    const input = document.getElementById('messageInput');
+    btn.disabled = true;
+    btn.classList.add('recording');
+    btn.title = 'Grabando...';
+    try {
+        const response = await fetch('/api/voice/transcribe', {method: 'POST'});
+        const data = await response.json();
+        console.log('[DEBUG] Voice:', data);
+        if (data.text && data.text.trim()) {
+            input.value = data.text;
+            sendMessage();
+        }
+    } catch (e) {
+        console.error('[DEBUG] Voice error:', e);
+    } finally {
+        btn.disabled = false;
         btn.classList.remove('recording');
-        isRecording = false;
-        try {
-            const response = await fetch('/api/voice/stop', {method: 'POST'});
-            const data = await response.json();
-            if (data.text && data.text.trim()) {
-                document.getElementById('messageInput').value = data.text;
-                sendMessage();
-            }
-        } catch(e) {}
+        btn.title = 'Grabar voz';
     }
 }
 document.getElementById('messageInput').focus();
@@ -283,21 +289,20 @@ def chat():
         traceback.print_exc()
         return jsonify({'error': str(e), 'text': 'Error interno del servidor'}), 500
 
-@app.route('/api/voice/start', methods=['POST'])
-def voice_start():
+@app.route('/api/voice/transcribe', methods=['POST'])
+def voice_transcribe():
     try:
+        print('[SERVER] Iniciando grabacion VAD...')
         voice = get_voice_interface()
-        return jsonify({'status': 'recording', 'vad_enabled': True})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/voice/stop', methods=['POST'])
-def voice_stop():
-    try:
-        voice = get_voice_interface()
+        print(f'[SERVER] Voice interface: {voice}')
+        print('[SERVER] Llamando voice.listen()...')
         text = voice.listen()
-        return jsonify({'text': text, 'status': 'stopped'})
+        print(f'[SERVER] Resultado: {repr(text)}')
+        print(f'[SERVER] Transcripcion: {repr(text)}')
+        return jsonify({'text': text, 'status': 'done'})
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e), 'text': ''}), 500
 
 @app.route('/api/status')
@@ -315,4 +320,4 @@ if __name__ == '__main__':
     print('  MACRON UI v3.0 - http://localhost:5004')
     print('  Chat funcional - Estado real - VAD ready')
     print('='*50)
-    app.run(host='0.0.0.0', port=5004, debug=False, threaded=True)
+    app.run(host='0.0.0.0', port=5004, debug=False, threaded=False)
