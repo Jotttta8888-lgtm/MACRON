@@ -1,7 +1,6 @@
 import os, sys, json, time, threading
 from concurrent.futures import ThreadPoolExecutor
 from macron_voice_vad import MacronVoiceInterface
-from macron_wake_whisper import MacronWakeWordWhisper
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask, render_template_string, request, jsonify
@@ -27,10 +26,7 @@ def get_macron():
 
 # Executor de UN SOLO thread para MLX - todas las llamadas al LLM van aqui
 # Esto garantiza que el stream GPU de MLX siempre este en el mismo thread
-
 _llm_executor = ThreadPoolExecutor(max_workers=1)
-
-# Voice interface (lazy loading)
 _voice_interface = None
 _voice_lock = threading.Lock()
 
@@ -41,34 +37,6 @@ def get_voice_interface():
             if _voice_interface is None:
                 _voice_interface = MacronVoiceInterface()
     return _voice_interface
-
-# Wake word listener (lazy loading)
-_wake_listener = None
-_wake_lock = threading.Lock()
-
-def get_wake_listener():
-    global _wake_listener
-    if _wake_listener is None:
-        with _wake_lock:
-            if _wake_listener is None:
-                voice = get_voice_interface()
-                macron = get_macron()
-                _wake_listener = MacronWakeWordWhisper(voice, macron)
-    return _wake_listener
-
-# Wake word listener (lazy loading)
-_wake_listener = None
-_wake_lock = threading.Lock()
-
-def get_wake_listener():
-    global _wake_listener
-    if _wake_listener is None:
-        with _wake_lock:
-            if _wake_listener is None:
-                voice = get_voice_interface()
-                macron = get_macron()
-                _wake_listener = MacronWakeWordWhisper(voice, macron)
-    return _wake_listener
 
 MODULE_STATUS = {
     "RAG": True, "Planning": True, "CoT": True, "Rutinas": True,
@@ -135,8 +103,6 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 .chat-input button:disabled { opacity: 0.5; cursor: not-allowed; }
 .voice-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 .voice-btn.recording { background: var(--danger); color: white; border-color: var(--danger); animation: pulse 1.5s infinite; }
-.wake-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-left: 8px; }
-.wake-btn.listening { background: var(--accent); color: white; border-color: var(--accent); animation: pulse 1.5s infinite; }
 @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,0.4); } 50% { box-shadow: 0 0 0 8px rgba(255,71,87,0); } }
 .clear-btn { font-size: 12px; color: var(--text-muted); background: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
@@ -172,7 +138,6 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
     </div>
     <div class="chat-input">
         <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Grabar voz">&#127908;</button>
-        <button class="wake-btn" id="wakeBtn" onclick="toggleWakeWord()" title="Escucha continua">&#128266;</button>
         <input type="text" id="messageInput" placeholder="Escribe tu mensaje..." onkeypress="if(event.key==='Enter')sendMessage()">
         <button id="sendBtn" onclick="sendMessage()">Enviar</button>
     </div>
@@ -259,44 +224,23 @@ function clearChat() {
     messageHistory = [];
 }
 
-async function toggleWakeWord() {
-    const btn = document.getElementById("wakeBtn");
-    try {
-        const response = await fetch("/api/wake/toggle", {method: "POST"});
-        const data = await response.json();
-        console.log("[DEBUG] Wake:", data);
-        if (data.listening) {
-            btn.classList.add("listening");
-            btn.title = "Escuchando...";
-        } else {
-            btn.classList.remove("listening");
-            btn.title = "Escucha continua";
-        }
-    } catch (e) {
-        console.error("[DEBUG] Wake error:", e);
-    }
-}
-
-async function toggleVoice() {
+async function toggleVoice() { const btn=document.getElementById("voiceBtn");const input=document.getElementById("messageInput");btn.disabled=true;btn.classList.add("recording");btn.title="Grabando...";try{const r=await fetch("/api/voice/transcribe",{method:"POST"});const d=await r.json();console.log("[DEBUG] Voice:",d);if(d.text&&d.text.trim()){input.value=d.text;sendMessage();}}catch(e){console.error("[DEBUG] Voice error:",e);}finally{btn.disabled=false;btn.classList.remove("recording");btn.title="Grabar voz";}}
     const btn = document.getElementById('voiceBtn');
-    const input = document.getElementById('messageInput');
-    btn.disabled = true;
-    btn.classList.add('recording');
-    btn.title = 'Grabando...';
-    try {
-        const response = await fetch('/api/voice/transcribe', {method: 'POST'});
-        const data = await response.json();
-        console.log('[DEBUG] Voice:', data);
-        if (data.text && data.text.trim()) {
-            input.value = data.text;
-            sendMessage();
-        }
-    } catch (e) {
-        console.error('[DEBUG] Voice error:', e);
-    } finally {
-        btn.disabled = false;
+    if (!isRecording) {
+        btn.classList.add('recording');
+        isRecording = true;
+        try { await fetch('/api/voice/start', {method: 'POST'}); } catch(e) {}
+    } else {
         btn.classList.remove('recording');
-        btn.title = 'Grabar voz';
+        isRecording = false;
+        try {
+            const response = await fetch('/api/voice/stop', {method: 'POST'});
+            const data = await response.json();
+            if (data.text && data.text.trim()) {
+                document.getElementById('messageInput').value = data.text;
+                sendMessage();
+            }
+        } catch(e) {}
     }
 }
 document.getElementById('messageInput').focus();
@@ -339,38 +283,23 @@ def chat():
         traceback.print_exc()
         return jsonify({'error': str(e), 'text': 'Error interno del servidor'}), 500
 
-@app.route('/api/voice/transcribe', methods=['POST'])
-def voice_transcribe():
+@app.route('/api/voice/start', methods=['POST'])
+def voice_start():
     try:
-        print('[SERVER] Iniciando grabacion VAD...')
         voice = get_voice_interface()
-        print(f'[SERVER] Voice interface: {voice}')
-        print('[SERVER] Llamando voice.listen()...')
-        text = voice.listen()
-        print(f'[SERVER] Resultado: {repr(text)}')
-        print(f'[SERVER] Transcripcion: {repr(text)}')
-        return jsonify({'text': text, 'status': 'done'})
+        return jsonify({'status': 'recording', 'vad_enabled': True})
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({'error': str(e), 'text': ''}), 500
-
-@app.route('/api/wake/toggle', methods=['POST'])
-def wake_toggle():
-    try:
-        wake = get_wake_listener()
-        if wake.is_listening:
-            wake.stop_listening()
-            return jsonify({'status': 'stopped', 'listening': False})
-        else:
-            wake.start_listening()
-            return jsonify({'status': 'started', 'listening': True})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/wake/toggle', methods=['POST'])
+@app.route('/api/voice/stop', methods=['POST'])
+def voice_stop():
+    try:
+        voice = get_voice_interface()
+        text = voice.listen()
+        return jsonify({'text': text, 'status': 'stopped'})
+    except Exception as e:
+        return jsonify({'error': str(e), 'text': ''}), 500
+
 @app.route('/api/status')
 def status():
     return jsonify({
@@ -386,4 +315,4 @@ if __name__ == '__main__':
     print('  MACRON UI v3.0 - http://localhost:5004')
     print('  Chat funcional - Estado real - VAD ready')
     print('='*50)
-    app.run(host='0.0.0.0', port=5004, debug=False, threaded=False)
+    app.run(host='0.0.0.0', port=5004, debug=False, threaded=True)

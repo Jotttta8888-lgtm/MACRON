@@ -1,16 +1,6 @@
-def _load_macron():
-    from MACRON_FUNCIONALIDADES_v2 import MacronOrchestrator
-    return MacronOrchestrator()
-
-def get_macron():
-    global _macron
-    if _macron is None:
-        with _lock:
-            if _macron is None:
-                future = _llm_executor.submit(_load_macron)
-                _macron = future.result(timeout=120)
-    return _macronimport os, sys, json, time, threading
+import os, sys, json, time, threading
 from concurrent.futures import ThreadPoolExecutor
+from macron_voice_vad import MacronVoiceInterface
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask, render_template_string, request, jsonify
@@ -186,7 +176,7 @@ async function sendMessage() {
     const btn = document.getElementById('sendBtn');
     const text = input.value.trim();
     if (!text) return;
-    input.value = '';
+    input.val '';
     input.disabled = true;
     btn.disabled = true;
     addMessage(text, true);
