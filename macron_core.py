@@ -62,6 +62,7 @@ _mod_encryption = _safe_import("macron_encryption")
 _mod_multiuser = _safe_import("macron_multiuser")
 _mod_calendar = _safe_import("macron_calendar")
 _mod_notes = _safe_import("macron_notes")
+_mod_reminders = _safe_import("macron_reminders")
 _mod_focus = _safe_import("macron_focus")
 _mod_safari = _safe_import("macron_safari")
 _mod_mail = _safe_import("macron_mail")
@@ -612,6 +613,37 @@ class MacronCore:
             try: return _mod_notes.create_note(title, body, folder)
             except Exception as e: logger.warning(f"notes_create error: {e}")
         return {"success": False, "error": "Notes no disponible"}
+
+    # -- REMINDERS
+    def reminders_lists(self):
+        if _mod_reminders and hasattr(_mod_reminders, 'get_lists'):
+            try: return _mod_reminders.get_lists()
+            except Exception as e: logger.warning(f"reminders_lists error: {e}")
+        return []
+
+    def reminders_pending(self, list_name="Recordatorios", limit=20):
+        if _mod_reminders and hasattr(_mod_reminders, 'get_reminders'):
+            try: return _mod_reminders.get_reminders(list_name, False, limit)
+            except Exception as e: logger.warning(f"reminders_pending error: {e}")
+        return []
+
+    def reminders_completed(self, list_name="Recordatorios", limit=20):
+        if _mod_reminders and hasattr(_mod_reminders, 'get_reminders'):
+            try: return _mod_reminders.get_reminders(list_name, True, limit)
+            except Exception as e: logger.warning(f"reminders_completed error: {e}")
+        return []
+
+    def reminders_create(self, title, list_name="Recordatorios", due_date=None, notes="", priority=0):
+        if _mod_reminders and hasattr(_mod_reminders, 'create_reminder'):
+            try: return _mod_reminders.create_reminder(title, list_name, due_date, notes, priority)
+            except Exception as e: logger.warning(f"reminders_create error: {e}")
+        return {"success": False, "error": "Reminders no disponible"}
+
+    def reminders_complete(self, title, list_name="Recordatorios"):
+        if _mod_reminders and hasattr(_mod_reminders, 'complete_reminder'):
+            try: return _mod_reminders.complete_reminder(title, list_name)
+            except Exception as e: logger.warning(f"reminders_complete error: {e}")
+        return {"success": False, "error": "Reminders no disponible"}
 
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None

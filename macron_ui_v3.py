@@ -170,6 +170,8 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="showCalendarUpcoming()">&#128467; Proximos</button>
         <button class="qa-btn" onclick="showNotesList()">&#128221; Notas</button>
         <button class="qa-btn" onclick="showNotesSearch()">&#128270; Buscar Notas</button>
+        <button class="qa-btn" onclick="showRemindersPending()">&#9989; Pendientes</button>
+        <button class="qa-btn" onclick="showRemindersCreate()">&#10133; Nuevo Recordatorio</button>
     </div>
 </div>
 <div class="main">
@@ -935,6 +937,30 @@ def notes_content_api():
         data = request.get_json()
         title = data.get('title', '')
         result = core.notes_content(title)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/reminders/pending')
+def reminders_pending_api():
+    try:
+        core = get_macron_core()
+        list_name = request.args.get('list', 'Recordatorios')
+        limit = request.args.get('limit', 10, type=int)
+        reminders = core.reminders_pending(list_name, limit)
+        return jsonify({'reminders': reminders, 'count': len(reminders)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'reminders': []}), 500
+
+@app.route('/api/reminders/create', methods=['POST'])
+def reminders_create_api():
+    try:
+        core = get_macron_core()
+        data = request.get_json()
+        title = data.get('title', '')
+        list_name = data.get('list', 'Recordatorios')
+        notes = data.get('notes', '')
+        result = core.reminders_create(title, list_name, notes=notes)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
