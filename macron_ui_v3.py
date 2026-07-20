@@ -163,6 +163,9 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="saveForLater()">&#128278; Guardar para leer</button>
         <button class="qa-btn" onclick="showMailInbox()">&#128231; Mail Inbox</button>
         <button class="qa-btn" onclick="summarizeMail()">&#128240; Resumir Mail</button>
+        <button class="qa-btn" onclick="showFinderDesktop()">&#128193; Desktop</button>
+        <button class="qa-btn" onclick="showFinderDownloads()">&#128229; Downloads</button>
+        <button class="qa-btn" onclick="showFinderRecent()">&#128338; Recientes</button>
     </div>
 </div>
 <div class="main">
@@ -493,6 +496,70 @@ async function summarizeMail() {
     }
 }
 
+async function showFinderDesktop() {
+    try {
+        const response = await fetch('/api/finder/desktop');
+        const data = await response.json();
+        console.log('[DEBUG] Desktop:', data);
+        let text = '📁 Desktop (' + data.count + ' archivos):\n\n';
+        if (data.files && data.files.length) {
+            data.files.slice(0, 10).forEach(f => {
+                const icon = f.is_dir ? '📂' : '📄';
+                text += icon + ' ' + f.name + '\n';
+            });
+            if (data.files.length > 10) text += '\n... y ' + (data.files.length - 10) + ' mas';
+        } else {
+            text += 'Desktop vacio.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Finder error:', e);
+        addMessage('Error accediendo a Desktop', false, true);
+    }
+}
+
+async function showFinderDownloads() {
+    try {
+        const response = await fetch('/api/finder/downloads');
+        const data = await response.json();
+        console.log('[DEBUG] Downloads:', data);
+        let text = '📥 Downloads (' + data.count + ' archivos):\n\n';
+        if (data.files && data.files.length) {
+            data.files.slice(0, 10).forEach(f => {
+                const icon = f.is_dir ? '📂' : '📄';
+                text += icon + ' ' + f.name + '\n';
+            });
+            if (data.files.length > 10) text += '\n... y ' + (data.files.length - 10) + ' mas';
+        } else {
+            text += 'Downloads vacio.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Finder error:', e);
+        addMessage('Error accediendo a Downloads', false, true);
+    }
+}
+
+async function showFinderRecent() {
+    try {
+        const response = await fetch('/api/finder/recent?limit=10');
+        const data = await response.json();
+        console.log('[DEBUG] Recent:', data);
+        let text = '🕐 Archivos recientes (' + data.count + '):\n\n';
+        if (data.files && data.files.length) {
+            data.files.forEach(f => {
+                text += '📄 ' + f.name + '\n';
+            });
+        } else {
+            text += 'No hay archivos recientes.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Finder error:', e);
+        addMessage('Error accediendo a recientes', false, true);
+    }
+}
+
 refreshStatus();
 document.getElementById('messageInput').focus();
 </script>
@@ -759,6 +826,46 @@ def mail_search():
         limit = data.get('limit', 10)
         core = get_macron_core()
         results = core.mail_search(query, limit)
+        return jsonify({'results': results, 'count': len(results)})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/finder/desktop')
+def finder_desktop():
+    try:
+        core = get_macron_core()
+        files = core.finder_desktop()
+        return jsonify({'files': files, 'count': len(files)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'files': []}), 500
+
+@app.route('/api/finder/downloads')
+def finder_downloads():
+    try:
+        core = get_macron_core()
+        files = core.finder_downloads()
+        return jsonify({'files': files, 'count': len(files)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'files': []}), 500
+
+@app.route('/api/finder/recent')
+def finder_recent():
+    try:
+        core = get_macron_core()
+        limit = request.args.get('limit', 10, type=int)
+        files = core.finder_recent(limit)
+        return jsonify({'files': files, 'count': len(files)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'files': []}), 500
+
+@app.route('/api/finder/search', methods=['POST'])
+def finder_search():
+    try:
+        data = request.get_json()
+        query = data.get('query', '')
+        limit = data.get('limit', 20)
+        core = get_macron_core()
+        results = core.finder_search(query, limit)
         return jsonify({'results': results, 'count': len(results)})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

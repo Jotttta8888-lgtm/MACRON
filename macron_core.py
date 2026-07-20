@@ -64,6 +64,7 @@ _mod_calendar = _safe_import("macron_calendar")
 _mod_focus = _safe_import("macron_focus")
 _mod_safari = _safe_import("macron_safari")
 _mod_mail = _safe_import("macron_mail")
+_mod_finder = _safe_import("macron_finder")
 
 # ── CLASE PRINCIPAL: API UNIFICADA ──────────────────────────────
 class MacronCore:
@@ -110,6 +111,7 @@ class MacronCore:
             "focus": _mod_focus is not None,
             "safari": _mod_safari is not None,
             "mail": _mod_mail is not None,
+            "finder": _mod_finder is not None,
         }
         for name, available in self.modules.items():
             if available:
@@ -514,6 +516,64 @@ class MacronCore:
             except Exception as e:
                 logger.warning(f"mail_send error: {e}")
         return {"error": "Mail no disponible"}
+
+
+    # ── FINDER ───────────────────────────────────────────────────────
+    def finder_desktop(self):
+        if _mod_finder and hasattr(_mod_finder, 'get_desktop_files'):
+            try:
+                return _mod_finder.get_desktop_files()
+            except Exception as e:
+                logger.warning(f"finder_desktop error: {e}")
+        return []
+
+    def finder_downloads(self):
+        if _mod_finder and hasattr(_mod_finder, 'get_downloads'):
+            try:
+                return _mod_finder.get_downloads()
+            except Exception as e:
+                logger.warning(f"finder_downloads error: {e}")
+        return []
+
+    def finder_search(self, query, limit=20):
+        if _mod_finder and hasattr(_mod_finder, 'search_files'):
+            try:
+                return _mod_finder.search_files(query, limit=limit)
+            except Exception as e:
+                logger.warning(f"finder_search error: {e}")
+        return []
+
+    def finder_recent(self, limit=10):
+        if _mod_finder and hasattr(_mod_finder, 'get_recent_files'):
+            try:
+                return _mod_finder.get_recent_files(limit)
+            except Exception as e:
+                logger.warning(f"finder_recent error: {e}")
+        return []
+
+    def finder_open(self, path):
+        if _mod_finder and hasattr(_mod_finder, 'open_file'):
+            try:
+                return _mod_finder.open_file(path)
+            except Exception as e:
+                logger.warning(f"finder_open error: {e}")
+        return {"success": False, "error": "Finder no disponible"}
+
+    def finder_reveal(self, path):
+        if _mod_finder and hasattr(_mod_finder, 'reveal_in_finder'):
+            try:
+                return _mod_finder.reveal_in_finder(path)
+            except Exception as e:
+                logger.warning(f"finder_reveal error: {e}")
+        return {"success": False, "error": "Finder no disponible"}
+
+    def finder_info(self, path):
+        if _mod_finder and hasattr(_mod_finder, 'get_file_info'):
+            try:
+                return _mod_finder.get_file_info(path)
+            except Exception as e:
+                logger.warning(f"finder_info error: {e}")
+        return {"error": "Finder no disponible"}
 
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None
