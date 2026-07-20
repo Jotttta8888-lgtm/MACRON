@@ -63,6 +63,7 @@ _mod_multiuser = _safe_import("macron_multiuser")
 _mod_calendar = _safe_import("macron_calendar")
 _mod_notes = _safe_import("macron_notes")
 _mod_reminders = _safe_import("macron_reminders")
+_mod_agent_productivity = _safe_import("macron_agent_productivity")
 _mod_focus = _safe_import("macron_focus")
 _mod_safari = _safe_import("macron_safari")
 _mod_mail = _safe_import("macron_mail")
@@ -644,6 +645,23 @@ class MacronCore:
             try: return _mod_reminders.complete_reminder(title, list_name)
             except Exception as e: logger.warning(f"reminders_complete error: {e}")
         return {"success": False, "error": "Reminders no disponible"}
+
+    # -- PRODUCTIVITY AGENT
+    def agent_daily_summary(self):
+        if _mod_agent_productivity and hasattr(_mod_agent_productivity, 'ProductivityAgent'):
+            try:
+                agent = _mod_agent_productivity.ProductivityAgent(self)
+                return agent.daily_summary()
+            except Exception as e: logger.warning(f'agent_daily_summary error: {e}')
+        return {'error': 'Agente no disponible'}
+
+    def agent_suggestions(self):
+        if _mod_agent_productivity and hasattr(_mod_agent_productivity, 'ProductivityAgent'):
+            try:
+                agent = _mod_agent_productivity.ProductivityAgent(self)
+                return agent.suggest_actions()
+            except Exception as e: logger.warning(f'agent_suggestions error: {e}')
+        return []
 
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None

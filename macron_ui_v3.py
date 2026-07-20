@@ -172,6 +172,7 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="showNotesSearch()">&#128270; Buscar Notas</button>
         <button class="qa-btn" onclick="showRemindersPending()">&#9989; Pendientes</button>
         <button class="qa-btn" onclick="showRemindersCreate()">&#10133; Nuevo Recordatorio</button>
+        <button class="qa-btn" onclick="showAgentSummary()">&#129302; Resumen Diario</button>
     </div>
 </div>
 <div class="main">
@@ -962,6 +963,15 @@ def reminders_create_api():
         notes = data.get('notes', '')
         result = core.reminders_create(title, list_name, notes=notes)
         return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/agent/summary')
+def agent_summary_api():
+    try:
+        core = get_macron_core()
+        summary = core.agent_daily_summary()
+        return jsonify(summary)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
