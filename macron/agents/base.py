@@ -81,6 +81,16 @@ class BaseAgent(ABC):
         self._save_json(self._memory_file, {})
         self._save_json(self._history_file, [])
         return True
+
+    def _get_adapter(self, name):
+        """Obtiene un adapter del engine."""
+        try:
+            from macron.core.engine import get_engine
+            engine = get_engine()
+            return engine.registry.get(name)
+        except Exception as e:
+            return None
+
     @abstractmethod
     def info(self):
         pass

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MACRON v3.0</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="sidebar">
+    <div><h1>MACRON</h1><div class="version" id="versionText">v3.0 &middot; Dual Brain</div></div>
+    <div class="hardware">
+        <div class="hw-item"><span class="hw-label">Apple Silicon</span><span class="hw-value" id="hwChip">Detectando...</span></div>
+        <div class="hw-item"><span class="hw-label">Neural Engine</span><span class="hw-value">ANE ON</span></div>
+        <div class="hw-item"><span class="hw-label">Second Brain</span><span class="hw-value">FAISS</span></div>
+        <div class="hw-item"><span class="hw-label">Modulos</span><span class="hw-value" id="moduleCount">Cargando...</span></div>
+    </div>
+    <div class="modules-section"><h3>Modulos Activos</h3><div class="modules-grid" id="modulesGrid">{{ modules_html | safe }}</div></div>
+    <div class="quick-actions">
+        <h3 style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Acciones Rapidas</h3>
+        <button class="qa-btn" onclick="sendQuick('resumen diario')">&#129302; Resumen Diario</button>
+        <button class="qa-btn" onclick="sendQuick('monitoreo')">&#128065; Monitoreo</button>
+        <button class="qa-btn" onclick="showSafariTabs()">&#128279; Safari Tabs</button>
+        <button class="qa-btn" onclick="showMailInbox()">&#128231; Mail Inbox</button>
+        <button class="qa-btn" onclick="showFinderDesktop()">&#128193; Desktop</button>
+        <button class="qa-btn" onclick="showCalendarToday()">&#128197; Hoy</button>
+        <button class="qa-btn" onclick="showNotesList()">&#128221; Notas</button>
+        <button class="qa-btn" onclick="showRemindersPending()">&#9989; Pendientes</button>
+        <button class="qa-btn" onclick="clearChat()">&#128465; Limpiar Chat</button>
+    </div>
+</div>
+<div class="main">
+    <div class="chat-header">
+        <h2>Chat con MACRON v3.0</h2>
+        <div style="display:flex;gap:10px;align-items:center;">
+            <span class="status-badge" id="statusBadge"><span class="status-dot on"></span>En linea</span>
+            <button class="clear-btn" onclick="clearChat()">Limpiar</button>
+        </div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="empty-state" id="emptyState">
+            <h3>Bienvenido a MACRON v3.0</h3>
+            <p>Dual Brain Architecture. Escribe un mensaje para comenzar.</p>
+        </div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Escribe tu mensaje..." onkeypress="if(event.key==='Enter')sendMessage()">
+        <button id="sendBtn" onclick="sendMessage()">Enviar</button>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -29,6 +29,12 @@
       "user": "Hola MACRON",
       "agent": "Hola! Soy MACRON, tu asistente para macOS. Estoy listo para ayudarte con productividad, calendario, notas y mas.",
       "context": {}
+    },
+    {
+      "timestamp": "2026-07-20T14:47:05.863142",
+      "user": "Hola",
+      "agent": "Hola! Soy MACRON, tu asistente para macOS. Estoy listo para ayudarte con productividad, calendario, notas y mas.",
+      "context": {}
     }
   ],
   "facts": {},
