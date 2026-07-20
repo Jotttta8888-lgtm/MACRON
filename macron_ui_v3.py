@@ -161,6 +161,8 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="showSafariTabs()">&#128279; Safari Tabs</button>
         <button class="qa-btn" onclick="summarizePage()">&#128240; Resumir Pagina</button>
         <button class="qa-btn" onclick="saveForLater()">&#128278; Guardar para leer</button>
+        <button class="qa-btn" onclick="showMailInbox()">&#128231; Mail Inbox</button>
+        <button class="qa-btn" onclick="summarizeMail()">&#128240; Resumir Mail</button>
     </div>
 </div>
 <div class="main">
@@ -451,6 +453,46 @@ async function saveForLater() {
     }
 }
 
+async function showMailInbox() {
+    try {
+        const response = await fetch('/api/mail/inbox?limit=5');
+        const data = await response.json();
+        console.log('[DEBUG] Mail inbox:', data);
+        let text = '📧 Mail - ' + data.count + ' emails:\n\n';
+        if (data.emails && data.emails.length) {
+            data.emails.forEach((e, i) => {
+                const status = e.read ? '✅' : '🔴';
+                text += status + ' ' + e.subject + '\n';
+                text += '   De: ' + e.sender + '\n\n';
+            });
+        } else {
+            text += 'No hay emails.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Mail error:', e);
+        addMessage('Error accediendo a Mail', false, true);
+    }
+}
+
+async function summarizeMail() {
+    try {
+        addMessage('🤖 Analizando emails no leidos...', false);
+        const response = await fetch('/api/mail/summarize');
+        const data = await response.json();
+        console.log('[DEBUG] Mail summary:', data);
+        if (data.error) {
+            addMessage('Error: ' + data.error, false, true);
+        } else {
+            let text = '📧 Resumen de Mail (' + data.count + ' no leidos):\n\n';
+            text += data.summary;
+            addMessage(text, false);
+        }
+    } catch (e) {
+        console.error('[DEBUG] Mail summarize error:', e);
+    }
+}
+
 refreshStatus();
 document.getElementById('messageInput').focus();
 </script>
@@ -678,6 +720,46 @@ def safari_open():
         core = get_macron_core()
         result = core.safari_open_url(url)
         return jsonify({'success': True, 'result': result})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/mail/inbox')
+def mail_inbox():
+    try:
+        core = get_macron_core()
+        limit = request.args.get('limit', 10, type=int)
+        emails = core.mail_get_inbox(limit)
+        return jsonify({'emails': emails, 'count': len(emails)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'emails': []}), 500
+
+@app.route('/api/mail/unread')
+def mail_unread():
+    try:
+        core = get_macron_core()
+        count = core.mail_get_unread_count()
+        return jsonify({'unread_count': count})
+    except Exception as e:
+        return jsonify({'error': str(e), 'unread_count': 0}), 500
+
+@app.route('/api/mail/summarize')
+def mail_summarize():
+    try:
+        core = get_macron_core()
+        result = core.mail_summarize()
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e), 'summary': ''}), 500
+
+@app.route('/api/mail/search', methods=['POST'])
+def mail_search():
+    try:
+        data = request.get_json()
+        query = data.get('query', '')
+        limit = data.get('limit', 10)
+        core = get_macron_core()
+        results = core.mail_search(query, limit)
+        return jsonify({'results': results, 'count': len(results)})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

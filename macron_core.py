@@ -63,6 +63,7 @@ _mod_multiuser = _safe_import("macron_multiuser")
 _mod_calendar = _safe_import("macron_calendar")
 _mod_focus = _safe_import("macron_focus")
 _mod_safari = _safe_import("macron_safari")
+_mod_mail = _safe_import("macron_mail")
 
 # ── CLASE PRINCIPAL: API UNIFICADA ──────────────────────────────
 class MacronCore:
@@ -108,6 +109,7 @@ class MacronCore:
             "calendar": _mod_calendar is not None,
             "focus": _mod_focus is not None,
             "safari": _mod_safari is not None,
+            "mail": _mod_mail is not None,
         }
         for name, available in self.modules.items():
             if available:
@@ -470,6 +472,48 @@ class MacronCore:
             except Exception as e:
                 logger.warning(f"safari_domain_summary error: {e}")
         return []
+
+
+    # ── MAIL ───────────────────────────────────────────────────────
+    def mail_get_inbox(self, limit=20):
+        if _mod_mail and hasattr(_mod_mail, 'get_inbox'):
+            try:
+                return _mod_mail.get_inbox(limit)
+            except Exception as e:
+                logger.warning(f"mail_get_inbox error: {e}")
+        return []
+
+    def mail_get_unread_count(self):
+        if _mod_mail and hasattr(_mod_mail, 'get_unread_count'):
+            try:
+                return _mod_mail.get_unread_count()
+            except Exception as e:
+                logger.warning(f"mail_unread error: {e}")
+        return 0
+
+    def mail_search(self, query, limit=10):
+        if _mod_mail and hasattr(_mod_mail, 'search_mail'):
+            try:
+                return _mod_mail.search_mail(query, limit)
+            except Exception as e:
+                logger.warning(f"mail_search error: {e}")
+        return []
+
+    def mail_summarize(self, limit=5):
+        if _mod_mail and hasattr(_mod_mail, 'summarize_inbox'):
+            try:
+                return _mod_mail.summarize_inbox(self, limit)
+            except Exception as e:
+                logger.warning(f"mail_summarize error: {e}")
+        return {"summary": "Mail no disponible", "count": 0}
+
+    def mail_send(self, to_address, subject, body):
+        if _mod_mail and hasattr(_mod_mail, 'send_email'):
+            try:
+                return _mod_mail.send_email(to_address, subject, body)
+            except Exception as e:
+                logger.warning(f"mail_send error: {e}")
+        return {"error": "Mail no disponible"}
 
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None
