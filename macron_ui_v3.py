@@ -158,6 +158,9 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="exportChat()">&#128228; Exportar Chat</button>
         <button class="qa-btn" onclick="clearChat()">&#128465; Limpiar Chat</button>
         <button class="qa-btn" onclick="refreshStatus()">&#128260; Actualizar Estado</button>
+        <button class="qa-btn" onclick="showSafariTabs()">&#128279; Safari Tabs</button>
+        <button class="qa-btn" onclick="summarizePage()">&#128240; Resumir Pagina</button>
+        <button class="qa-btn" onclick="saveForLater()">&#128278; Guardar para leer</button>
     </div>
 </div>
 <div class="main">
@@ -388,6 +391,66 @@ async function refreshStatus() {
     }
 }
 
+async function showSafariTabs() {
+    try {
+        const response = await fetch('/api/safari/tabs');
+        const data = await response.json();
+        console.log('[DEBUG] Safari tabs:', data);
+        let text = '🌐 Safari - ' + data.count + ' pestanas:\n\n';
+        if (data.active) {
+            text += '👉 ACTIVA: ' + data.active.title + '\n' + data.active.url + '\n\n';
+        }
+        if (data.tabs && data.tabs.length) {
+            data.tabs.slice(0, 10).forEach((t, i) => {
+                text += (i + 1) + '. ' + t.title + '\n   ' + t.url + '\n';
+            });
+            if (data.tabs.length > 10) text += '\n... y ' + (data.tabs.length - 10) + ' mas';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Safari error:', e);
+        addMessage('Error accediendo a Safari', false, true);
+    }
+}
+
+async function summarizePage() {
+    try {
+        addMessage('🤖 Analizando pagina activa...', false);
+        const response = await fetch('/api/safari/summarize');
+        const data = await response.json();
+        console.log('[DEBUG] Summary:', data);
+        if (data.error) {
+            addMessage('Error: ' + data.error, false, true);
+        } else {
+            let text = '📝 Resumen de: ' + (data.title || 'Pagina actual') + '\n';
+            text += '🔗 ' + (data.url || '') + '\n\n';
+            text += data.summary;
+            addMessage(text, false);
+        }
+    } catch (e) {
+        console.error('[DEBUG] Summarize error:', e);
+    }
+}
+
+async function saveForLater() {
+    try {
+        const response = await fetch('/api/safari/save', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({notes: 'Guardado desde MACRON UI'})
+        });
+        const data = await response.json();
+        console.log('[DEBUG] Save:', data);
+        if (data.success) {
+            addMessage('✅ Pagina guardada para leer despues. Total: ' + data.total_saved, false);
+        } else {
+            addMessage('⚠️ ' + (data.error || 'No se pudo guardar'), false, true);
+        }
+    } catch (e) {
+        console.error('[DEBUG] Save error:', e);
+    }
+}
+
 refreshStatus();
 document.getElementById('messageInput').focus();
 </script>
@@ -557,6 +620,66 @@ def notify():
         return jsonify({'success': result})
     except Exception as e:
         return jsonify({'error': str(e), 'success': False}), 500
+
+@app.route('/api/safari/tabs')
+def safari_tabs():
+    try:
+        core = get_macron_core()
+        tabs = core.safari_get_tabs()
+        active = core.safari_get_active_tab()
+        return jsonify({'tabs': tabs, 'active': active, 'count': len(tabs)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'tabs': [], 'active': None}), 500
+
+@app.route('/api/safari/summarize')
+def safari_summarize():
+    try:
+        core = get_macron_core()
+        result = core.safari_summarize()
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e), 'summary': ''}), 500
+
+@app.route('/api/safari/search', methods=['POST'])
+def safari_search():
+    try:
+        data = request.get_json()
+        query = data.get('query', '')
+        core = get_macron_core()
+        result = core.safari_search(query)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/safari/save', methods=['POST'])
+def safari_save():
+    try:
+        data = request.get_json() or {}
+        core = get_macron_core()
+        result = core.safari_save(notes=data.get('notes', ''))
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e), 'success': False}), 500
+
+@app.route('/api/safari/readlater')
+def safari_readlater():
+    try:
+        core = get_macron_core()
+        items = core.safari_read_later_list()
+        return jsonify({'items': items, 'count': len(items)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'items': []}), 500
+
+@app.route('/api/safari/open', methods=['POST'])
+def safari_open():
+    try:
+        data = request.get_json()
+        url = data.get('url', '')
+        core = get_macron_core()
+        result = core.safari_open_url(url)
+        return jsonify({'success': True, 'result': result})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     print('='*50)

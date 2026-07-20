@@ -62,6 +62,7 @@ _mod_encryption = _safe_import("macron_encryption")
 _mod_multiuser = _safe_import("macron_multiuser")
 _mod_calendar = _safe_import("macron_calendar")
 _mod_focus = _safe_import("macron_focus")
+_mod_safari = _safe_import("macron_safari")
 
 # ── CLASE PRINCIPAL: API UNIFICADA ──────────────────────────────
 class MacronCore:
@@ -106,6 +107,7 @@ class MacronCore:
             "multiuser": _mod_multiuser is not None,
             "calendar": _mod_calendar is not None,
             "focus": _mod_focus is not None,
+            "safari": _mod_safari is not None,
         }
         for name, available in self.modules.items():
             if available:
@@ -385,6 +387,89 @@ class MacronCore:
             except Exception as e:
                 logger.warning(f"siri_send error: {e}")
         return {"error": "Siri no disponible"}
+
+
+    # ── SAFARI ───────────────────────────────────────────────────
+    def safari_get_tabs(self):
+        """Lista pestanas de Safari."""
+        if _mod_safari and hasattr(_mod_safari, 'get_tabs'):
+            try:
+                return _mod_safari.get_tabs()
+            except Exception as e:
+                logger.warning(f"safari_get_tabs error: {e}")
+        return []
+
+    def safari_get_active_tab(self):
+        """Pestana activa de Safari."""
+        if _mod_safari and hasattr(_mod_safari, 'get_active_tab'):
+            try:
+                return _mod_safari.get_active_tab()
+            except Exception as e:
+                logger.warning(f"safari_get_active_tab error: {e}")
+        return None
+
+    def safari_summarize(self):
+        """Resume pagina activa."""
+        if _mod_safari and hasattr(_mod_safari, 'summarize_page'):
+            try:
+                return _mod_safari.summarize_page(self)
+            except Exception as e:
+                logger.warning(f"safari_summarize error: {e}")
+        return {"error": "Safari no disponible", "summary": ""}
+
+    def safari_search(self, query):
+        """Busca en pagina activa."""
+        if _mod_safari and hasattr(_mod_safari, 'search_in_page'):
+            try:
+                return _mod_safari.search_in_page(query)
+            except Exception as e:
+                logger.warning(f"safari_search error: {e}")
+        return {"found": False}
+
+    def safari_save(self, notes=""):
+        """Guarda pagina para leer despues."""
+        if _mod_safari and hasattr(_mod_safari, 'save_for_later'):
+            try:
+                return _mod_safari.save_for_later(notes=notes)
+            except Exception as e:
+                logger.warning(f"safari_save error: {e}")
+        return {"success": False, "error": "Safari no disponible"}
+
+    def safari_read_later_list(self):
+        """Lista URLs guardadas."""
+        if _mod_safari and hasattr(_mod_safari, 'get_read_later_list'):
+            try:
+                return _mod_safari.get_read_later_list()
+            except Exception as e:
+                logger.warning(f"safari_read_later_list error: {e}")
+        return []
+
+    def safari_open_url(self, url):
+        """Abre URL en Safari."""
+        if _mod_safari and hasattr(_mod_safari, 'open_url'):
+            try:
+                return _mod_safari.open_url(url)
+            except Exception as e:
+                logger.warning(f"safari_open_url error: {e}")
+        return {"error": "Safari no disponible"}
+
+    def safari_close_tab(self):
+        """Cierra pestana activa."""
+        if _mod_safari and hasattr(_mod_safari, 'close_tab'):
+            try:
+                return _mod_safari.close_tab()
+            except Exception as e:
+                logger.warning(f"safari_close_tab error: {e}")
+        return {"error": "Safari no disponible"}
+
+    def safari_domain_summary(self):
+        """Resumen de dominios abiertos."""
+        if _mod_safari and hasattr(_mod_safari, 'get_domain_summary'):
+            try:
+                return _mod_safari.get_domain_summary()
+            except Exception as e:
+                logger.warning(f"safari_domain_summary error: {e}")
+        return []
 
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None
