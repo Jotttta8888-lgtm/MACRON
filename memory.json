@@ -23,6 +23,12 @@
       "user": "Adios",
       "agent": "¡Hasta luego! Guardando nuestra conversacion en memoria... 👋",
       "context": {}
+    },
+    {
+      "timestamp": "2026-07-20T14:24:23.096510",
+      "user": "Hola MACRON",
+      "agent": "Hola! Soy MACRON, tu asistente para macOS. Estoy listo para ayudarte con productividad, calendario, notas y mas.",
+      "context": {}
     }
   ],
   "facts": {},
