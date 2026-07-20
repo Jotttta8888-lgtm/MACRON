@@ -173,6 +173,7 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="showRemindersPending()">&#9989; Pendientes</button>
         <button class="qa-btn" onclick="showRemindersCreate()">&#10133; Nuevo Recordatorio</button>
         <button class="qa-btn" onclick="showAgentSummary()">&#129302; Resumen Diario</button>
+        <button class="qa-btn" onclick="showMonitorReport()">&#128065; Monitoreo</button>
     </div>
 </div>
 <div class="main">
@@ -972,6 +973,15 @@ def agent_summary_api():
         core = get_macron_core()
         summary = core.agent_daily_summary()
         return jsonify(summary)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/monitor/report')
+def monitor_report_api():
+    try:
+        core = get_macron_core()
+        report = core.monitor_report()
+        return jsonify(report)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
