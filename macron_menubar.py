@@ -4,9 +4,9 @@ import os
 
 class MACRONMenuBar(rumps.App):
     def __init__(self):
-        # Usar icono si existe
+        # Usar icono original (no template)
         icon_path = os.path.expanduser("~/Documents/MACRON/icon_1024x1024.png")
-        super().__init__("MACRON", title="M", icon=icon_path)
+        super().__init__("MACRON", title=None, icon=icon_path, template=False)
         self.menu = [
             "Abrir MACRON",
             "Estado del servidor",
@@ -49,7 +49,7 @@ class MACRONMenuBar(rumps.App):
     
     @rumps.clicked("Acerca de MACRON")
     def about(self, _):
-        rumps.alert("MACRON v4.2", "Agente IA local para macOS\nApple Silicon / MLX\n\nDesarrollado por Juan Camilo")
+        rumps.alert("MACRON v4.3", "Agente IA local para macOS\nApple Silicon / MLX\n\nDesarrollado por Juan Camilo")
     
     @rumps.clicked("Salir")
     def quit(self, _):
