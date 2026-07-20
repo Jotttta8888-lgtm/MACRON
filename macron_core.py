@@ -61,6 +61,7 @@ _mod_offline = _safe_import("macron_offline")
 _mod_encryption = _safe_import("macron_encryption")
 _mod_multiuser = _safe_import("macron_multiuser")
 _mod_calendar = _safe_import("macron_calendar")
+_mod_notes = _safe_import("macron_notes")
 _mod_focus = _safe_import("macron_focus")
 _mod_safari = _safe_import("macron_safari")
 _mod_mail = _safe_import("macron_mail")
@@ -574,6 +575,43 @@ class MacronCore:
             except Exception as e:
                 logger.warning(f"finder_info error: {e}")
         return {"error": "Finder no disponible"}
+
+    # ── NOTES
+    def notes_accounts(self):
+        if _mod_notes and hasattr(_mod_notes, 'get_accounts'):
+            try: return _mod_notes.get_accounts()
+            except Exception as e: logger.warning(f"notes_accounts error: {e}")
+        return []
+
+    def notes_folders(self):
+        if _mod_notes and hasattr(_mod_notes, 'get_folders'):
+            try: return _mod_notes.get_folders()
+            except Exception as e: logger.warning(f"notes_folders error: {e}")
+        return []
+
+    def notes_list(self, limit=20):
+        if _mod_notes and hasattr(_mod_notes, 'get_notes'):
+            try: return _mod_notes.get_notes(limit)
+            except Exception as e: logger.warning(f"notes_list error: {e}")
+        return []
+
+    def notes_search(self, query, limit=10):
+        if _mod_notes and hasattr(_mod_notes, 'search_notes'):
+            try: return _mod_notes.search_notes(query, limit)
+            except Exception as e: logger.warning(f"notes_search error: {e}")
+        return []
+
+    def notes_content(self, title):
+        if _mod_notes and hasattr(_mod_notes, 'get_note_content'):
+            try: return _mod_notes.get_note_content(title)
+            except Exception as e: logger.warning(f"notes_content error: {e}")
+        return {"error": "Notes no disponible"}
+
+    def notes_create(self, title, body, folder="Notes"):
+        if _mod_notes and hasattr(_mod_notes, 'create_note'):
+            try: return _mod_notes.create_note(title, body, folder)
+            except Exception as e: logger.warning(f"notes_create error: {e}")
+        return {"success": False, "error": "Notes no disponible"}
 
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None

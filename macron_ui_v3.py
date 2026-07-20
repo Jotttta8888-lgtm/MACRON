@@ -168,6 +168,8 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="showFinderRecent()">&#128338; Recientes</button>
         <button class="qa-btn" onclick="showCalendarToday()">&#128197; Hoy</button>
         <button class="qa-btn" onclick="showCalendarUpcoming()">&#128467; Proximos</button>
+        <button class="qa-btn" onclick="showNotesList()">&#128221; Notas</button>
+        <button class="qa-btn" onclick="showNotesSearch()">&#128270; Buscar Notas</button>
     </div>
 </div>
 <div class="main">
@@ -901,6 +903,39 @@ def calendar_search_api():
         days = data.get('days', 30)
         events = core.calendar_search(query, days)
         return jsonify({'events': events, 'count': len(events)})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/notes/list')
+def notes_list_api():
+    try:
+        core = get_macron_core()
+        limit = request.args.get('limit', 10, type=int)
+        notes = core.notes_list(limit)
+        return jsonify({'notes': notes, 'count': len(notes)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'notes': []}), 500
+
+@app.route('/api/notes/search', methods=['POST'])
+def notes_search_api():
+    try:
+        core = get_macron_core()
+        data = request.get_json()
+        query = data.get('query', '')
+        limit = data.get('limit', 10)
+        notes = core.notes_search(query, limit)
+        return jsonify({'notes': notes, 'count': len(notes)})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/notes/content', methods=['POST'])
+def notes_content_api():
+    try:
+        core = get_macron_core()
+        data = request.get_json()
+        title = data.get('title', '')
+        result = core.notes_content(title)
+        return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
