@@ -1,8 +1,9 @@
 """
 macron/api/server.py
-API Flask para MACRON v3.0 con autenticación
+API Flask para MACRON v3.0 con autenticación + caching
 """
 import os
+import time
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from .auth import require_auth, auth_status
@@ -12,6 +13,8 @@ def create_app():
                 template_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'ui', 'templates'),
                 static_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'ui', 'static'))
     CORS(app)
+    _api_cache = {}
+    _cache_ttl = 10  # segundos
     
     try:
         from macron.core.engine import get_engine
@@ -32,6 +35,16 @@ def create_app():
         except Exception as e:
             return f'<span class="chip off">Error: {e}</span>'
     
+    def _cached_response(key, getter_func):
+        now = time.time()
+        if key in _api_cache:
+            value, timestamp = _api_cache[key]
+            if now - timestamp < _cache_ttl:
+                return value
+        value = getter_func()
+        _api_cache[key] = (value, now)
+        return value
+
     @app.route('/')
     def home():
         return render_template('index.html', modules_html=get_module_status_html())
@@ -70,20 +83,19 @@ def create_app():
     @app.route('/api/safari/tabs')
     @require_auth
     def safari_tabs():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             adapter = engine.registry.get("safari")
             if adapter and hasattr(adapter, 'get_tabs'):
                 tabs = adapter.get_tabs()
                 return jsonify({'tabs': tabs, 'active': adapter.get_active_tab(), 'count': len(tabs)})
             return jsonify({'error': 'SafariAdapter no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('safari_tabs', _get)
     
     @app.route('/api/mail/inbox')
     @require_auth
     def mail_inbox():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             adapter = engine.registry.get("mail")
             if adapter and hasattr(adapter, 'get_inbox'):
@@ -91,39 +103,36 @@ def create_app():
                 emails = adapter.get_inbox(limit)
                 return jsonify({'emails': emails, 'count': len(emails)})
             return jsonify({'error': 'MailAdapter no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('mail_inbox', _get)
     
     @app.route('/api/finder/desktop')
     @require_auth
     def finder_desktop():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             adapter = engine.registry.get("finder")
             if adapter and hasattr(adapter, 'get_desktop_files'):
                 files = adapter.get_desktop_files()
                 return jsonify({'files': files, 'count': len(files)})
             return jsonify({'error': 'FinderAdapter no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('finder_desktop', _get)
     
     @app.route('/api/calendar/today')
     @require_auth
     def calendar_today():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             adapter = engine.registry.get("calendar")
             if adapter and hasattr(adapter, 'get_today_events'):
                 events = adapter.get_today_events()
                 return jsonify({'events': events, 'count': len(events)})
             return jsonify({'error': 'CalendarAdapter no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('calendar_today', _get)
     
     @app.route('/api/notes/list')
     @require_auth
     def notes_list():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             adapter = engine.registry.get("notes")
             if adapter and hasattr(adapter, 'get_notes'):
@@ -131,13 +140,12 @@ def create_app():
                 notes = adapter.get_notes(limit)
                 return jsonify({'notes': notes, 'count': len(notes)})
             return jsonify({'error': 'NotesAdapter no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('notes_list', _get)
     
     @app.route('/api/reminders/pending')
     @require_auth
     def reminders_pending():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             adapter = engine.registry.get("reminders")
             if adapter and hasattr(adapter, 'get_reminders'):
@@ -146,32 +154,29 @@ def create_app():
                 rems = adapter.get_reminders(list_name, completed=False, limit=limit)
                 return jsonify({'reminders': rems, 'count': len(rems)})
             return jsonify({'error': 'RemindersAdapter no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('reminders_pending', _get)
     
     @app.route('/api/agent/summary')
     @require_auth
     def agent_summary():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             agent = engine.registry.get("productivity")
             if agent and hasattr(agent, 'daily_summary'):
                 return jsonify(agent.daily_summary())
             return jsonify({'error': 'ProductivityAgent no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('agent_summary', _get)
     
     @app.route('/api/monitor/report')
     @require_auth
     def monitor_report():
-        try:
+        def _get():
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
             agent = engine.registry.get("monitor")
             if agent and hasattr(agent, 'full_report'):
                 return jsonify(agent.full_report())
             return jsonify({'error': 'MonitorAgent no disponible'}), 404
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+        return _cached_response('monitor_report', _get)
     
     return app
 
@@ -180,5 +185,6 @@ if __name__ == '__main__':
     print('='*50)
     print('  MACRON API v3.0 - http://localhost:5000')
     print('  Auth: X-API-Key header required')
+    print('  Cache: 10 segundos TTL')
     print('='*50)
     app.run(host='0.0.0.0', port=5000, debug=False)
