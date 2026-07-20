@@ -1,0 +1,25 @@
+#!/bin/bash
+# MACRON Launcher v2.5
+# Asistente AI local para macOS 27 Golden Gate
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+MACRON_DIR="$HOME/Documents/MACRON"
+
+if [ ! -d "$MACRON_DIR" ]; then
+    osascript -e 'display dialog "No se encontro MACRON en ~/Documents/MACRON" buttons {"OK"} default button "OK" with icon stop'
+    exit 1
+fi
+
+cd "$MACRON_DIR"
+if [ -f "venv/bin/activate" ]; then
+    source venv/bin/activate
+else
+    osascript -e 'display dialog "Entorno virtual no encontrado" buttons {"OK"} default button "OK" with icon stop'
+    exit 1
+fi
+
+nohup python3 macron_ui_v3.py > /dev/null 2>&1 &
+sleep 2
+open "http://127.0.0.1:5000"
+osascript -e 'display notification "MACRON iniciado en http://127.0.0.1:5000" with title "MACRON AI"'
+exit 0
