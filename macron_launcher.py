@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-MACRON Launcher v4.3
-Lanza servidor Flask + UI Tkinter + Menu Bar como procesos separados
+MACRON Launcher v4.5
+Lanza servidor Flask + UI Tkinter + Menu Bar + Notificaciones
 """
 import os
 import sys
@@ -85,9 +85,14 @@ def wait_for_server(timeout=120):
     return False
 
 def main():
+    # Importar notificaciones
+    sys.path.insert(0, PROJECT_DIR)
+    from macron_notifications import MacronNotifications
+    notifier = MacronNotifications()
+    
     print("=" * 50)
-    print("  MACRON v4.3 - Launcher")
-    print("  Iniciando servidor + UI + Menu Bar...")
+    print("  MACRON v4.5 - Launcher")
+    print("  Iniciando servidor + UI + Menu Bar + Notificaciones...")
     print("=" * 50)
     
     atexit.register(cleanup)
@@ -99,8 +104,10 @@ def main():
     print("[2/4] Esperando servidor...")
     if wait_for_server():
         print("[2/4] Servidor listo!")
+        notifier.server_started()
     else:
         print("[2/4] Timeout esperando servidor, continuando...")
+        notifier.error("Timeout esperando servidor")
     
     print("[3/4] Iniciando Menu Bar...")
     menubar_proc = start_menubar()
@@ -108,10 +115,13 @@ def main():
     print("[4/4] Iniciando interfaz...")
     ui_proc = start_ui()
     
+    notifier.welcome()
+    
     print("\n✅ MACRON ejecutandose!")
     print("   Servidor: http://127.0.0.1:5004")
     print("   UI: Ventana Tkinter")
     print("   Menu Bar: Barra superior")
+    print("   Notificaciones: Activas")
     print("\nPresiona Ctrl+C para salir\n")
     
     try:
@@ -123,9 +133,11 @@ def main():
                 break
             if not server_alive:
                 print("[WARN] Servidor caido, reiniciando...")
+                notifier.error("Servidor caido, reiniciando...")
                 server_proc = start_server()
             if not ui_alive:
                 print("[WARN] UI cerrada, saliendo...")
+                notifier.server_stopped()
                 break
             if not menubar_alive:
                 print("[WARN] Menu Bar caido, reiniciando...")
@@ -133,6 +145,7 @@ def main():
             time.sleep(2)
     except KeyboardInterrupt:
         print("\n[Cerrando MACRON...]")
+        notifier.server_stopped()
     finally:
         cleanup()
 
