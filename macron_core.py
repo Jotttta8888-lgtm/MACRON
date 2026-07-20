@@ -65,6 +65,7 @@ _mod_notes = _safe_import("macron_notes")
 _mod_reminders = _safe_import("macron_reminders")
 _mod_agent_productivity = _safe_import("macron_agent_productivity")
 _mod_agent_monitor = _safe_import("macron_agent_monitor")
+_mod_agent_research = _safe_import("macron_agent_research")
 _mod_focus = _safe_import("macron_focus")
 _mod_safari = _safe_import("macron_safari")
 _mod_mail = _safe_import("macron_mail")
@@ -687,6 +688,31 @@ class MacronCore:
                 agent = _mod_agent_monitor.MonitorAgent(self)
                 return agent.detect_large_files(path, min_size_mb)
             except Exception as e: logger.warning(f'monitor_large_files error: {e}')
+        return {'error': 'Agente no disponible'}
+
+    # -- RESEARCH AGENT
+    def research_topic(self, query, max_results=5):
+        if _mod_agent_research and hasattr(_mod_agent_research, 'ResearchAgent'):
+            try:
+                agent = _mod_agent_research.ResearchAgent(self)
+                return agent.research_topic(query, max_results)
+            except Exception as e: logger.warning(f'research_topic error: {e}')
+        return {'error': 'Agente no disponible'}
+
+    def quick_fact(self, query):
+        if _mod_agent_research and hasattr(_mod_agent_research, 'ResearchAgent'):
+            try:
+                agent = _mod_agent_research.ResearchAgent(self)
+                return agent.quick_fact(query)
+            except Exception as e: logger.warning(f'quick_fact error: {e}')
+        return {'error': 'Agente no disponible'}
+
+    def track_topic(self, query):
+        if _mod_agent_research and hasattr(_mod_agent_research, 'ResearchAgent'):
+            try:
+                agent = _mod_agent_research.ResearchAgent(self)
+                return agent.track_topic(query)
+            except Exception as e: logger.warning(f'track_topic error: {e}')
         return {'error': 'Agente no disponible'}
 
 # ── SINGLETON ───────────────────────────────────────────────────
