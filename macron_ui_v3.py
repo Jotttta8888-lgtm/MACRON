@@ -166,6 +166,8 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
         <button class="qa-btn" onclick="showFinderDesktop()">&#128193; Desktop</button>
         <button class="qa-btn" onclick="showFinderDownloads()">&#128229; Downloads</button>
         <button class="qa-btn" onclick="showFinderRecent()">&#128338; Recientes</button>
+        <button class="qa-btn" onclick="showCalendarToday()">&#128197; Hoy</button>
+        <button class="qa-btn" onclick="showCalendarUpcoming()">&#128467; Proximos</button>
     </div>
 </div>
 <div class="main">
@@ -867,6 +869,38 @@ def finder_search():
         core = get_macron_core()
         results = core.finder_search(query, limit)
         return jsonify({'results': results, 'count': len(results)})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/calendar/today')
+def calendar_today_api():
+    try:
+        core = get_macron_core()
+        events = core.calendar_today()
+        return jsonify({'events': events, 'count': len(events)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'events': []}), 500
+
+@app.route('/api/calendar/upcoming')
+def calendar_upcoming_api():
+    try:
+        core = get_macron_core()
+        days = request.args.get('days', 7, type=int)
+        limit = request.args.get('limit', 10, type=int)
+        events = core.calendar_upcoming(days, limit)
+        return jsonify({'events': events, 'count': len(events), 'days': days})
+    except Exception as e:
+        return jsonify({'error': str(e), 'events': []}), 500
+
+@app.route('/api/calendar/search', methods=['POST'])
+def calendar_search_api():
+    try:
+        core = get_macron_core()
+        data = request.get_json()
+        query = data.get('query', '')
+        days = data.get('days', 30)
+        events = core.calendar_search(query, days)
+        return jsonify({'events': events, 'count': len(events)})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
