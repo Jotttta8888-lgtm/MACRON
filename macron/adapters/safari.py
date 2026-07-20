@@ -1,6 +1,6 @@
 """
 macron/adapters/safari.py
-SafariAdapter para MACRON v3.0 - Hereda de BaseAdapter
+SafariAdapter para MACRON v3.0
 """
 import os
 import json
@@ -20,54 +20,30 @@ class SafariAdapter(BaseAdapter):
         self._read_later_file = os.path.expanduser("~/Documents/MACRON/safari_read_later.json")
     
     def _action_to_applescript(self, action, **kwargs):
-        """Mapea acciones a scripts AppleScript."""
         if action == "get_tabs":
-            return '''
-            tell application "Safari"
-                set output to ""
-                repeat with wIndex from 1 to count of windows
-                    set w to window wIndex
-                    repeat with tIndex from 1 to count of tabs of w
-                        set t to tab tIndex of w
-                        set output to output & (name of t) & "|" & (URL of t) & "|" & wIndex & "\\n"
-                    end repeat
-                end repeat
-                return output
-            end tell
-            '''
+            return 'tell application "Safari"\nset output to ""\nrepeat with wIndex from 1 to count of windows\nset w to window wIndex\nrepeat with tIndex from 1 to count of tabs of w\nset t to tab tIndex of w\nset output to output & (name of t) & "|" & (URL of t) & "|" & wIndex & "\\n"\nend repeat\nend repeat\nreturn output\nend tell'
         elif action == "get_active_tab":
-            return '''
-            tell application "Safari"
-                set t to current tab of front window
-                return (name of t) & "|" & (URL of t)
-            end tell
-            '''
+            return 'tell application "Safari"\nset t to current tab of front window\nreturn (name of t) & "|" & (URL of t)\nend tell'
         elif action == "get_page_content":
-            return '''
-            tell application "Safari"
-                set pageText to do JavaScript "document.body.innerText" in current tab of front window
-                return pageText
-            end tell
-            '''
+            return 'tell application "Safari"\nset pageText to do JavaScript "document.body.innerText" in current tab of front window\nreturn pageText\nend tell'
         elif action == "open_url":
             url = kwargs.get("url", "")
+            safe_url = self._escape_applescript(url)
             in_new_tab = kwargs.get("in_new_tab", True)
             if in_new_tab:
-                return f'tell application "Safari"\\nmake new document\\nset URL of current tab of front window to "{url}"\\nactivate\\nend tell'
+                return f'tell application "Safari"\\nmake new document\\nset URL of current tab of front window to "{safe_url}"\\nactivate\\nend tell'
             else:
-                return f'tell application "Safari"\\nset URL of current tab of front window to "{url}"\\nactivate\\nend tell'
+                return f'tell application "Safari"\\nset URL of current tab of front window to "{safe_url}"\\nactivate\\nend tell'
         elif action == "close_tab":
             tab_index = kwargs.get("tab_index")
-            window_index = kwargs.get("window_index", 1)
             if tab_index is None:
                 return 'tell application "Safari"\\nclose current tab of front window\\nend tell'
             else:
-                return f'tell application "Safari"\\nclose tab {tab_index} of window {window_index}\\nend tell'
+                return f'tell application "Safari"\\nclose tab {tab_index} of window 1\\nend tell'
         else:
-            raise NotImplementedError(f"Accion '{action}' no implementada en SafariAdapter")
+            raise NotImplementedError(f"Accion '{action}' no implementada")
     
     def get_tabs(self):
-        """Lista todas las pestanas abiertas."""
         result = self._run(self._script("get_tabs"), timeout=10)
         if not result.success:
             return []
@@ -76,15 +52,10 @@ class SafariAdapter(BaseAdapter):
             if "|" in line:
                 parts = line.split("|")
                 if len(parts) >= 3:
-                    tabs.append({
-                        "title": parts[0],
-                        "url": parts[1],
-                        "window_index": int(parts[2]) if parts[2].isdigit() else 1
-                    })
+                    tabs.append({"title": parts[0], "url": parts[1], "window_index": int(parts[2]) if parts[2].isdigit() else 1})
         return tabs
     
     def get_active_tab(self):
-        """Devuelve la pestana activa."""
         result = self._run(self._script("get_active_tab"), timeout=10)
         if not result.success:
             return None
@@ -94,7 +65,6 @@ class SafariAdapter(BaseAdapter):
         return None
     
     def get_page_content(self):
-        """Extrae texto visible de la pagina activa."""
         result = self._run(self._script("get_page_content"), timeout=10)
         if not result.success:
             return ""
@@ -103,18 +73,13 @@ class SafariAdapter(BaseAdapter):
         return "\n".join(lines[:500])
     
     def summarize_page(self):
-        """Resume contenido de la pagina activa."""
         content = self.get_page_content()
         if not content:
             return {"error": "No se pudo obtener contenido", "summary": ""}
         max_chars = 4000
         if len(content) > max_chars:
             content = content[:max_chars] + "...\n[Contenido truncado]"
-        prompt = f"""Resume el siguiente articulo en 3-5 puntos clave. Se conciso:
-
-{content}
-
-Resumen:"""
+        prompt = f"""Resume el siguiente articulo en 3-5 puntos clave. Se conciso:\n\n{content}\n\nResumen:"""
         if self.core and hasattr(self.core, 'chat'):
             try:
                 result = self.core.chat(prompt)
@@ -130,9 +95,9 @@ Resumen:"""
         return {"summary": "Resumen automatico:\n" + "\n".join(f"- {line[:100]}" for line in lines if len(line) > 20), "url": "", "title": ""}
     
     def search_in_page(self, query):
-        """Busca texto en la pagina activa."""
+        safe_query = self._escape_applescript(query)
         content = self.get_page_content().lower()
-        query_lower = query.lower()
+        query_lower = safe_query.lower()
         if query_lower in content:
             idx = content.find(query_lower)
             start = max(0, idx - 100)
@@ -141,7 +106,6 @@ Resumen:"""
         return {"found": False, "context": "", "occurrences": 0}
     
     def save_for_later(self, title=None, url=None, notes=""):
-        """Guarda URL para leer despues."""
         if url is None:
             tab = self.get_active_tab()
             if tab:
@@ -175,7 +139,6 @@ Resumen:"""
             return {"success": False, "error": str(e)}
     
     def get_read_later_list(self):
-        """Devuelve lista de URLs guardadas."""
         if not os.path.exists(self._read_later_file):
             return []
         try:
@@ -185,17 +148,14 @@ Resumen:"""
             return []
     
     def open_url(self, url, in_new_tab=True):
-        """Abre URL en Safari."""
         result = self._run(self._script("open_url", url=url, in_new_tab=in_new_tab), timeout=10)
         return {"success": result.success, "output": result.stdout, "error": result.stderr}
     
-    def close_tab(self, tab_index=None, window_index=1):
-        """Cierra pestana especifica o la activa."""
-        result = self._run(self._script("close_tab", tab_index=tab_index, window_index=window_index), timeout=10)
+    def close_tab(self, tab_index=None):
+        result = self._run(self._script("close_tab", tab_index=tab_index), timeout=10)
         return {"success": result.success, "output": result.stdout, "error": result.stderr}
     
     def get_domain_summary(self):
-        """Resumen de dominios abiertos."""
         tabs = self.get_tabs()
         domains = {}
         for tab in tabs:

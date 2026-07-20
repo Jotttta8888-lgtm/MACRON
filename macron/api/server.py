@@ -1,10 +1,11 @@
 """
 macron/api/server.py
-API Flask para MACRON v3.0
+API Flask para MACRON v3.0 con autenticación
 """
 import os
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
+from .auth import require_auth, auth_status
 
 def create_app():
     app = Flask(__name__,
@@ -35,7 +36,12 @@ def create_app():
     def home():
         return render_template('index.html', modules_html=get_module_status_html())
     
+    @app.route('/api/auth/status')
+    def auth_info():
+        return jsonify(auth_status())
+    
     @app.route('/api/status')
+    @require_auth
     def status():
         if not engine:
             return jsonify({'error': 'Engine no disponible', 'healthy': False}), 500
@@ -46,6 +52,7 @@ def create_app():
             return jsonify({'error': str(e), 'healthy': False}), 500
     
     @app.route('/api/chat', methods=['POST'])
+    @require_auth
     def chat():
         data = request.get_json()
         message = data.get('message', '')
@@ -61,6 +68,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/safari/tabs')
+    @require_auth
     def safari_tabs():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -73,6 +81,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/mail/inbox')
+    @require_auth
     def mail_inbox():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -86,6 +95,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/finder/desktop')
+    @require_auth
     def finder_desktop():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -98,6 +108,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/calendar/today')
+    @require_auth
     def calendar_today():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -110,6 +121,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/notes/list')
+    @require_auth
     def notes_list():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -123,6 +135,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/reminders/pending')
+    @require_auth
     def reminders_pending():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -137,6 +150,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/agent/summary')
+    @require_auth
     def agent_summary():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -148,6 +162,7 @@ def create_app():
             return jsonify({'error': str(e)}), 500
     
     @app.route('/api/monitor/report')
+    @require_auth
     def monitor_report():
         try:
             if not engine: return jsonify({'error': 'Engine no disponible'}), 500
@@ -164,6 +179,6 @@ if __name__ == '__main__':
     app = create_app()
     print('='*50)
     print('  MACRON API v3.0 - http://localhost:5000')
-    print('  Dual Brain Architecture')
+    print('  Auth: X-API-Key header required')
     print('='*50)
     app.run(host='0.0.0.0', port=5000, debug=False)
