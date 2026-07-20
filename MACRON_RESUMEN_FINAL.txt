@@ -1,0 +1,62 @@
+============================================
+  MACRON v5.5 - RESUMEN COMPLETO
+  Agente IA Local para macOS
+============================================
+
+FASE 1: Core (v1.0-v2.0)
+- LLM local via MLX (Llama-3.2-1B)
+- RAG de documentos
+- Face Recognition
+- VAD (Voice Activity Detection)
+- Whisper para transcripcion
+
+FASE 2: Funcionalidades Avanzadas (v2.0-v3.0)
+- Chain of Thought
+- Code Completion
+- Multi-idioma
+- Planificador de tareas
+- Rutinas automatizadas
+- Vault seguro
+- Deteccion de intrusos
+- Notion Integration
+
+FASE 3: Web UI + Tests (v3.0-v4.0)
+- Interfaz web Flask
+- Tests automatizados
+- Wake word con Whisper
+
+FASE 4: App Nativa macOS (v4.0-v4.5)
+- App .app nativa
+- Icono personalizado
+- Menu bar
+- Notificaciones nativas
+- Auto-start
+
+FASE 5: Optimizaciones (v5.0-v5.5)
+- Memory Optimizer (carga lazy)
+- Cache de modelos
+- Modo oscuro/claro
+- Historial persistente (SQLite)
+- Selector de modelos (Llama, Mistral, Phi)
+- Exportar conversaciones (TXT, MD, JSON)
+- Busqueda en chat
+- Widgets flotantes
+
+ARCHIVOS ACTIVOS:
+- macron_ui_v3.py (Servidor Flask)
+- macron_tkinter.py (UI Tkinter)
+- macron_launcher.py (Orquestador)
+- macron_menubar.py (Menu bar)
+- macron_notifications.py (Notificaciones)
+- macron_memory_optimizer.py (Optimizacion RAM)
+- macron_cache.py (Cache de modelos)
+- macron_history.py (Historial SQLite)
+- macron_model_selector.py (Selector de LLMs)
+- macron_export.py (Exportar conversaciones)
+- macron_search.py (Busqueda en chat)
+- macron_widget.py (Widgets flotantes)
+- macron_voice_vad.py (Voz y VAD)
+- macron_wake_whisper.py (Wake word)
+
+TOTAL: 20 funcionalidades avanzadas
+Estado: COMPLETO
