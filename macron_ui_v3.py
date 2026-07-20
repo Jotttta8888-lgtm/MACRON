@@ -985,6 +985,27 @@ def monitor_report_api():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/plugins/list')
+def plugins_list_api():
+    try:
+        core = get_macron_core()
+        plugins = core.plugin_list()
+        return jsonify({'plugins': plugins, 'count': len(plugins)})
+    except Exception as e:
+        return jsonify({'error': str(e), 'plugins': []}), 500
+
+@app.route('/api/plugins/run', methods=['POST'])
+def plugins_run_api():
+    try:
+        core = get_macron_core()
+        data = request.get_json()
+        name = data.get('name', '')
+        args = data.get('args', None)
+        result = core.plugin_run(name, args)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     print('='*50)
     print('  MACRON UI v3.1 - http://localhost:5004')

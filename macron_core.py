@@ -715,6 +715,39 @@ class MacronCore:
             except Exception as e: logger.warning(f'track_topic error: {e}')
         return {'error': 'Agente no disponible'}
 
+    # -- PLUGIN SYSTEM
+    def plugin_list(self):
+        if _mod_plugins and hasattr(_mod_plugins, 'PluginManager'):
+            try:
+                manager = _mod_plugins.PluginManager(self)
+                return manager.list_plugins()
+            except Exception as e: logger.warning(f'plugin_list error: {e}')
+        return []
+
+    def plugin_load(self, name):
+        if _mod_plugins and hasattr(_mod_plugins, 'PluginManager'):
+            try:
+                manager = _mod_plugins.PluginManager(self)
+                return manager.load_plugin(name)
+            except Exception as e: logger.warning(f'plugin_load error: {e}')
+        return {'error': 'Plugin system no disponible'}
+
+    def plugin_run(self, name, args=None):
+        if _mod_plugins and hasattr(_mod_plugins, 'PluginManager'):
+            try:
+                manager = _mod_plugins.PluginManager(self)
+                return manager.run_plugin(name, args)
+            except Exception as e: logger.warning(f'plugin_run error: {e}')
+        return {'error': 'Plugin system no disponible'}
+
+    def plugin_loaded(self):
+        if _mod_plugins and hasattr(_mod_plugins, 'PluginManager'):
+            try:
+                manager = _mod_plugins.PluginManager(self)
+                return manager.get_loaded_plugins()
+            except Exception as e: logger.warning(f'plugin_loaded error: {e}')
+        return []
+
 # ── SINGLETON ───────────────────────────────────────────────────
 _core_instance = None
 
