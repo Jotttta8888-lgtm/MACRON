@@ -44,7 +44,7 @@ class ModuleRegistry:
                 try:
                     mod = importlib.import_module(full_path)
                     for name, obj in inspect.getmembers(mod, inspect.isclass):
-                        if hasattr(obj, "__macron_module__"):
+                        if hasattr(obj, "__macron_module__") and name not in ("BaseAdapter", "BaseAgent"):
                             self.register(name=getattr(obj, "__macron_name__", module_name),
                                           module_path=full_path, class_name=name,
                                           version=getattr(obj, "__version__", "1.0"),
