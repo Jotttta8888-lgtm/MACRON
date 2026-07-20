@@ -1,0 +1,31 @@
+{
+  "conversations": [
+    {
+      "timestamp": "2026-07-20T01:10:42.870661",
+      "user": "Hola MACRON",
+      "agent": "Hola! Soy MACRON, tu asistente para macOS. Estoy listo para ayudarte con productividad, calendario, notas y mas.",
+      "context": {}
+    },
+    {
+      "timestamp": "2026-07-20T01:10:42.871047",
+      "user": "Que puedes hacer?",
+      "agent": "Puedo ayudarte con:\n• 📅 Calendario y eventos\n• 📝 Notas y recordatorios\n• 📧 Mails de Mail.app\n• 📁 Archivos y Finder\n• 🌐 Busquedas en Safari\n• 🤖 Resumenes diarios automaticos\n• 👁️ Monitoreo de carpetas\n• 🔌 Plugins personalizados\n¿Qué necesitas?",
+      "context": {}
+    },
+    {
+      "timestamp": "2026-07-20T01:10:42.871271",
+      "user": "Gracias por tu ayuda",
+      "agent": "Puedo ayudarte con:\n• 📅 Calendario y eventos\n• 📝 Notas y recordatorios\n• 📧 Mails de Mail.app\n• 📁 Archivos y Finder\n• 🌐 Busquedas en Safari\n• 🤖 Resumenes diarios automaticos\n• 👁️ Monitoreo de carpetas\n• 🔌 Plugins personalizados\n¿Qué necesitas?",
+      "context": {}
+    },
+    {
+      "timestamp": "2026-07-20T01:10:42.871455",
+      "user": "Adios",
+      "agent": "¡Hasta luego! Guardando nuestra conversacion en memoria... 👋",
+      "context": {}
+    }
+  ],
+  "facts": {},
+  "preferences": {},
+  "created": "2026-07-20T01:10:42.870574"
+}

@@ -1315,3 +1315,125 @@
 2026-07-20 01:09:35,783 [INFO] MACRON.Core: MacronCore inicializado
 2026-07-20 01:09:45,564 [INFO] MACRON.Core: Core MACRON_FUNCIONALIDADES_v2 cargado
 2026-07-20 01:09:46,742 [WARNING] MACRON.Core: Modulo no disponible: macron_agent_research - No module named 'macron_agent_research'
+2026-07-20 01:10:27,724 [INFO] MACRON.Core: Core MACRON_FUNCIONALIDADES_v2 cargado
+2026-07-20 01:10:28,398 [WARNING] MACRON.Core: Modulo no disponible: macron_agent_research - No module named 'macron_agent_research'
+2026-07-20 01:10:34,909 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-07-20 01:10:35,090 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,091 [WARNING] huggingface_hub.utils._http: Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-07-20 01:10:35,098 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:35,184 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,190 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:35,191 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-07-20 01:10:35,275 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,284 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:35,375 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,381 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-07-20 01:10:35,475 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,481 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:35,568 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,575 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:35,678 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:10:35,764 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:35,771 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:36,020 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:10:36,110 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:10:36,208 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:10:36,298 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:10:36,384 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:36,392 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:36,480 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:36,487 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:36,578 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:36,586 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:36,676 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:36,687 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:36,786 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-20 01:10:36,878 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-20 01:10:37,031 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:10:37,039 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-07-20 01:10:37,129 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-07-20 01:10:38,853 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/mlx-community/Llama-3.2-1B-Instruct-4bit/revision/main "HTTP/1.1 200 OK"
+2026-07-20 01:10:41,080 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/mlx-community/Llama-3.2-1B-Instruct-4bit/revision/main "HTTP/1.1 200 OK"
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Orchestrator inicializado
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'history' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'export' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'search' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'cache' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'memory' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'models' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'notifications' disponible
+2026-07-20 01:10:42,869 [INFO] MACRON.Core: Modulo 'hotkey' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'widget' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'siri' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'plugins' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'analytics' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'offline' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'encryption' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'multiuser' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'calendar' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'focus' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'safari' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'mail' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: Modulo 'finder' disponible
+2026-07-20 01:10:42,870 [INFO] MACRON.Core: MacronCore inicializado
+2026-07-20 01:11:07,516 [INFO] MACRON.Core: Core MACRON_FUNCIONALIDADES_v2 cargado
+2026-07-20 01:11:08,190 [WARNING] MACRON.Core: Modulo no disponible: macron_agent_research - No module named 'macron_agent_research'
+2026-07-20 01:11:14,521 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-07-20 01:11:14,664 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:14,665 [WARNING] huggingface_hub.utils._http: Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-07-20 01:11:14,672 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:14,816 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:14,826 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:14,828 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-07-20 01:11:14,910 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:14,931 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:15,016 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:15,023 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-07-20 01:11:15,111 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:15,118 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:15,203 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:15,210 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:15,298 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:11:15,390 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:15,398 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:15,652 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:11:15,741 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:11:15,827 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:11:15,938 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-07-20 01:11:16,034 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:16,041 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:16,127 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:16,133 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:16,221 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:16,230 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:16,367 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:16,375 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:16,468 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-07-20 01:11:16,631 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-07-20 01:11:16,761 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-07-20 01:11:16,768 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-07-20 01:11:16,857 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-07-20 01:11:18,654 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/mlx-community/Llama-3.2-1B-Instruct-4bit/revision/main "HTTP/1.1 200 OK"
+2026-07-20 01:11:20,790 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/mlx-community/Llama-3.2-1B-Instruct-4bit/revision/main "HTTP/1.1 200 OK"
+2026-07-20 01:11:23,183 [INFO] MACRON.Core: Orchestrator inicializado
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'history' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'export' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'search' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'cache' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'memory' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'models' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'notifications' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'hotkey' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'widget' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'siri' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'plugins' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'analytics' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'offline' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'encryption' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'multiuser' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'calendar' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'focus' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'safari' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'mail' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: Modulo 'finder' disponible
+2026-07-20 01:11:23,186 [INFO] MACRON.Core: MacronCore inicializado
