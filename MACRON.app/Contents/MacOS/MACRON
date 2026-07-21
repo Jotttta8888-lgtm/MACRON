@@ -1,7 +1,4 @@
 #!/bin/bash
-# MACRON Launcher v2.5
-# Asistente AI local para macOS 27 Golden Gate
-
 DIR="$(cd "$(dirname "$0")" && pwd)"
 MACRON_DIR="$HOME/Documents/MACRON"
 
@@ -11,15 +8,28 @@ if [ ! -d "$MACRON_DIR" ]; then
 fi
 
 cd "$MACRON_DIR"
-if [ -f "venv/bin/activate" ]; then
-    source venv/bin/activate
-else
-    osascript -e 'display dialog "Entorno virtual no encontrado" buttons {"OK"} default button "OK" with icon stop'
+
+# Usar Python directamente del venv (no source activate)
+PYTHON="$MACRON_DIR/venv/bin/python3"
+
+if [ ! -f "$PYTHON" ]; then
+    osascript -e 'display dialog "Python del entorno virtual no encontrado" buttons {"OK"} default button "OK" with icon stop'
     exit 1
 fi
 
-nohup python3 macron_ui_v3.py > /dev/null 2>&1 &
-sleep 2
-open "http://127.0.0.1:5000"
-osascript -e 'display notification "MACRON iniciado en http://127.0.0.1:5000" with title "MACRON AI"'
+# Verificar si hay otro servidor corriendo y matarlo
+lsof -ti:5001 | xargs kill -9 2>/dev/null
+
+# Ejecutar servidor con Python del venv
+nohup "$PYTHON" macron_ui_v3.py > /tmp/macron_server.log 2>&1 &
+sleep 4
+
+# Verificar que el servidor inició
+if curl -s http://localhost:5001/api/status > /dev/null 2>&1; then
+    open "http://127.0.0.1:5001"
+    osascript -e 'display notification "MACRON v6.6.2 iniciado correctamente" with title "MACRON AI"'
+else
+    osascript -e 'display dialog "Error iniciando MACRON. Revisa /tmp/macron_server.log" buttons {"OK"} default button "OK" with icon stop'
+fi
+
 exit 0

@@ -568,6 +568,276 @@ async function showFinderRecent() {
     }
 }
 
+
+async function showCalendarToday() {
+    try {
+        const response = await fetch('/api/calendar/today');
+        const data = await response.json();
+        console.log('[DEBUG] Calendar today:', data);
+        let text = '📅 Eventos de hoy (' + data.count + '):\n\n';
+        if (data.events && data.events.length) {
+            data.events.forEach(e => {
+                text += '• ' + e.title + '\n';
+                text += '  ' + e.start + '\n\n';
+            });
+        } else {
+            text += 'No hay eventos hoy.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Calendar error:', e);
+        addMessage('Error accediendo al calendario', false, true);
+    }
+}
+
+async function showCalendarUpcoming() {
+    try {
+        const response = await fetch('/api/calendar/upcoming?days=7');
+        const data = await response.json();
+        console.log('[DEBUG] Calendar upcoming:', data);
+        let text = '📅 Proximos eventos (' + data.count + ' en ' + data.days + ' dias):\n\n';
+        if (data.events && data.events.length) {
+            data.events.forEach(e => {
+                text += '• ' + e.title + '\n';
+                text += '  ' + e.start + '\n\n';
+            });
+        } else {
+            text += 'No hay eventos proximos.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Calendar error:', e);
+        addMessage('Error accediendo al calendario', false, true);
+    }
+}
+
+async function showNotesList() {
+    try {
+        const response = await fetch('/api/notes/list');
+        const data = await response.json();
+        console.log('[DEBUG] Notes:', data);
+        let text = '📝 Notas (' + data.count + '):\n\n';
+        if (data.notes && data.notes.length) {
+            data.notes.forEach((n, i) => {
+                text += (i + 1) + '. ' + n.title + '\n';
+            });
+        } else {
+            text += 'No hay notas.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Notes error:', e);
+        addMessage('Error accediendo a Notas', false, true);
+    }
+}
+
+async function showNotesSearch() {
+    const query = prompt('Buscar en notas:');
+    if (!query) return;
+    try {
+        const response = await fetch('/api/notes/search', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query: query})
+        });
+        const data = await response.json();
+        console.log('[DEBUG] Notes search:', data);
+        let text = '🔍 Resultados para "' + query + '" (' + data.count + '):\n\n';
+        if (data.notes && data.notes.length) {
+            data.notes.forEach((n, i) => {
+                text += (i + 1) + '. ' + n.title + '\n';
+            });
+        } else {
+            text += 'No se encontraron notas.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Notes search error:', e);
+        addMessage('Error buscando notas', false, true);
+    }
+}
+
+async function showRemindersPending() {
+    try {
+        const response = await fetch('/api/reminders/pending');
+        const data = await response.json();
+        console.log('[DEBUG] Reminders:', data);
+        let text = '✅ Recordatorios pendientes (' + data.count + '):\n\n';
+        if (data.reminders && data.reminders.length) {
+            data.reminders.forEach(r => {
+                text += '• ' + r.title + '\n';
+                text += '  Prioridad: ' + r.priority + '\n\n';
+            });
+        } else {
+            text += 'No hay recordatorios pendientes.';
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Reminders error:', e);
+        addMessage('Error accediendo a Recordatorios', false, true);
+    }
+}
+
+async function showRemindersCreate() {
+    const title = prompt('Titulo del recordatorio:');
+    if (!title) return;
+    try {
+        const response = await fetch('/api/reminders/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({title: title})
+        });
+        const data = await response.json();
+        console.log('[DEBUG] Reminder created:', data);
+        if (data.success) {
+            addMessage('✅ ' + data.message, false);
+        } else {
+            addMessage('⚠️ No se pudo crear el recordatorio', false, true);
+        }
+    } catch (e) {
+        console.error('[DEBUG] Reminder create error:', e);
+        addMessage('Error creando recordatorio', false, true);
+    }
+}
+
+async function showAgentSummary() {
+    try {
+        addMessage('🤖 Generando resumen diario...', false);
+        const response = await fetch('/api/agent/summary');
+        const data = await response.json();
+        console.log('[DEBUG] Agent summary:', data);
+        if (data.error) {
+            addMessage('Error: ' + data.error, false, true);
+        } else {
+            let text = '📊 Resumen del Agente:\n\n';
+            text += data.summary || 'No hay datos suficientes.';
+            addMessage(text, false);
+        }
+    } catch (e) {
+        console.error('[DEBUG] Agent summary error:', e);
+        addMessage('Error generando resumen', false, true);
+    }
+}
+
+async function showMonitorReport() {
+    try {
+        const response = await fetch('/api/monitor/report');
+        const data = await response.json();
+        console.log('[DEBUG] Monitor:', data);
+        let text = '👁 Monitoreo del Sistema:\n\n';
+        if (data.error) {
+            text += 'Error: ' + data.error;
+        } else {
+            text += JSON.stringify(data, null, 2);
+        }
+        addMessage(text, false);
+    } catch (e) {
+        console.error('[DEBUG] Monitor error:', e);
+        addMessage('Error obteniendo reporte', false, true);
+    }
+}
+
+
+async function showCalendarToday() {
+    try {
+        const response = await fetch('/api/calendar/today');
+        const data = await response.json();
+        let text = '📅 Eventos de hoy (' + data.count + '):\n\n';
+        if (data.events && data.events.length) {
+            data.events.forEach(e => { text += '• ' + e.title + '\n  ' + e.start + '\n\n'; });
+        } else { text += 'No hay eventos hoy.'; }
+        addMessage(text, false);
+    } catch (e) { addMessage('Error accediendo al calendario', false, true); }
+}
+
+async function showCalendarUpcoming() {
+    try {
+        const response = await fetch('/api/calendar/upcoming?days=7');
+        const data = await response.json();
+        let text = '📅 Proximos eventos (' + data.count + '):\n\n';
+        if (data.events && data.events.length) {
+            data.events.forEach(e => { text += '• ' + e.title + '\n  ' + e.start + '\n\n'; });
+        } else { text += 'No hay eventos proximos.'; }
+        addMessage(text, false);
+    } catch (e) { addMessage('Error accediendo al calendario', false, true); }
+}
+
+async function showNotesList() {
+    try {
+        const response = await fetch('/api/notes/list');
+        const data = await response.json();
+        let text = '📝 Notas (' + data.count + '):\n\n';
+        if (data.notes && data.notes.length) {
+            data.notes.forEach((n, i) => { text += (i+1) + '. ' + n.title + '\n'; });
+        } else { text += 'No hay notas.'; }
+        addMessage(text, false);
+    } catch (e) { addMessage('Error accediendo a Notas', false, true); }
+}
+
+async function showNotesSearch() {
+    const query = prompt('Buscar en notas:');
+    if (!query) return;
+    try {
+        const response = await fetch('/api/notes/search', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query: query})
+        });
+        const data = await response.json();
+        let text = '🔍 Resultados para "' + query + '" (' + data.count + '):\n\n';
+        if (data.notes && data.notes.length) {
+            data.notes.forEach((n, i) => { text += (i+1) + '. ' + n.title + '\n'; });
+        } else { text += 'No se encontraron notas.'; }
+        addMessage(text, false);
+    } catch (e) { addMessage('Error buscando notas', false, true); }
+}
+
+async function showRemindersPending() {
+    try {
+        const response = await fetch('/api/reminders/pending');
+        const data = await response.json();
+        let text = '✅ Recordatorios pendientes (' + data.count + '):\n\n';
+        if (data.reminders && data.reminders.length) {
+            data.reminders.forEach(r => { text += '• ' + r.title + '\n  Prioridad: ' + r.priority + '\n\n'; });
+        } else { text += 'No hay recordatorios pendientes.'; }
+        addMessage(text, false);
+    } catch (e) { addMessage('Error accediendo a Recordatorios', false, true); }
+}
+
+async function showRemindersCreate() {
+    const title = prompt('Titulo del recordatorio:');
+    if (!title) return;
+    try {
+        const response = await fetch('/api/reminders/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({title: title})
+        });
+        const data = await response.json();
+        if (data.success) { addMessage('✅ ' + data.message, false); }
+        else { addMessage('⚠️ No se pudo crear', false, true); }
+    } catch (e) { addMessage('Error creando recordatorio', false, true); }
+}
+
+async function showAgentSummary() {
+    try {
+        addMessage('🤖 Generando resumen...', false);
+        const response = await fetch('/api/agent/summary');
+        const data = await response.json();
+        let text = '📊 Resumen:\n\n' + (data.summary || 'Sin datos.');
+        addMessage(text, false);
+    } catch (e) { addMessage('Error generando resumen', false, true); }
+}
+
+async function showMonitorReport() {
+    try {
+        const response = await fetch('/api/monitor/report');
+        const data = await response.json();
+        let text = '👁 Monitoreo:\n\n' + JSON.stringify(data, null, 2);
+        addMessage(text, false);
+    } catch (e) { addMessage('Error obteniendo reporte', false, true); }
+}
+
 refreshStatus();
 document.getElementById('messageInput').focus();
 </script>
@@ -588,8 +858,7 @@ def chat():
     try:
         core = get_macron_core()
         if core.orchestrator and hasattr(core.orchestrator, 'llm') and hasattr(core.orchestrator.llm, 'chat'):
-            future = _llm_executor.submit(core.orchestrator.llm.chat, message)
-            result = future.result(timeout=60)
+            result = core.orchestrator.llm.chat(message)
         else:
             result = core.chat(message)
 
@@ -1008,7 +1277,7 @@ def plugins_run_api():
 
 if __name__ == '__main__':
     print('='*50)
-    print('  MACRON UI v3.1 - http://localhost:5004')
+    print('  MACRON UI v3.1 - http://localhost:5001')
     print('  Core conectado - 20+ funcionalidades activas')
     print('='*50)
-    app.run(host='0.0.0.0', port=5004, debug=False, threaded=False)
+    app.run(host='0.0.0.0', port=5001, debug=False, threaded=False)

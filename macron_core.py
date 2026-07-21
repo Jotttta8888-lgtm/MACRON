@@ -118,6 +118,7 @@ class MacronCore:
             "safari": _mod_safari is not None,
             "mail": _mod_mail is not None,
             "finder": _mod_finder is not None,
+            "agent_research": _mod_agent_research is not None,
         }
         for name, available in self.modules.items():
             if available:
@@ -349,9 +350,36 @@ class MacronCore:
     # ── CALENDAR ───────────────────────────────────────────────
     def calendar_add_event(self, title, start_date, notes=""):
         """Agrega evento al calendario."""
-        if _mod_calendar and hasattr(_mod_calendar, 'add_calendar_event'):
+        if _mod_calendar and hasattr(_mod_calendar, 'create_event'):
             try:
-                return _mod_calendar.add_calendar_event(title, start_date, notes)
+                from datetime import datetime
+                # Convertir a datetime si es string
+                if isinstance(start_date, str):
+                    for fmt in ["%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"]:
+                        try:
+                            dt = datetime.strptime(start_date.strip(), fmt)
+                            break
+                        except ValueError:
+                            continue
+                    else:
+                        dt = datetime.now()
+                elif hasattr(start_date, 'strftime'):
+                    dt = start_date
+                else:
+                    dt = datetime.now()
+                
+                # Formato español para AppleScript
+                meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+                dias = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
+                dia_semana = dias[dt.weekday()]
+                mes = meses[dt.month - 1]
+                apple_date = f"{dia_semana}, {dt.day} de {mes} de {dt.year} a las {dt.strftime('%H:%M:%S')}"
+                
+                result = _mod_calendar.create_event(title, apple_date, notes=notes)
+                if isinstance(result, dict):
+                    return result.get('success', False)
+                return bool(result)
             except Exception as e:
                 logger.warning(f"calendar_add_event error: {e}")
         return False
@@ -365,6 +393,33 @@ class MacronCore:
                 logger.warning(f"reminder_add error: {e}")
         return False
     
+    def calendar_today(self):
+        """Obtiene eventos de hoy."""
+        if _mod_calendar and hasattr(_mod_calendar, 'get_today_events'):
+            try:
+                return _mod_calendar.get_today_events()
+            except Exception as e:
+                logger.warning(f"calendar_today error: {e}")
+        return []
+
+    def calendar_upcoming(self, days=7, limit=10):
+        """Obtiene proximos eventos."""
+        if _mod_calendar and hasattr(_mod_calendar, 'get_upcoming_events'):
+            try:
+                return _mod_calendar.get_upcoming_events(days, limit)
+            except Exception as e:
+                logger.warning(f"calendar_upcoming error: {e}")
+        return []
+
+    def calendar_search(self, query, days=30):
+        """Busca eventos en el calendario."""
+        if _mod_calendar and hasattr(_mod_calendar, 'search_events'):
+            try:
+                return _mod_calendar.search_events(query, days)
+            except Exception as e:
+                logger.warning(f"calendar_search error: {e}")
+        return []
+
     # ── FOCUS (POMODORO) ───────────────────────────────────────
     def focus_toggle(self):
         """Activa/desactiva modo Focus."""

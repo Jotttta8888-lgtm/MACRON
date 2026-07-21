@@ -1,0 +1,74 @@
+================================================================================
+  MACRON SNAPSHOT - 2026-07-20
+  Version: 6.6.2
+  Puerto: 5001
+================================================================================
+
+HARDWARE
+--------
+- Apple Silicon: True (M1/M2)
+- MLX: True
+- MPS: True
+- RAM: 8.0 GB
+- Modelo LLM: Llama-3.2-1B-Instruct-4bit
+
+MODULOS (21/21 activos)
+-----------------------
+history, export, search, cache, memory, models, notifications,
+hotkey, widget, siri, plugins, analytics, offline, encryption,
+multiuser, calendar, focus, safari, mail, finder, agent_research
+
+ENDPOINTS TESTEADOS (20/20 pasados)
+------------------------------------
+GET:
+  /api/status           ✅
+  /api/history          ✅
+  /api/plugins          ✅
+  /api/analytics        ✅
+  /api/calendar/today   ✅
+  /api/finder/desktop   ✅
+  /api/finder/downloads ✅
+  /api/mail/unread      ✅
+  /api/safari/tabs      ✅
+  /api/notes/list       ✅
+  /api/reminders/pending✅
+  /api/agent/summary    ✅
+  /api/monitor/report   ✅
+
+POST:
+  /api/chat             ✅
+  /api/notify           ✅
+  /api/focus/toggle     ✅
+  /api/finder/search    ✅
+  /api/mail/search      ✅
+  /api/notes/search     ✅
+  /api/calendar/search  ✅
+
+BUGS ARREGLADOS
+---------------
+1. Chat MLX: Error de thread - ejecutar directamente sin executor
+2. Calendario /today: Metodo calendar_today() faltante en macron_core.py
+3. Calendario /event: Formato de fecha espanol para AppleScript + nombre de funcion
+
+ARCHIVOS MODIFICADOS
+--------------------
+- macron_ui_v3.py: Puerto 5001, fix chat (sin executor)
+- macron_core.py: +calendar_today(), +calendar_upcoming(), +calendar_search(),
+                   fix calendar_add_event() con formato espanol,
+                   +agent_research en modulos
+- macron_calendar.py: Sin cambios (fix aplicado en macron_core.py)
+- macron_agent_research.py: NUEVO - modulo de investigacion web
+
+NUEVOS ARCHIVOS
+---------------
+- macron_agent_research.py: Busqueda web via DuckDuckGo
+- health_check.py: Script de prueba automatica de endpoints
+
+PENDIENTES
+----------
+- UI web: Botones no tienen JavaScript funcional (render_template_string estatico)
+- /api/voice/transcribe: No testeado (riesgo de colgar servidor)
+- /api/calendar/event: Funciona pero devuelve success:false en algunos casos
+- /api/export: Exporta a JSON pero no verificado contenido
+
+================================================================================
