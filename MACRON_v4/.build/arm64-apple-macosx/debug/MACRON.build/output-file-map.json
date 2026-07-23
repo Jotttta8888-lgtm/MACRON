@@ -1,0 +1,82 @@
+{
+  "": {
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/primary.swiftdeps"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.dia"
+  },
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift": {
+    "dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.d",
+    "object": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o",
+    "swiftmodule": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swiftdeps",
+    "diagnostics": "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.dia"
+  }
+}

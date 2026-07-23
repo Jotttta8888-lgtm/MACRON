@@ -1,0 +1,6 @@
+MACRON.app/Contents/MacOS/MACRON
+MACRON.app/Contents/MacOS/MACRON
+*.backup.*
+.DS_Store
+*.log
+MACRON_Xcode_Project/

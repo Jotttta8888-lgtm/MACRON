@@ -1,0 +1,81 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "MACRON-arm64-apple-macosx-debug.exe": ["<MACRON-arm64-apple-macosx-debug.exe>"]
+  "MACRON-arm64-apple-macosx-debug.module": ["<MACRON-arm64-apple-macosx-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<MACRON-arm64-apple-macosx-debug.exe>","<MACRON-arm64-apple-macosx-debug.module>"]
+  "test": ["<MACRON-arm64-apple-macosx-debug.exe>","<MACRON-arm64-apple-macosx-debug.module>"]
+default: "main"
+nodes:
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON":
+    is-mutated: true
+commands:
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist":
+    tool: write-auxiliary-file
+    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
+    outputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist"]
+    description: "Write auxiliary file /Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist"
+
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift"]
+    outputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources"]
+    description: "Write auxiliary file /Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources"
+
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o"]
+    outputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList"
+
+  "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
+    outputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+
+  "<MACRON-arm64-apple-macosx-debug.exe>":
+    tool: phony
+    inputs: ["<MACRON-arm64-apple-macosx-debug.exe-CodeSigning>"]
+    outputs: ["<MACRON-arm64-apple-macosx-debug.exe>"]
+
+  "<MACRON-arm64-apple-macosx-debug.module>":
+    tool: phony
+    inputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules/MACRON.swiftmodule"]
+    outputs: ["<MACRON-arm64-apple-macosx-debug.module>"]
+
+  "C.MACRON-arm64-apple-macosx-debug.exe":
+    tool: shell
+    inputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList"]
+    outputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/MACRON"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug","-o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON","-module-name","MACRON","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-alias","-Xlinker","_MACRON_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-Xlinker","-add_ast_path","-Xlinker","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules/MACRON.swiftmodule","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g"]
+
+  "C.MACRON-arm64-apple-macosx-debug.exe-entitlements":
+    tool: shell
+    inputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist"]
+    outputs: ["<MACRON-arm64-apple-macosx-debug.exe-CodeSigning>"]
+    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/MACRON"
+    args: ["codesign","--force","--sign","-","--entitlements","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON"]
+
+  "C.MACRON-arm64-apple-macosx-debug.module":
+    tool: shell
+    inputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources"]
+    outputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules/MACRON.swiftmodule"]
+    description: "Compiling Swift Module 'MACRON' (11 sources)"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","MACRON","-emit-dependencies","-emit-module","-emit-module-path","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules/MACRON.swiftmodule","-output-file-map","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/output-file-map.json","-incremental","-c","@/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources","-I","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx14.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j6","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","MACRON_main","-color-diagnostics","-swift-version","5","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","macron_v4"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/","/Users/juancamilo/Documents/MACRON/MACRON_v4/Package.swift","/Users/juancamilo/Documents/MACRON/MACRON_v4/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

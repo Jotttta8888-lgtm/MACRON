@@ -1,0 +1,49 @@
+=== MACRON SNAPSHOT FINAL - 2026-07-22 19:17 ===
+Estado: FUNCIONAL COMPLETO - Fase 4 Avanzada
+
+=== LOGROS DE ESTA SESION ===
+1. ChatView.swift: Simplificado - usa NativeTextField compartido
+2. CalendarView.swift: 2 TextFields -> NativeTextField (AppKit)
+3. NotesRemindersView.swift: 3 TextFields -> NativeTextField
+4. FinderSafariMailView.swift: 2 TextFields -> NativeTextField
+5. ResearchAnalyticsSettingsView.swift: 2 TextFields -> NativeTextField
+6. FocusTextField.swift: Componente reutilizable creado
+7. DashboardView.swift: Boton "Activar Voz" muestra instrucciones
+8. SpeechManager.swift: Eliminado (usamos dictado nativo de macOS)
+9. MACRONApp.swift: Limpio - AppDelegate con focus, sin NSStatusBar
+10. Dictado nativo de macOS: Configurado y funcional (Control dos veces)
+
+=== COMO USAR EL DICTADO ===
+1. Ve a Configuracion del Sistema > Teclado > Dictado
+2. Asegurate que "Funcion rapida" este en "Presionar la tecla Control dos veces"
+3. En cualquier campo de texto de MACRON, presiona Control dos veces
+4. Habla - el texto aparecera automaticamente
+
+=== ARCHIVOS SWIFT (12 archivos) ===
+Sources/MACRON/:
+  1. MACRONApp.swift - AppDelegate, focus, sin MenuBarExtra
+  2. ContentView.swift - HStack layout
+  3. ChatView.swift - NativeTextField, boton mic (placeholder)
+  4. CalendarView.swift - NativeTextFields
+  5. NotesRemindersView.swift - NativeTextFields
+  6. FinderSafariMailView.swift - NativeTextFields
+  7. ResearchAnalyticsSettingsView.swift - NativeTextFields
+  8. DashboardView.swift - Acciones rapidas, boton voz con alerta
+  9. MacronAPIClient.swift - API client
+  10. MacronModels.swift - Modelos de datos
+  11. FocusTextField.swift - Componente NativeTextField reutilizable
+  12. Resources/Info.plist - Permisos app
+
+=== PENDIENTES PARA PROXIMA SESION ===
+- [ ] MenuBarExtra (NSStatusBar deprecado en macOS 27, necesita investigacion)
+- [ ] Reconocimiento de voz nativo integrado (SFSpeechRecognizer con permisos)
+- [ ] Empaquetar .app firmada para distribucion
+- [ ] Subir cambios a GitHub
+
+=== COMANDOS RAPIDOS ===
+Recompilar: cd ~/Documents/MACRON/MACRON_v4 && swift build
+Copiar: cp .build/arm64-apple-macosx/debug/MACRON ~/Documents/MACRON/MACRON.app/Contents/MacOS/
+Abrir: open ~/Documents/MACRON/MACRON.app
+
+Backend: cd ~/Documents/MACRON && source venv/bin/activate && python macron_ui_v3.py
+Proxy: python ~/macron_proxy.py

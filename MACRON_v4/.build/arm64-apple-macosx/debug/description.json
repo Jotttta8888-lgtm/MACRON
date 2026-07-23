@@ -1,0 +1,431 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.MACRON-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources",
+      "importPath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "MACRON",
+      "moduleOutputPath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules/MACRON.swiftmodule",
+      "objects" : [
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j6",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "MACRON_main",
+        "-color-diagnostics",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "macron_v4"
+      ],
+      "outputFileMapPath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules/MACRON.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift",
+        "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift"
+      ],
+      "tempsPath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "MACRON" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "MACRON",
+      "-package-name",
+      "macron_v4",
+      "-c",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift",
+      "-I",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j6",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "MACRON_main",
+      "-color-diagnostics",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "macron_v4",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "MACRON" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON-entitlement.plist"
+    },
+    "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/CalendarView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ChatView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FinderSafariMailView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/FocusTextField.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MACRONApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronAPIClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/MacronModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/NotesRemindersView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/Sources/MACRON/ResearchAnalyticsSettingsView.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/sources"
+    },
+    "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/CalendarView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ChatView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FinderSafariMailView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/FocusTextField.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MACRONApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronAPIClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/MacronModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/NotesRemindersView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.build/ResearchAnalyticsSettingsView.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/MACRON.product/Objects.LinkFileList"
+    },
+    "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/juancamilo/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}
