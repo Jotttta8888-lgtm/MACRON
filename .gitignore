@@ -1,12 +1,11 @@
-MACRON.app/Contents/MacOS/MACRON
+# Binarios y builds
 MACRON.app/Contents/MacOS/MACRON
 *.backup.*
-.DS_Store
 *.log
-MACRON_Xcode_Project/
 MACRON_v4/.build/
-MACRON.app/Contents/MacOS/MACRON
-*.backup.*
+
+# macOS
 .DS_Store
-*.log
+
+# Xcode
 MACRON_Xcode_Project/
