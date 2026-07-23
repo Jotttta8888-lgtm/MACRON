@@ -1,8 +1,13 @@
 # MACRON - Asistente AI Local para macOS
 
-Version 2.5 | macOS 15+ | 100%% Local & Privado
+**Version 3.1** | macOS 15+ | 100% Local & Privado
 
 MACRON es un asistente de inteligencia artificial completamente local para macOS que integra 28 modulos nativos, 5 agentes autonomos y un sistema de plugins extensible. Ningun dato sale de tu Mac.
+
+## Estado del Proyecto
+
+- **Interfaz Python/Tkinter** (estable): `macron_ui_v3.py` + servidor Flask
+- **Interfaz SwiftUI** (en desarrollo): `MACRON_v4/` — Swift Package Manager, NativeTextField, dictado nativo macOS
 
 ## Caracteristicas Principales
 
@@ -37,12 +42,21 @@ MACRON es un asistente de inteligencia artificial completamente local para macOS
 ## Arquitectura
 
     MACRON/
-    ├── macron_core.py
-    ├── macron_ui_v3.py
-    ├── macron_agent_*.py
-    ├── macron_plugins.py
-    ├── MACRON.app/
-    └── plugins/
+    ├── macron_core.py              # Nucleo del sistema
+    ├── macron_ui_v3.py             # Interfaz web Python/Tkinter
+    ├── macron_agent_*.py           # Agentes autonomos (5)
+    ├── macron_plugins.py           # Sistema de plugins
+    ├── MACRON_v4/                  # SwiftUI (en desarrollo)
+    │   ├── Package.swift
+    │   └── Sources/MACRON/
+    ├── MACRON.app/                 # App .app nativa
+    ├── MACRON_Xcode_Project/       # Proyecto Xcode legacy
+    └── plugins/                    # Plugins de terceros
+
+## Compilar SwiftUI (MACRON_v4)
+
+    cd MACRON_v4
+    swift build
 
 ## Modulos Activos (28/28)
 
@@ -54,7 +68,7 @@ Crea plugins en ~/Documents/MACRON/plugins/
 
 ## Privacidad
 
-100%% local. Ningun dato sale de tu Mac.
+100% local. Ningun dato sale de tu Mac.
 
 ## Autor
 
