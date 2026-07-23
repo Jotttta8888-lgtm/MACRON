@@ -738,8 +738,6 @@ async function showMonitorReport() {
 }
 
 
-}
-
 refreshStatus();
 document.getElementById('messageInput').focus();
 </script>
