@@ -1,0 +1,202 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F32D447A57E54DF8ACC48C12 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32D447A57E54DF8ACC48C12R /* main.swift */; };
+		364DE76FF34542D097720B90 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364DE76FF34542D097720B90R /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F32D447A57E54DF8ACC48C12R /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		364DE76FF34542D097720B90R /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9066DA8F905B431880955571 /* MACRON.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MACRON.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C5DD06ED2D74481491F9D3AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4462D82895894641B6247BB1 = {
+			isa = PBXGroup;
+			children = (
+				F32D447A57E54DF8ACC48C12R /* main.swift */,
+				364DE76FF34542D097720B90R /* ContentView.swift */,
+			);
+			path = MACRON;
+			sourceTree = "<group>";
+		};
+		A3BD9EE9B4E74079B9C4AAD8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9066DA8F905B431880955571 /* MACRON.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A7D7D26AB2C74795B633D348 = {
+			isa = PBXGroup;
+			children = (
+				BA85FD0851774B2D8313F614 /* MACRON */,
+				8CD30613CD6549E3BBB8E5A3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B51AFFAAD8B14FF7983BD470 /* MACRON */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 605EF6AC7A7A4CE3BB391EAD /* Build configuration list for PBXNativeTarget "MACRON" */;
+			buildPhases = (
+				070B656975CA4C2EA52CA9A8 /* Sources */,
+				B6E58E0C639B4C40A2326741 /* Frameworks */,
+				222C9C55524645378792D5D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MACRON;
+			productName = MACRON;
+			productReference = 9066DA8F905B431880955571 /* MACRON.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A7D7D26AB2C74795B633D348 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					B51AFFAAD8B14FF7983BD470 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 605EF6AC7A7A4CE3BB391EADP /* Build configuration list for PBXProject "MACRON" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A7D7D26AB2C74795B633D348;
+			productRefGroup = 7B156D7E7AE444BF876FE81B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B51AFFAAD8B14FF7983BD470 /* MACRON */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8898DED654644C75B11F6161 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F32D447A57E54DF8ACC48C12 /* main.swift in Sources */,
+				364DE76FF34542D097720B90 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0ABD88D378E442399512BF11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MACRON/MACRON.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.macron.agent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		824DDE3AEE2241198EF537C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MACRON/MACRON.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.macron.agent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		605EF6AC7A7A4CE3BB391EADP /* Build configuration list for PBXProject "MACRON" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0ABD88D378E442399512BF11 /* Debug */,
+				824DDE3AEE2241198EF537C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		605EF6AC7A7A4CE3BB391EAD /* Build configuration list for PBXNativeTarget "MACRON" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0ABD88D378E442399512BF11 /* Debug */,
+				824DDE3AEE2241198EF537C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A7D7D26AB2C74795B633D348 /* Project object */;
+}
