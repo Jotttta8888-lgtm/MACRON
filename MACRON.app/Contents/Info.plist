@@ -10,11 +10,11 @@
     <string>MACRON</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>4.0</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
     <key>LSUIElement</key>
     <false/>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>MACRON necesita acceso al microfono para reconocimiento de voz</string>
-    <key>NSSpeechRecognitionUsageDescription</key>
-    <string>MACRON usa reconocimiento de voz para convertir tu voz a texto</string>
 </dict>
 </plist>
