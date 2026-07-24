@@ -80,6 +80,12 @@ def api_call(path, method='GET', data=None):
     
     # Leer API key
     key_file = os.path.expanduser("~/.macron_api_key")
+    if not os.path.exists(key_file):
+        import secrets
+        new_key = secrets.token_hex(32)
+        with open(key_file, "w") as f:
+            f.write(new_key)
+        print(f"   API Key generada: {new_key[:16]}...")
     with open(key_file) as f:
         api_key = f.read().strip()
     
