@@ -3,7 +3,7 @@ import Combine
 @MainActor
 class MacronAPIClient: ObservableObject {
     static let shared = MacronAPIClient()
-    private let baseURL = "http://localhost:5002"
+    private let baseURL = "http://localhost:5001"
     private var session: URLSession
     private var healthCheckTimer: Timer?
     @Published var isOnline = false

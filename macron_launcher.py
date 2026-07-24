@@ -26,10 +26,10 @@ def check_venv():
 
 def start_api():
     print("🚀 Iniciando API Server...")
-    print("   URL: http://localhost:5000")
+    print("   URL: http://localhost:5001")
     print("   Auth: X-API-Key header required")
-    print("   WebSocket: ws://localhost:5000/ws/chat")
-    print("   SSE: http://localhost:5000/api/stream")
+    print("   WebSocket: ws://localhost:5001/ws/chat")
+    print("   SSE: http://localhost:5001/api/stream")
     print()
     
     # Iniciar server en background
@@ -46,7 +46,7 @@ def start_api():
     # Verificar que está corriendo
     import urllib.request
     try:
-        req = urllib.request.Request('http://localhost:5000/api/auth/status')
+        req = urllib.request.Request('http://localhost:5001/api/auth/status')
         with urllib.request.urlopen(req, timeout=5) as resp:
             print("✅ API Server iniciado correctamente")
             return proc
@@ -58,7 +58,7 @@ def show_menu():
     print("\n" + "="*60)
     print("  📋 MENÚ PRINCIPAL")
     print("="*60)
-    print("  1. 🌐 Abrir Web UI (http://localhost:5000)")
+    print("  1. 🌐 Abrir Web UI (http://localhost:5001)")
     print("  2. 📊 Ver estado del sistema")
     print("  3. 📧 Ver mails no leídos")
     print("  4. 🔗 Ver tabs de Safari")
@@ -89,7 +89,7 @@ def api_call(path, method='GET', data=None):
     with open(key_file) as f:
         api_key = f.read().strip()
     
-    url = f'http://localhost:5000{path}'
+    url = f'http://localhost:5001{path}'
     headers = {
         'X-API-Key': api_key,
         'Content-Type': 'application/json'
@@ -127,7 +127,7 @@ def main():
             
             elif choice == '1':
                 print("\n🌐 Abriendo Web UI...")
-                webbrowser.open('http://localhost:5000')
+                webbrowser.open('http://localhost:5001')
             
             elif choice == '2':
                 print("\n📊 Estado del sistema:")
