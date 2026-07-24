@@ -17,10 +17,15 @@ class MacronAPIClient: ObservableObject {
         startHealthCheck()
     }
     func startHealthCheck() {
+        healthCheckTimer?.invalidate()
         healthCheckTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
             Task { @MainActor in _ = await self.checkHealth() }
         }
         Task { @MainActor in _ = await self.checkHealth() }
+    }
+    func stopHealthCheck() {
+        healthCheckTimer?.invalidate()
+        healthCheckTimer = nil
     }
     private func request<T: Decodable>(path: String, method: String = "GET", body: [String: Any]? = nil) async throws -> T {
         guard let url = URL(string: baseURL + path) else { throw MacronError.invalidURL }
