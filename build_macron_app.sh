@@ -2,9 +2,25 @@
 set -e
 
 APP_NAME="MACRON"
-BUILD_DIR="$HOME/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug"
 APP_BUNDLE="$HOME/Documents/MACRON/MACRON.app"
-BINARY="$BUILD_DIR/MACRON"
+
+# Detectar ruta del binario (swift build puede variar la ruta)
+BUILD_DIR_ARCH="$HOME/Documents/MACRON/MACRON_v4/.build/arm64-apple-macosx/debug"
+BUILD_DIR_SIMPLE="$HOME/Documents/MACRON/MACRON_v4/.build/debug"
+
+if [ -f "$BUILD_DIR_ARCH/MACRON" ]; then
+    BINARY="$BUILD_DIR_ARCH/MACRON"
+    echo "   Binario encontrado en: $BUILD_DIR_ARCH"
+elif [ -f "$BUILD_DIR_SIMPLE/MACRON" ]; then
+    BINARY="$BUILD_DIR_SIMPLE/MACRON"
+    echo "   Binario encontrado en: $BUILD_DIR_SIMPLE"
+else
+    echo "   ERROR: No se encontró el binario MACRON"
+    echo "   Buscado en:"
+    echo "     - $BUILD_DIR_ARCH/MACRON"
+    echo "     - $BUILD_DIR_SIMPLE/MACRON"
+    exit 1
+fi
 
 echo "=== Building MACRON.app ==="
 
