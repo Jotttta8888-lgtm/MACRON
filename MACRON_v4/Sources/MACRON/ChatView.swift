@@ -144,6 +144,7 @@ struct MessageBubble: View {
 
 struct TypingIndicator: View {
     @State private var offset: CGFloat = 0
+    @State private var isAnimating = false
     
     var body: some View {
         HStack(spacing: 4) {
@@ -151,13 +152,14 @@ struct TypingIndicator: View {
                 Circle()
                     .fill(Color.secondary)
                     .frame(width: 6, height: 6)
-                    .offset(y: offset)
-                    .animation(.easeInOut(duration: 0.5).repeatForever().delay(Double(i) * 0.15), value: offset)
+                    .offset(y: isAnimating ? -4 : 0)
+                    .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true).delay(Double(i) * 0.15), value: isAnimating)
             }
         }
         .padding(12)
         .background(Color(.controlBackgroundColor))
         .cornerRadius(16)
-        .onAppear { offset = -4 }
+        .onAppear { isAnimating = true }
+        .onDisappear { isAnimating = false }
     }
 }
