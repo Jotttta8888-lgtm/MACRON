@@ -5,6 +5,7 @@ struct ChatView: View {
     @State private var textInput = ""
     @State private var messages: [ChatMessage] = []
     @State private var isLoading = false
+    @StateObject private var speechService = SpeechService()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -42,7 +43,9 @@ struct ChatView: View {
             
             HStack(spacing: 12) {
                 Button(action: toggleSpeech) {
-                    Image(systemName: "mic").font(.title3)
+                    Image(systemName: speechService.isRecording ? "mic.fill" : "mic")
+                        .font(.title3)
+                        .foregroundColor(speechService.isRecording ? .red : .primary)
                 }.buttonStyle(.plain)
                 
                 NativeTextField(text: $textInput, placeholder: "Escribe un mensaje...", onSubmit: sendMessage)
@@ -58,11 +61,22 @@ struct ChatView: View {
             .background(Color(.controlBackgroundColor))
         }
         .background(Color(.windowBackgroundColor))
-
+        .onChange(of: speechService.transcript) { _, newValue in
+            if !newValue.isEmpty {
+                textInput = newValue
+            }
+        }
+        .onChange(of: speechService.isRecording) { _, isRecording in
+            if !isRecording && !speechService.transcript.isEmpty {
+                sendMessage()
+            }
+        }
     }
     
     private func toggleSpeech() {
-        // Usa el dictado nativo de macOS: presiona Fn dos veces en cualquier campo de texto
+        Task {
+            await speechService.toggleRecording()
+        }
     }
     
     private func sendMessage() {
