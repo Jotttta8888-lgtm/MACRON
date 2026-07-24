@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var api = MacronAPIClient.shared
+    @ObservedObject var api = MacronAPIClient.shared
     @State private var selectedTab = 0
     @State private var showSettings = false
     
