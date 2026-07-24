@@ -64,10 +64,20 @@ class MACRONMenuBar(rumps.App):
     @rumps.clicked('Detener Servidor')
     def stop_server(self, sender):
         try:
-            subprocess.run(["lsof", "-ti:5001"], capture_output=True)
-            subprocess.run(["bash", "-c", "lsof -ti:5001 | xargs kill -9 2>/dev/null"], check=False)
-            self.server_running = False
-            rumps.notification("MACRON", "OK", "Servidor detenido")
+            # Buscar solo procesos de MACRON (no cualquier proceso en el puerto)
+            result = subprocess.run(
+                ["pgrep", "-f", "macron_ui_v3.py"],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                pids = result.stdout.strip().split('\n')
+                for pid in pids:
+                    subprocess.run(["kill", "-15", pid.strip()], check=False)
+                    print(f"[Menubar] PID {pid.strip()} detenido gracefully")
+                self.server_running = False
+                rumps.notification("MACRON", "OK", f"Servidor detenido ({len(pids)} proceso(s))")
+            else:
+                rumps.notification("MACRON", "Info", "No hay servidor MACRON corriendo")
         except Exception as e:
             rumps.notification("MACRON", "Error", str(e))
 
