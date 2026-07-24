@@ -22,6 +22,16 @@ fi
 
 cd "$MACRON_DIR"
 
+# Función para verificar archivos existentes
+check_existing_file() {
+    local file="$1"
+    if [ -f "$file" ]; then
+        echo "[WARN] $file ya existe. Se omitirá para no sobrescribir cambios personalizados."
+        return 1
+    fi
+    return 0
+}
+
 # Backup de UI anterior
 if [ -f "macron_ui.py" ]; then
     echo "[1/6] Haciendo backup de macron_ui.py..."
@@ -41,8 +51,10 @@ echo "[3/6] Instalando dependencias..."
 pip install -q flask sounddevice numpy 2>/dev/null || true
 
 # Crear macron_ui_v3.py
-echo "[4/6] Creando macron_ui_v3.py..."
-cat > macron_ui_v3.py << 'PYEOF'
+echo "[4/6] Verificando macron_ui_v3.py..."
+if check_existing_file "macron_ui_v3.py"; then
+    echo "Creando macron_ui_v3.py..."
+    cat > macron_ui_v3.py << 'PYEOF'
 import os, sys, json, time, threading
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -583,11 +595,12 @@ def refresh_modules():
 
 if __name__ == '__main__':
     print('='*50)
-    print('  MACRON UI v3.0 - http://localhost:5004')
+    print('  MACRON UI v3.0 - http://localhost:5001')
     print('  Chat funcional - Estado real - VAD ready')
     print('='*50)
-    app.run(host='0.0.0.0', port=5004, debug=False, threaded=True)
+    app.run(host='0.0.0.0', port=5001, debug=False, threaded=True)
 PYEOF
+fi
 
 # Crear macron_voice_vad.py
 echo "[5/6] Creando macron_voice_vad.py..."
@@ -878,17 +891,17 @@ def main():
 
     def open_browser():
         time.sleep(1.5)
-        webbrowser.open('http://localhost:5004')
+        webbrowser.open('http://localhost:5001')
 
     threading.Thread(target=open_browser, daemon=True).start()
 
     print("\n" + "="*50)
-    print("  MACRON UI v3.0 - http://localhost:5004")
+    print("  MACRON UI v3.0 - http://localhost:5001")
     print("  Presiona Ctrl+C para detener")
     print("="*50 + "\n")
 
     try:
-        app.run(host='0.0.0.0', port=5004, debug=False, threaded=True)
+        app.run(host='0.0.0.0', port=5001, debug=False, threaded=True)
     except KeyboardInterrupt:
         print("\n[Launcher] MACRON detenido. Hasta pronto.")
 
@@ -918,5 +931,5 @@ echo ""
 echo "O directamente la UI:"
 echo "  python3 macron_ui_v3.py"
 echo ""
-echo "Abrira: http://localhost:5004"
+echo "Abrira: http://localhost:5001"
 echo "=========================================="
