@@ -91,7 +91,7 @@ struct ChatView: View {
                 let response = try await api.sendChat(message: userText)
                 await MainActor.run {
                     isLoading = false
-                    if let text = response.response {
+                    if let text = response.text {
                         messages.append(ChatMessage(text: text, isUser: false))
                     } else if let error = response.error {
                         messages.append(ChatMessage(text: "Error: \(error)", isUser: false, isError: true))

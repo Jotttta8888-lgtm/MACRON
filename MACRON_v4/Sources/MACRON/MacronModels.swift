@@ -18,7 +18,7 @@ struct HardwareInfo: Codable {
     let model: String?
 }
 struct ChatResponse: Codable {
-    let response: String?
+    let text: String?
     let error: String?
     let model: String?
     let tokens: Int?
