@@ -1,1 +1,6 @@
-flask>=2.0.0\nflask-cors>=3.0.0\npyyaml>=6.0.0\nsentence-transformers>=2.2.0\nfaiss-cpu>=1.7.0\nnumpy>=1.24.0\n
+flask>=2.0.0
+flask-cors>=3.0.0
+pyyaml>=6.0.0
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.0
+numpy>=1.24.0
