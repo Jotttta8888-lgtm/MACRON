@@ -46,8 +46,11 @@ struct DashboardView: View {
         }.background(Color(.windowBackgroundColor))
     }
     private func refresh() {
-        isLoading = true
-        Task { _ = await api.checkHealth(); isLoading = false }
+        Task {
+            defer { isLoading = false }
+            isLoading = true
+            _ = await api.checkHealth()
+        }
     }
 }
 struct StatCard: View {
