@@ -163,11 +163,8 @@ class MacronVoiceVAD:
                 print(f"[VAD] Repeticion detectada: '{most_common[0]}' x{most_common[1]}")
                 return ""
 
-        import re
-        suspicious = len(re.findall(r'[\u3040-\u9fff\uac00-\ud7af\u0600-\u06ff]', text))
-        if suspicious > 3 and suspicious / len(text) > 0.3:
-            print(f"[VAD] Caracteres no-esperados detectados ({suspicious}), descartando")
-            return ""
+        # Nota: Validacion de idioma eliminada. Whisper ya recibe language="es".
+        # Si el usuario habla otro idioma, es responsabilidad del modelo manejarlo.
 
         noise_patterns = ['\u266a', '\u266b', '\u3010', '\u3011', '\u203b', '\u25c6', '\u25a0', '\u25cf', '\u25cb']
         if any(p in text for p in noise_patterns):
