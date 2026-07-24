@@ -2,9 +2,14 @@ import SwiftUI
 import AppKit
 
 class FocusTextField: NSTextField {
+    var shouldAutoFocus = true
+    
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        self.window?.makeFirstResponder(self)
+        if shouldAutoFocus {
+            self.window?.makeFirstResponder(self)
+            shouldAutoFocus = false
+        }
     }
 }
 
