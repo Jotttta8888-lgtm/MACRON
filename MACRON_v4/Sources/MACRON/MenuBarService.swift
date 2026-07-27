@@ -12,6 +12,10 @@ class MenuBarService: NSObject {
         
         let menu = NSMenu()
         
+        let widgetItem = NSMenuItem(title: "Mostrar Widget", action: #selector(toggleWidget), keyEquivalent: "")
+        widgetItem.target = self
+        menu.addItem(widgetItem)
+        menu.addItem(NSMenuItem.separator())
         let openItem = NSMenuItem(title: "Abrir MACRON", action: #selector(openApp), keyEquivalent: "")
         openItem.target = self
         menu.addItem(openItem)
@@ -45,6 +49,10 @@ class MenuBarService: NSObject {
         
         Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in self.checkBackend() }
         checkBackend()
+    }
+    
+    @objc private func toggleWidget() {
+        DesktopWidgetWindow.shared.isVisible ? DesktopWidgetWindow.shared.hide() : DesktopWidgetWindow.shared.show()
     }
     
     @objc private func openApp() {

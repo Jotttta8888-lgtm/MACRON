@@ -8,6 +8,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // SOLO hotkey global. NADA de activate automatico.
         HotkeyService.shared.startMonitoring()
         MenuBarService.shared.setup()
+        WritingToolsService.shared.setup()
+        ClipboardHistoryService.shared.startMonitoring()
+        VoicePipelineService.shared.setup()
+        FocusModeService.shared.startMonitoring()
+        PluginSystem.shared.scanPlugins()
+        PluginSystem.shared.createExamplePlugin()
         // Todo lo demas desactivado para evitar robos de foco:
         // NotificationService, CrashRecovery, SleepWake, ScreenSharing, WakeWord
     }
@@ -72,4 +78,5 @@ extension Notification.Name {
     static let toggleTheme = Notification.Name("toggleTheme")
     static let deepLinkReceived = Notification.Name("deepLinkReceived")
     static let quickActionReceived = Notification.Name("quickActionReceived")
+    static let showClipboardHistory = Notification.Name("showClipboardHistory")
 }

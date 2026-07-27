@@ -62,6 +62,51 @@
 				<string>public.plain-text</string>
 			</array>
 		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Reescribir con MACRON</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>rewriteText</string>
+			<key>NSPortName</key>
+			<string>MACRON</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Resumir con MACRON</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>summarizeText</string>
+			<key>NSPortName</key>
+			<string>MACRON</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Corregir con MACRON</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>proofreadText</string>
+			<key>NSPortName</key>
+			<string>MACRON</string>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+		</dict>
 	</array>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>MACRON necesita reconocimiento de voz para entender comandos.</string>
