@@ -17,6 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         FinanceTracker.shared.load()
         WeatherAdvisor.shared.checkWeather()
         GameModeService.shared.startMonitoring()
+        LocalWebServer.shared.start()
         DigitalWellbeingService.shared.startTracking()
         SystemMonitorService.shared.startMonitoring()
         MeetingAssistantService.shared.startMonitoring()
