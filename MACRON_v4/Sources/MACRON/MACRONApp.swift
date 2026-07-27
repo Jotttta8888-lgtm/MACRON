@@ -20,6 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         LocalWebServer.shared.start()
         CodeSnippetManager.shared.load()
         RSSNewsReader.shared.fetchFeed(url: "https://feeds.bbci.co.uk/news/rss.xml", source: "BBC")
+        OfflineMapsService.shared.load()
+        JournalService.shared.load()
         DigitalWellbeingService.shared.startTracking()
         SystemMonitorService.shared.startMonitoring()
         MeetingAssistantService.shared.startMonitoring()
