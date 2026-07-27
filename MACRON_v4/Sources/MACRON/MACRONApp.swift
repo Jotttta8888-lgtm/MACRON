@@ -18,6 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         WeatherAdvisor.shared.checkWeather()
         GameModeService.shared.startMonitoring()
         LocalWebServer.shared.start()
+        CodeSnippetManager.shared.load()
+        RSSNewsReader.shared.fetchFeed(url: "https://feeds.bbci.co.uk/news/rss.xml", source: "BBC")
         DigitalWellbeingService.shared.startTracking()
         SystemMonitorService.shared.startMonitoring()
         MeetingAssistantService.shared.startMonitoring()
