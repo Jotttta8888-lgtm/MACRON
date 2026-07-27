@@ -14,6 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         HomeKitBridge.shared.setup()
         SmartNotesService.shared.loadNotes()
         PersonalKnowledgeBase.shared.loadIndex()
+        FinanceTracker.shared.load()
+        WeatherAdvisor.shared.checkWeather()
         SystemMonitorService.shared.startMonitoring()
         MeetingAssistantService.shared.startMonitoring()
         VoicePipelineService.shared.setup()
