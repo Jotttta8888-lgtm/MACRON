@@ -2,30 +2,70 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>MACRON</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.macron.app</string>
+	<string>com.juancamilo.macron</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>MACRON</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>4.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.juancamilo.macron</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>macron</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>14.0</string>
+	<string>13.0</string>
 	<key>LSUIElement</key>
 	<false/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>MACRON necesita acceso para automatizar acciones del sistema.</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 Juan Camilo</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>MACRON necesita acceso al micrófono para el dictado.</string>
+	<string>MACRON necesita acceso al micrófono para comandos de voz y dictado.</string>
+	<key>NSServices</key>
+	<array>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Enviar a MACRON</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>processText</string>
+			<key>NSPortName</key>
+			<string>MACRON</string>
+			<key>NSRequiredContext</key>
+			<dict/>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>MACRON necesita acceso al reconocimiento de voz para el dictado.</string>
+	<string>MACRON necesita reconocimiento de voz para entender comandos.</string>
+	<key>NSSupportsAppIntents</key>
+	<true/>
 </dict>
 </plist>

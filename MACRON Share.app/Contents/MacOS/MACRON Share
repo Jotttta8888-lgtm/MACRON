@@ -1,0 +1,6 @@
+#!/bin/bash
+osascript <<APPLESCRIPT
+set theText to the clipboard as text
+set resultText to do shell script "cd ~/Documents/MACRON && ./macron-shortcut.sh " & quoted form of theText
+display notification resultText with title "MACRON Share"
+APPLESCRIPT

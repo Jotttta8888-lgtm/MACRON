@@ -1,0 +1,102 @@
+{
+  "WFWorkflowClientVersion": "1092.0.2",
+  "WFWorkflowClientRelease": "4.0",
+  "WFWorkflowMinimumClientVersion": 900,
+  "WFWorkflowMinimumClientVersionString": "900",
+  "WFWorkflowIcon": {
+    "WFWorkflowIconStartColor": 4292093695,
+    "WFWorkflowIconGlyphNumber": 61456
+  },
+  "WFWorkflowImportQuestions": [],
+  "WFWorkflowTypes": ["NCWidget", "WatchKit"],
+  "WFWorkflowInputContentItemClasses": [
+    "WFAppStoreAppContentItem",
+    "WFArticleContentItem",
+    "WFContactContentItem",
+    "WFDateContentItem",
+    "WFEmailAddressContentItem",
+    "WFGenericFileContentItem",
+    "WFImageContentItem",
+    "WFiTunesProductContentItem",
+    "WFLocationContentItem",
+    "WFDCMapsLinkContentItem",
+    "WFAVAssetContentItem",
+    "WFPDFContentItem",
+    "WFPhoneNumberContentItem",
+    "WFRichTextContentItem",
+    "WFSafariWebPageContentItem",
+    "WFStringContentItem",
+    "WFURLContentItem"
+  ],
+  "WFWorkflowActions": [
+    {
+      "WFWorkflowActionIdentifier": "is.workflow.actions.geturl",
+      "WFWorkflowActionParameters": {
+        "WFURLActionURL": "http://localhost:5001/api/voice-action",
+        "WFHTTPHeaders": {
+          "Value": {
+            "WFSerializationType": "WFTextTokenString",
+            "string": "Content-Type: application/json"
+          },
+          "WFSerializationType": "WFTextTokenString"
+        },
+        "WFHTTPBody": {
+          "Value": {
+            "string": "{\"text\": \"{{Ask}}\"}",
+            "attachmentsByRange": {
+              "{9, 6}": {
+                "Type": "Ask",
+                "Aggrandizements": []
+              }
+            }
+          },
+          "WFSerializationType": "WFTextTokenString"
+        },
+        "WFHTTPMethod": "POST",
+        "UUID": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890"
+      }
+    },
+    {
+      "WFWorkflowActionIdentifier": "is.workflow.actions.gettext",
+      "WFWorkflowActionParameters": {
+        "WFTextActionText": {
+          "Value": {
+            "string": "{{URL Result}}",
+            "attachmentsByRange": {
+              "{2, 10}": {
+                "Type": "ActionOutput",
+                "OutputName": "URL Result",
+                "OutputUUID": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+                "Aggrandizements": []
+              }
+            }
+          },
+          "WFSerializationType": "WFTextTokenString"
+        },
+        "UUID": "B2C3D4E5-F6A7-8901-BCDE-F12345678901"
+      }
+    },
+    {
+      "WFWorkflowActionIdentifier": "is.workflow.actions.speaktext",
+      "WFWorkflowActionParameters": {
+        "WFSpeakTextText": {
+          "Value": {
+            "string": "{{Text}}",
+            "attachmentsByRange": {
+              "{2, 4}": {
+                "Type": "ActionOutput",
+                "OutputName": "Text",
+                "OutputUUID": "B2C3D4E5-F6A7-8901-BCDE-F12345678901",
+                "Aggrandizements": []
+              }
+            }
+          },
+          "WFSerializationType": "WFTextTokenString"
+        },
+        "WFSpeakTextWait": true,
+        "UUID": "C3D4E5F6-A7B8-9012-CDEF-123456789012"
+      }
+    }
+  ],
+  "WFWorkflowName": "MACRON Voice"
+}

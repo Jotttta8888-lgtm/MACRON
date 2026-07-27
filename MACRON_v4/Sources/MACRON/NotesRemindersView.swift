@@ -60,9 +60,9 @@ struct AddNoteSheet: View {
     var body: some View {
         VStack(spacing: 16) {
             Text("Nueva Nota").font(.title2.bold())
-            NativeTextField(text: $title, placeholder: "Titulo", onSubmit: nil)
+            DictationTextField(placeholder: "Titulo", text: $title)
             TextEditor(text: $content).frame(minHeight: 150).overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary.opacity(0.3)))
-            NativeTextField(text: $tags, placeholder: "Tags (separados por coma)", onSubmit: nil)
+            DictationTextField(placeholder: "Tags", text: $tags)
             HStack {
                 Button("Cancelar", action: onCancel).buttonStyle(.bordered)
                 Spacer()
@@ -141,7 +141,7 @@ struct AddReminderSheet: View {
     var body: some View {
         VStack(spacing: 16) {
             Text("Nuevo Recordatorio").font(.title2.bold())
-            NativeTextField(text: $title, placeholder: "Titulo", onSubmit: nil)
+            DictationTextField(placeholder: "Titulo", text: $title)
             Toggle("Fecha limite", isOn: $hasDueDate)
             if hasDueDate { DatePicker("Fecha", selection: $dueDate) }
             Picker("Prioridad", selection: $priority) {

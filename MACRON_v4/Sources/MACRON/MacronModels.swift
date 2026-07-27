@@ -152,3 +152,16 @@ struct ResearchResult: Codable, Identifiable {
     let url: String?
     let snippet: String?
 }
+
+struct VoiceActionResponse: Codable {
+    let action: String?
+    let params: [String: String]?
+    let response: String?
+    let result: [String: String]?
+    let original_text: String?
+    let method: String?
+    
+    // Campos de error del backend
+    let error: String?
+    let text: String?
+}

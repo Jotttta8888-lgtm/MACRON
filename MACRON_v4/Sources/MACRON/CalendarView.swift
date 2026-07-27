@@ -62,9 +62,9 @@ struct AddEventSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             Text("Nuevo Evento").font(.title2.bold())
-            NativeTextField(text: $title, placeholder: "Titulo", onSubmit: nil)
+            DictationTextField(placeholder: "Titulo", text: $title)
             DatePicker("Fecha y hora", selection: $date)
-            NativeTextField(text: $notes, placeholder: "Notas", onSubmit: nil)
+            DictationTextField(placeholder: "Notas", text: $notes)
             HStack {
                 Button("Cancelar", action: onCancel).buttonStyle(.bordered)
                 Spacer()

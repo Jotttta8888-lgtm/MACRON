@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 """
 MACRON UI v3.1 — Conectado a macron_core.py
 Expone las 20+ funcionalidades via API REST
@@ -12,6 +13,51 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from flask import Flask, render_template_string, request, jsonify
 
 app = Flask(__name__)
+
+# Memoria de conversación persistente
+_conversation_memory = []
+_MAX_MEMORY = 20
+
+def _add_to_memory(role, text, action=None):
+    global _conversation_memory
+    entry = {
+        'timestamp': __import__('datetime').datetime.now().isoformat(),
+        'role': role,
+        'text': text,
+        'action': action
+    }
+    _conversation_memory.append(entry)
+    if len(_conversation_memory) > _MAX_MEMORY:
+        _conversation_memory = _conversation_memory[-_MAX_MEMORY:]
+    # Guardar a disco
+    try:
+        import json, os
+        mem_file = os.path.expanduser('~/Documents/MACRON/conversation_memory.json')
+        with open(mem_file, 'w') as f:
+            json.dump(_conversation_memory, f, indent=2, ensure_ascii=False)
+    except:
+        pass
+
+def _get_memory_context():
+    global _conversation_memory
+    if not _conversation_memory:
+        try:
+            import json, os
+            mem_file = os.path.expanduser('~/Documents/MACRON/conversation_memory.json')
+            if os.path.exists(mem_file):
+                with open(mem_file, 'r') as f:
+                    _conversation_memory = json.load(f)
+        except:
+            pass
+    # Formatear últimos 5 mensajes como contexto
+    recent = _conversation_memory[-5:]
+    context = []
+    for m in recent:
+        prefix = "Usuario" if m['role'] == 'user' else "MACRON"
+        context.append(f"{prefix}: {m['text']}")
+    return "\n".join(context) if context else ""
+
+
 
 # ── CORE UNIFICADO ─────────────────────────────────────────────
 _core = None
@@ -823,6 +869,568 @@ def status():
     except Exception as e:
         return jsonify({'error': str(e), 'healthy': False}), 500
 
+
+
+
+def _convert_result_to_strings(result):
+    """Convierte cualquier resultado a dict de strings para JSON compatible"""
+    if result is None:
+        return {}
+    if isinstance(result, dict):
+        out = {}
+        for k, v in result.items():
+            if v is None:
+                out[k] = ""
+            elif isinstance(v, bool):
+                out[k] = "true" if v else "false"
+            elif isinstance(v, (dict, list)):
+                import json
+                out[k] = json.dumps(v)
+            else:
+                out[k] = str(v)
+        return out
+    return {"text": str(result)}
+
+
+def _route_voice_action(text_lower):
+    """Router expandido: detecta cientos de palabras clave"""
+    keywords = {
+        'focus_toggle': [
+            'concentrarme', 'enfocarme', 'distracción', 'distracto', 'focus mode',
+            'modo focus', 'modo concentración', 'no me concentro', 'pomodoro',
+            'silenciar notificaciones', 'modo silencio', 'trabajar', 'estudiar',
+            'modo trabajo', 'modo estudio', 'concentración', 'enfoque'
+        ],
+        'focus_status': [
+            'estado focus', 'estado de focus', 'focus activo', 'focus encendido',
+            'estoy en focus', 'modo focus activo'
+        ],
+        'safari_search': [
+            'buscar en safari', 'navegar a', 'abrir safari', 'ir a', 'buscar sobre',
+            'google', 'wikipedia', 'buscar en internet', 'investigar sobre',
+            'buscar en google', 'buscar en la web', 'navegar a la página'
+        ],
+        'safari_get_tabs': [
+            'tabs abiertas', 'pestañas abiertas', 'páginas abiertas', 'qué tengo abierto',
+            'ventanas abiertas', 'qué tengo en safari'
+        ],
+        'safari_summarize': [
+            'resumir página', 'resumen de la página', 'de qué trata esta página',
+            'qué dice esta página', 'resumen del sitio'
+        ],
+        'mail_get_inbox': [
+            'ver emails', 'ver correos', 'inbox', 'bandeja de entrada', 'mails',
+            'mensajes de correo', 'emails nuevos', 'correos nuevos',
+            'abrir mail', 'abrir correo', 'ver mi mail'
+        ],
+        'mail_get_unread_count': [
+            'emails no leídos', 'correos no leídos', 'cuántos emails', 'notificaciones mail',
+            'cuántos correos tengo', 'emails sin leer'
+        ],
+        'mail_search': [
+            'buscar en mail', 'buscar correo', 'buscar email de', 'encontrar email',
+            'buscar en correos'
+        ],
+        'calendar_today': [
+            'eventos de hoy', 'qué tengo hoy', 'agenda de hoy', 'calendario hoy',
+            'reuniones de hoy', 'citas de hoy', 'qué hay hoy', 'mi día hoy'
+        ],
+        'calendar_upcoming': [
+            'próximos eventos', 'eventos próximos', 'qué viene', 'calendario próximo',
+            'reuniones próximas', 'agenda próxima', 'qué hay mañana', 'esta semana'
+        ],
+        'calendar_add_event': [
+            'agregar evento', 'nueva reunión', 'nueva cita', 'crear evento',
+            'programar reunión', 'programar cita', 'añadir al calendario',
+            'nuevo evento', 'nueva reunión', 'nueva cita'
+        ],
+        'screenshot': [
+            'screenshot', 'captura de pantalla', 'foto de pantalla', 'pantallazo',
+            'capturar pantalla', 'tomar foto', 'screenshot de pantalla'
+        ],
+        'notify': [
+            'notificación', 'alerta', 'aviso', 'recordatorio', 'notificarme',
+            'avisarme', 'recuérdame', 'recuerdame'
+        ],
+        'history': [
+            'historial', 'chat anterior', 'conversación anterior', 'lo que dijimos',
+            'qué dijimos', 'mensajes anteriores'
+        ],
+        'export': [
+            'exportar', 'guardar datos', 'backup', 'respaldo', 'descargar datos',
+            'exportar chat', 'guardar conversación'
+        ],
+        'applescript_spotify': [
+            'abrir spotify', 'spotify', 'poner spotify', 'reproducir spotify',
+            'música en spotify', 'canción en spotify'
+        ],
+        'applescript_music': [
+            'abrir música', 'apple music', 'poner música', 'reproducir música',
+            'música', 'canción', 'playlist', 'lista de reproducción'
+        ],
+        'applescript_terminal': [
+            'abrir terminal', 'terminal', 'consola', 'línea de comandos',
+            'abrir la terminal'
+        ],
+        'applescript_calculator': [
+            'abrir calculadora', 'calculadora', 'calcula', 'sumar', 'restar',
+            'multiplicar', 'dividir'
+        ],
+        'applescript_settings': [
+            'abrir configuración', 'abrir ajustes', 'configuración', 'ajustes',
+            'preferencias del sistema', 'system settings', 'system preferences'
+        ],
+        'applescript_notes': [
+            'abrir notas', 'notas', 'nueva nota', 'escribir nota'
+        ],
+        'applescript_reminders': [
+            'abrir recordatorios', 'recordatorios', 'nuevo recordatorio'
+        ],
+        'applescript_photos': [
+            'abrir fotos', 'fotos', 'ver fotos', 'abrir imágenes'
+        ],
+        'applescript_finder': [
+            'abrir finder', 'abrir carpeta', 'nueva carpeta', 'carpeta',
+            'archivos', 'documentos'
+        ],
+        'applescript_preview': [
+            'abrir preview', 'preview', 'ver imagen', 'abrir pdf'
+        ],
+        'applescript_textedit': [
+            'abrir textedit', 'textedit', 'editor de texto', 'nuevo documento'
+        ],
+        'applescript_volume_up': [
+            'subir volumen', 'más volumen', 'aumentar volumen', 'volumen arriba',
+            'más alto', 'sube el volumen', 'súbele el volumen'
+        ],
+        'applescript_volume_down': [
+            'bajar volumen', 'menos volumen', 'disminuir volumen', 'volumen abajo',
+            'más bajo', 'baja el volumen', 'bájale el volumen'
+        ],
+        'applescript_mute': [
+            'silenciar', 'mute', 'sin sonido', 'apagar sonido'
+        ],
+        'applescript_brightness_up': [
+            'subir brillo', 'más brillo', 'aumentar brillo', 'brillo arriba',
+            'más luminoso', 'súbele el brillo'
+        ],
+        'applescript_brightness_down': [
+            'bajar brillo', 'menos brillo', 'disminuir brillo', 'brillo abajo',
+            'menos luminoso', 'bájale el brillo'
+        ],
+        'applescript_lock': [
+            'bloquear pantalla', 'bloquear mac', 'bloquear computadora',
+            'cerrar sesión', 'lock screen'
+        ],
+        'applescript_sleep': [
+            'dormir', 'suspender', 'sleep', 'modo sueño', 'apagar pantalla'
+        ],
+        'applescript_shutdown': [
+            'apagar', 'shutdown', 'apagar computadora', 'apagar mac'
+        ],
+        'applescript_restart': [
+            'reiniciar', 'restart', 'reiniciar mac', 'reiniciar computadora'
+        ],
+        'applescript_desktop': [
+            'mostrar escritorio', 'escritorio', 'desktop', 'ver escritorio',
+            'minimizar todo'
+        ],
+        'applescript_copy': [
+            'copiar', 'copia esto', 'copiar selección', 'command c'
+        ],
+        'applescript_paste': [
+            'pegar', 'pega esto', 'pegar selección', 'command v'
+        ],
+        'applescript_undo': [
+            'deshacer', 'undo', 'deshacer cambio', 'ctrl z'
+        ],
+        'applescript_redo': [
+            'rehacer', 'redo', 'rehacer cambio', 'ctrl shift z'
+        ],
+        'applescript_select_all': [
+            'seleccionar todo', 'select all', 'seleccionar todo el texto',
+            'command a'
+        ],
+        'applescript_close_window': [
+            'cerrar ventana', 'cierra esto', 'cerrar esta ventana', 'command w'
+        ],
+        'applescript_quit_app': [
+            'cerrar aplicación', 'salir', 'quit', 'cerrar app', 'command q'
+        ],
+        'applescript_new_tab': [
+            'nueva pestaña', 'nueva tab', 'new tab', 'command t'
+        ],
+        'applescript_new_window': [
+            'nueva ventana', 'new window', 'command n'
+        ],
+        'applescript_time': [
+            'qué hora es', 'hora actual', 'qué hora', 'dime la hora'
+        ],
+        'applescript_date': [
+            'qué día es', 'qué fecha es', 'fecha actual', 'dime la fecha',
+            'día de hoy'
+        ],
+        'applescript_battery': [
+            'batería', 'cuánta batería', 'nivel de batería', 'battery',
+            'cuánto le queda', 'porcentaje de batería'
+        ],
+        'applescript_wifi': [
+            'wifi', 'internet', 'conexión', 'red', 'conectar wifi',
+            'estado wifi', 'quitar wifi'
+        ],
+        'applescript_bluetooth': [
+            'bluetooth', 'conectar bluetooth', 'desconectar bluetooth',
+            'airpods', 'auriculares'
+        ],
+        'applescript_whatsapp': [
+            'abrir whatsapp', 'abre whatsapp', 'whatsapp', 'mensaje de whatsapp', 'abrir wasap',
+            'wasap', 'whatsapp web', 'wpp'
+        ],
+        'applescript_vscode': [
+            'abrir vscode', 'abre vscode', 'abrir visual studio code', 'vscode', 'visual studio code',
+            'abrir code', 'code editor', 'editor de código'
+        ],
+        'applescript_zoom': [
+            'abrir zoom', 'abre zoom', 'zoom', 'reunión de zoom', 'zoom meeting',
+            'iniciar zoom', 'llamada de zoom'
+        ],
+        'applescript_teams': [
+            'abrir teams', 'abre teams', 'microsoft teams', 'teams', 'reunión de teams',
+            'llamada de teams', 'abrir microsoft teams'
+        ],
+        'applescript_chrome': [
+            'abrir chrome', 'abre chrome', 'google chrome', 'chrome', 'navegador chrome',
+            'abrir google chrome'
+        ],
+        'applescript_brave': [
+            'abrir brave', 'abre brave', 'brave browser', 'brave', 'navegador brave'
+        ],
+        'applescript_arc': [
+            'abrir arc', 'abre arc', 'arc browser', 'arc', 'navegador arc'
+        ],
+        'applescript_notion': [
+            'abrir notion', 'abre notion', 'notion', 'notas notion', 'abrir notas notion'
+        ],
+        'applescript_slack': [
+            'abrir slack', 'abre slack', 'slack', 'mensaje de slack', 'abrir slack workspace'
+        ],
+        'applescript_discord': [
+            'abrir discord', 'abre discord', 'discord', 'abrir discord app', 'discord app'
+        ],
+        'applescript_telegram': [
+            'abrir telegram', 'abre telegram', 'telegram', 'mensaje de telegram', 'abrir tg'
+        ],
+        'applescript_obsidian': [
+            'abrir obsidian', 'abre obsidian', 'obsidian', 'vault obsidian', 'abrir vault'
+        ],
+    }
+
+    import re
+    for action, words in keywords.items():
+        for word in words:
+            # Word boundary: espacio, inicio o fin de string
+            pattern = r"(?:^|\s)" + re.escape(word) + r"(?:\s|$)"
+            if re.search(pattern, text_lower):
+                return action
+    return None
+
+
+def _validate_script(script_code):
+    trusted = ['tell application', 'tell application "System Events"', 'set volume', 'return (current date)', 'return (do shell script']
+    bad = [';', '|', '&&', 'rm ', 'sudo ', 'curl ', 'wget ', 'python ', 'osascript']
+    if any(b in script_code for b in bad):
+        return False
+    return any(script_code.strip().startswith(t) for t in trusted)
+
+def _execute_applescript(script_name, script_code, response_text):
+    """Ejecuta AppleScript y retorna resultado"""
+    import subprocess
+    if not _validate_script(script_code):
+        return {
+            'action': script_name,
+            'params': {'script': script_code},
+            'response': 'Script bloqueado por seguridad',
+            'result': {'error': 'No permitido', 'success': 'false'},
+            'method': 'applescript'
+        }
+    try:
+        result = subprocess.run(
+            ['osascript', '-e', script_code],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        output = result.stdout.strip()
+        error = result.stderr.strip() if result.returncode != 0 else None
+        success = result.returncode == 0
+        
+        result_dict = _convert_result_to_strings({
+            'output': output,
+            'error': error,
+            'success': success
+        })
+        
+        return {
+            'action': script_name,
+            'params': {'script': script_code},
+            'response': response_text if success else f"Error: {error}",
+            'result': result_dict,
+            'method': 'applescript'
+        }
+    except Exception as e:
+        result_dict = _convert_result_to_strings({
+            'error': str(e),
+            'success': False
+        })
+        return {
+            'action': script_name,
+            'params': {'script': script_code},
+            'response': f"Error ejecutando: {str(e)}",
+            'result': result_dict,
+            'method': 'applescript'
+        }
+
+
+def _execute_predefined_action(core, action, text):
+    """Ejecuta acciones predefinidas de MACRON"""
+    result = None
+    response_text = "Acción completada"
+    
+    try:
+        if action == 'focus_toggle':
+            result = core.focus_toggle()
+            response_text = "Modo Focus activado/desactivado"
+        elif action == 'focus_status':
+            result = core.focus_status()
+            response_text = "Estado de Focus consultado"
+        elif action == 'safari_search':
+            query = text.replace('buscar', '').replace('sobre', '').replace('en safari', '').strip()
+            result = core.safari_search(query)
+            response_text = f"Buscando: {query}"
+        elif action == 'safari_get_tabs':
+            result = core.safari_get_tabs()
+            response_text = "Tabs abiertas consultadas"
+        elif action == 'safari_summarize':
+            result = core.safari_summarize()
+            response_text = "Página resumida"
+        elif action == 'mail_get_inbox':
+            result = core.mail_get_inbox(20)
+            response_text = "Inbox consultado"
+        elif action == 'mail_get_unread_count':
+            result = core.mail_get_unread_count()
+            response_text = "Emails no leídos consultados"
+        elif action == 'mail_search':
+            result = core.mail_search(text, 10)
+            response_text = f"Buscando en Mail: {text}"
+        elif action == 'calendar_today':
+            result = core.calendar_today()
+            response_text = "Eventos de hoy consultados"
+        elif action == 'calendar_upcoming':
+            result = core.calendar_upcoming(7)
+            response_text = "Próximos eventos consultados"
+        elif action == 'calendar_add_event':
+            result = core.calendar_add_event(text, '', '')
+            response_text = "Evento agregado al calendario"
+        elif action == 'screenshot':
+            result = core.screenshot()
+            response_text = "Screenshot tomado"
+        elif action == 'notify':
+            result = core.notify('MACRON', text)
+            response_text = "Notificación enviada"
+        elif action == 'history':
+            result = core.get_history()
+            response_text = "Historial consultado"
+        elif action == 'export':
+            result = core.export_data('json')
+            response_text = "Datos exportados"
+        else:
+            result = core.chat(text)
+            response_text = result.get('text', 'Entendido') if isinstance(result, dict) else str(result)
+    except Exception as e:
+        result = {'error': str(e)}
+        response_text = f"Error: {str(e)}"
+    
+    result_dict = _convert_result_to_strings(result if isinstance(result, dict) else {'text': str(result)})
+    
+    return {
+        'action': action,
+        'params': {},
+        'response': response_text,
+        'result': result_dict,
+        'method': 'predefined'
+    }
+
+
+
+def _get_key():
+    key_file = os.path.expanduser('~/Documents/MACRON/.macron_key')
+    if os.path.exists(key_file):
+        with open(key_file, 'rb') as f:
+            return f.read()
+    key = Fernet.generate_key()
+    with open(key_file, 'wb') as f:
+        f.write(key)
+    return key
+
+def _save_history(entry, filepath):
+    try:
+        history = []
+        if os.path.exists(filepath):
+            with open(filepath, 'rb') as f:
+                encrypted = f.read()
+                if encrypted:
+                    fernet = Fernet(_get_key())
+                    decrypted = fernet.decrypt(encrypted)
+                    history = json.loads(decrypted.decode())
+        history.append(entry)
+        fernet = Fernet(_get_key())
+        encrypted = fernet.encrypt(json.dumps(history).encode())
+        with open(filepath, 'wb') as f:
+            f.write(encrypted)
+        print(f"[History] Guardado cifrado: {len(history)} entradas")
+    except Exception as e:
+        print(f"[History] Error guardando: {e}")
+
+@app.route('/api/voice-action', methods=['POST'])
+def voice_action():
+    data = request.get_json() or {}
+    text = data.get('text', '').strip()
+    
+    # Guardar en memoria
+    _add_to_memory('user', text)
+    
+    # Obtener contexto
+    memory_context = _get_memory_context()
+    
+    # Si hay contexto, enriquecer la respuesta
+    if memory_context and len(_conversation_memory) > 1:
+        print(f"[Memory] Contexto: {len(_conversation_memory)} mensajes")
+    """Voice-to-Action UNIVERSAL: router expandido + AppleScript"""
+    try:
+        data = request.get_json() or {}
+        text = data.get('text', '').strip()
+        
+        if not text:
+            return jsonify({'error': 'No text provided'}), 400
+        
+        # === LOG HISTORIAL ===
+        import json, os
+        from datetime import datetime
+        history_file = os.path.expanduser('~/Documents/MACRON/voice_history.json')
+        history_entry = {
+            'timestamp': datetime.now().isoformat(),
+            'text': text,
+            'action': None,
+            'method': None
+        }
+        
+        text_lower = text.lower()
+        
+        # === FASE 1: Router expandido ===
+        routed = _route_voice_action(text_lower)
+        
+        if routed:
+            core = get_macron_core()
+            
+            # Acciones predefinidas de MACRON
+            if routed.startswith('focus_') or routed.startswith('safari_') or routed.startswith('mail_') or routed.startswith('calendar_') or routed in ['screenshot', 'notify', 'history', 'export']:
+                result = _execute_predefined_action(core, routed, text)
+                result['original_text'] = text
+                history_entry['action'] = routed
+                history_entry['method'] = 'predefined'
+                _save_history(history_entry, history_file)
+                return jsonify(result)
+            
+            # Acciones AppleScript
+            scripts = {
+                'applescript_spotify': ('Abriendo Spotify', 'tell application "Spotify" to activate'),
+                'applescript_music': ('Abriendo Apple Music', 'tell application "Music" to activate'),
+                'applescript_terminal': ('Abriendo Terminal', 'tell application "Terminal" to activate'),
+                'applescript_calculator': ('Abriendo Calculadora', 'tell application "Calculator" to activate'),
+                'applescript_settings': ('Abriendo Configuración', 'tell application "System Settings" to activate'),
+                'applescript_notes': ('Abriendo Notas', 'tell application "Notes" to activate'),
+                'applescript_reminders': ('Abriendo Recordatorios', 'tell application "Reminders" to activate'),
+                'applescript_photos': ('Abriendo Fotos', 'tell application "Photos" to activate'),
+                'applescript_finder': ('Abriendo Finder', 'tell application "Finder" to activate'),
+                'applescript_preview': ('Abriendo Preview', 'tell application "Preview" to activate'),
+                'applescript_textedit': ('Abriendo TextEdit', 'tell application "TextEdit" to activate'),
+                'applescript_volume_up': ('Subiendo volumen', 'set volume output volume (output volume of (get volume settings) + 10)'),
+                'applescript_volume_down': ('Bajando volumen', 'set volume output volume (output volume of (get volume settings) - 10)'),
+                'applescript_mute': ('Silenciando', 'set volume with output muted'),
+                'applescript_brightness_up': ('Subiendo brillo', 'tell application "System Events" to key code 144'),
+                'applescript_brightness_down': ('Bajando brillo', 'tell application "System Events" to key code 145'),
+                'applescript_lock': ('Bloqueando pantalla', 'tell application "System Events" to keystroke "q" using {command down, control down}'),
+                'applescript_sleep': ('Suspendiendo', 'tell application "System Events" to sleep'),
+                'applescript_shutdown': ('Apagando...', 'tell application "System Events" to shut down'),
+                'applescript_restart': ('Reiniciando...', 'tell application "System Events" to restart'),
+                'applescript_desktop': ('Mostrando escritorio', 'tell application "System Events" to key code 103'),
+                'applescript_copy': ('Copiando', 'tell application "System Events" to keystroke "c" using command down'),
+                'applescript_paste': ('Pegando', 'tell application "System Events" to keystroke "v" using command down'),
+                'applescript_undo': ('Deshaciendo', 'tell application "System Events" to keystroke "z" using command down'),
+                'applescript_redo': ('Rehaciendo', 'tell application "System Events" to keystroke "z" using {command down, shift down}'),
+                'applescript_select_all': ('Seleccionando todo', 'tell application "System Events" to keystroke "a" using command down'),
+                'applescript_close_window': ('Cerrando ventana', 'tell application "System Events" to keystroke "w" using command down'),
+                'applescript_quit_app': ('Cerrando aplicación', 'tell application "System Events" to keystroke "q" using command down'),
+                'applescript_new_tab': ('Nueva pestaña', 'tell application "System Events" to keystroke "t" using command down'),
+                'applescript_new_window': ('Nueva ventana', 'tell application "System Events" to keystroke "n" using command down'),
+                'applescript_time': ('Consultando hora', 'return (current date) as string'),
+                'applescript_date': ('Consultando fecha', 'return (current date) as string'),
+                'applescript_battery': ('Consultando batería', 'return (do shell script "pmset -g batt")'),
+                'applescript_wifi': ('Consultando WiFi', 'return (do shell script "networksetup -getairportpower en0")'),
+                'applescript_bluetooth': ('Consultando Bluetooth', 'return (do shell script "system_profiler SPBluetoothDataType | grep Power")'),
+                'applescript_whatsapp': ('Abriendo WhatsApp', 'tell application "WhatsApp" to activate'),
+                'applescript_vscode': ('Abriendo VS Code', 'tell application "Visual Studio Code" to activate'),
+                'applescript_zoom': ('Abriendo Zoom', 'tell application "zoom.us" to activate'),
+                'applescript_teams': ('Abriendo Microsoft Teams', 'tell application "Microsoft Teams" to activate'),
+                'applescript_chrome': ('Abriendo Google Chrome', 'tell application "Google Chrome" to activate'),
+                'applescript_brave': ('Abriendo Brave', 'tell application "Brave Browser" to activate'),
+                'applescript_arc': ('Abriendo Arc', 'tell application "Arc" to activate'),
+                'applescript_notion': ('Abriendo Notion', 'tell application "Notion" to activate'),
+                'applescript_slack': ('Abriendo Slack', 'tell application "Slack" to activate'),
+                'applescript_discord': ('Abriendo Discord', 'tell application "Discord" to activate'),
+                'applescript_telegram': ('Abriendo Telegram', 'tell application "Telegram" to activate'),
+                'applescript_obsidian': ('Abriendo Obsidian', 'tell application "Obsidian" to activate'),
+            }
+            
+            if routed in scripts:
+                response, script = scripts[routed]
+                result = _execute_applescript(routed, script, response)
+                result['original_text'] = text
+                history_entry['action'] = routed
+                history_entry['method'] = 'applescript'
+                _save_history(history_entry, history_file)
+                return jsonify(result)
+            
+            # Comandos personalizados
+            if routed == 'custom_command' and isinstance(scripts, tuple) and scripts[0] == 'custom_command':
+                cmd = scripts[1]
+                result = _execute_applescript('custom_' + cmd['id'], cmd['applescript'], cmd['response'])
+                result['original_text'] = text
+                history_entry['action'] = 'custom_' + cmd['name']
+                history_entry['method'] = 'custom'
+                _save_history(history_entry, history_file)
+                return jsonify(result)
+        
+        # === FASE 2: Fallback al chat general ===
+        core = get_macron_core()
+        result = core.chat(text)
+        response = result.get('text', 'Entendido') if isinstance(result, dict) else str(result)
+        
+        history_entry['action'] = 'chat'
+        history_entry['method'] = 'chat'
+        _save_history(history_entry, history_file)
+        return jsonify({
+            'action': 'chat',
+            'params': {},
+            'response': response,
+            'result': result if isinstance(result, dict) else {'text': str(result)},
+            'original_text': text,
+            'method': 'chat'
+        })
+        result = _convert_result_to_strings(result)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 @app.route('/api/focus/toggle', methods=['POST'])
 def focus_toggle():
     try:
@@ -836,6 +1444,80 @@ def focus_toggle():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+
+
+@app.route('/api/memory', methods=['GET'])
+def get_memory():
+    return jsonify({
+        'memory': _conversation_memory,
+        'count': len(_conversation_memory)
+    })
+
+@app.route('/api/memory/clear', methods=['POST'])
+def clear_memory():
+    global _conversation_memory
+    _conversation_memory = []
+    try:
+        import os
+        mem_file = os.path.expanduser('~/Documents/MACRON/conversation_memory.json')
+        if os.path.exists(mem_file):
+            os.remove(mem_file)
+    except:
+        pass
+    return jsonify({'success': True})
+
+@app.route('/api/screen-sharing', methods=['GET'])
+def screen_sharing():
+    import subprocess
+    try:
+        result = subprocess.run(['pgrep', '-x', 'ZoomMeetings|ScreenSharing|ReplayKitAgent'], 
+                               capture_output=True, text=True, timeout=2)
+        is_sharing = len(result.stdout.strip()) > 0
+        return jsonify({'is_sharing': is_sharing})
+    except:
+        return jsonify({'is_sharing': False})
+
+@app.route('/api/custom-commands', methods=['GET', 'POST', 'DELETE'])
+def custom_commands():
+    import json, os
+    commands_file = os.path.expanduser('~/Documents/MACRON/custom_commands.json')
+    if request.method == 'GET':
+        try:
+            with open(commands_file, 'r') as f:
+                return jsonify({'commands': json.load(f)})
+        except:
+            return jsonify({'commands': []})
+    elif request.method == 'POST':
+        data = request.get_json() or {}
+        new_cmd = {
+            'id': __import__('datetime').datetime.now().isoformat(),
+            'name': data.get('name', ''),
+            'keywords': data.get('keywords', []),
+            'applescript': data.get('applescript', ''),
+            'response': data.get('response', 'Listo')
+        }
+        commands = []
+        if os.path.exists(commands_file):
+            with open(commands_file, 'r') as f:
+                commands = json.load(f)
+        commands.append(new_cmd)
+        with open(commands_file, 'w') as f:
+            json.dump(commands, f, indent=2, ensure_ascii=False)
+        return jsonify({'success': True, 'command': new_cmd})
+    elif request.method == 'DELETE':
+        cmd_id = request.args.get('id')
+        if not cmd_id:
+            return jsonify({'error': 'No id provided'}), 400
+        commands = []
+        if os.path.exists(commands_file):
+            with open(commands_file, 'r') as f:
+                commands = json.load(f)
+        commands = [c for c in commands if c.get('id') != cmd_id]
+        with open(commands_file, 'w') as f:
+            json.dump(commands, f, indent=2, ensure_ascii=False)
+        return jsonify({'success': True})
 
 @app.route('/api/history')
 def history_list():

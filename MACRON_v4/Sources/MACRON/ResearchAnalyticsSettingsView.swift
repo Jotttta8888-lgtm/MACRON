@@ -67,6 +67,7 @@ struct ResearchResultRow: View {
 struct AnalyticsView: View {
     @EnvironmentObject var api: MacronAPIClient
     @State private var analytics: AnalyticsResponse?
+    @State private var showHistory = false
     @State private var isLoading = false
     var body: some View {
         VStack(spacing: 0) {
@@ -110,11 +111,20 @@ struct AnalyticsView: View {
                                 }
                             }.padding().background(Color(.controlBackgroundColor)).cornerRadius(12).padding(.horizontal)
                         }
+                        Button(action: { showHistory = true }) {
+                            Label("Ver Historial de Voz", systemImage: "waveform")
+                                .font(.headline)
+                                .padding()
+                                .background(Color.orange.opacity(0.2))
+                                .cornerRadius(10)
+                        }
+                        .buttonStyle(.plain)
                         Spacer(minLength: 40)
                     }.padding(.vertical)
                 }
             } else { EmptyStateView(icon: "chart.bar", title: "Sin datos", subtitle: "No hay estadisticas disponibles") }
         }.background(Color(.windowBackgroundColor)).task { await loadAnalytics() }
+        .sheet(isPresented: $showHistory) { AnalyticsHistoryView() }
     }
     private func loadAnalytics() async {
         isLoading = true

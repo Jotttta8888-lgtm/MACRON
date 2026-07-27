@@ -2,6 +2,8 @@ import SwiftUI
 import Combine
 @MainActor
 class MacronAPIClient: ObservableObject {
+    @Published var cachedStatus: StatusResponse? = nil
+    @Published var isOffline = false
     static let shared = MacronAPIClient()
     private let baseURL = "http://localhost:5001"
     private var session: URLSession
@@ -41,6 +43,29 @@ class MacronAPIClient: ObservableObject {
         return try decoder.decode(T.self, from: data)
     }
     func checkHealth() async -> Bool {
+        let url = URL(string: baseURL + "/api/status")!
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let status = try JSONDecoder().decode(StatusResponse.self, from: data)
+            await MainActor.run {
+                self.status = status
+                self.cachedStatus = status
+                self.isOnline = true
+                self.isOffline = false
+            }
+            return true
+        } catch {
+            await MainActor.run {
+                self.isOnline = false
+                self.isOffline = true
+                if self.cachedStatus != nil {
+                    self.status = self.cachedStatus
+                }
+            }
+            return false
+        }
+    }
+    func oldCheckHealth() async -> Bool {
         do {
             let status: StatusResponse = try await request(path: "/api/status")
             self.status = status; self.isOnline = status.healthy ?? false; self.lastError = nil
@@ -49,6 +74,10 @@ class MacronAPIClient: ObservableObject {
     }
     func sendChat(message: String) async throws -> ChatResponse {
         try await request(path: "/api/chat", method: "POST", body: ["message": message, "session_id": "swiftui"])
+    }
+    
+    func sendVoiceAction(text: String) async throws -> VoiceActionResponse {
+        try await request(path: "/api/voice-action", method: "POST", body: ["text": text])
     }
     func getTodayEvents() async throws -> CalendarResponse { try await request(path: "/api/calendar/today") }
     func createEvent(title: String, startDate: String, endDate: String? = nil, notes: String = "") async throws -> CalendarResponse {
@@ -71,6 +100,13 @@ class MacronAPIClient: ObservableObject {
     }
     func getBookmarks() async throws -> SafariResponse { try await request(path: "/api/safari/bookmarks") }
     func getHistory(limit: Int = 50) async throws -> SafariResponse { try await request(path: "/api/safari/history?limit=\(limit)") }
+    
+    func getVoiceHistory() async throws -> [HistoryEntry] {
+        let url = URL(string: baseURL + "/api/history")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(HistoryResponse.self, from: data)
+        return response.history
+    }
     func getMailSummary() async throws -> MailResponse { try await request(path: "/api/mail/summary") }
     func getFocusStatus() async throws -> FocusResponse { try await request(path: "/api/focus/status") }
     func toggleFocus(mode: String) async throws -> FocusResponse { try await request(path: "/api/focus/toggle", method: "POST", body: ["mode": mode]) }
@@ -79,6 +115,11 @@ class MacronAPIClient: ObservableObject {
         try await request(path: "/api/research", method: "POST", body: ["query": query, "max_results": maxResults])
     }
 }
+struct HistoryResponse: Codable {
+    let history: [HistoryEntry]
+    let count: Int
+}
+
 enum MacronError: Error, LocalizedError {
     case invalidURL, invalidResponse, endpointNotFound, httpError(code: Int), decodingError, offline
     var errorDescription: String? {

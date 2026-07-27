@@ -1,0 +1,4 @@
+MACRON v4.0.0
+Build: 2026-07-27
+Platform: macOS Apple Silicon
+Status: RELEASE

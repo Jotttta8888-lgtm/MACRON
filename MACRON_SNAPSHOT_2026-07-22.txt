@@ -1,0 +1,54 @@
+=== MACRON SNAPSHOT COMPLETO - 2026-07-22 09:31 ===
+Estado: FUNCIONAL COMPLETO (Todos los TextFields arreglados)
+
+=== ARCHIVOS DEL PROYECTO SWIFT ===
+Ubicacion: ~/Documents/MACRON/MACRON_v4/
+
+Raiz:
+  Package.swift (268 bytes)
+
+Sources/MACRON/ (12 archivos .swift):
+  1. MACRONApp.swift - MODIFICADO: AppDelegate + sin MenuBarExtra
+  2. ContentView.swift - MODIFICADO: HStack en vez de NavigationSplitView
+  3. ChatView.swift - MODIFICADO: NativeTextField (AppKit) para teclado
+  4. CalendarView.swift - MODIFICADO: 2 NativeTextFields
+  5. NotesRemindersView.swift - MODIFICADO: 3 NativeTextFields
+  6. FinderSafariMailView.swift - MODIFICADO: 2 NativeTextFields
+  7. ResearchAnalyticsSettingsView.swift - MODIFICADO: 2 NativeTextFields
+  8. DashboardView.swift - Original
+  9. MacronAPIClient.swift - Original
+  10. MacronModels.swift - Original
+  11. Resources/Info.plist - Creado
+  12. FocusTextField.swift - CREADO: Componente reutilizable
+
+TOTAL TEXTFIELDS ARREGLADOS: 10 en 5 archivos
+
+=== CAMBIOS CLAVE DE ESTA SESION ===
+1. ChatView.swift: Reemplazado TextField SwiftUI por NativeTextField (NSTextField AppKit)
+2. ContentView.swift: Reemplazado NavigationSplitView por HStack simple
+3. MACRONApp.swift: Agregado AppDelegate con NSApp.activate()
+4. CalendarView.swift: 2 TextFields -> NativeTextField
+5. NotesRemindersView.swift: 3 TextFields -> NativeTextField
+6. FinderSafariMailView.swift: 2 TextFields -> NativeTextField
+7. ResearchAnalyticsSettingsView.swift: 2 TextFields -> NativeTextField
+8. FocusTextField.swift: Creado componente reutilizable
+
+=== COMANDOS PARA REINICIAR ===
+# 1. Backend (Terminal 1)
+cd ~/Documents/MACRON && source venv/bin/activate && python macron_ui_v3.py
+
+# 2. Proxy (Terminal 2)
+python ~/macron_proxy.py
+
+# 3. App
+open ~/Documents/MACRON/MACRON.app
+
+=== COMANDOS PARA RECOMPILAR ===
+cd ~/Documents/MACRON/MACRON_v4 && swift build
+cp .build/arm64-apple-macosx/debug/MACRON ~/Documents/MACRON/MACRON.app/Contents/MacOS/
+open ~/Documents/MACRON/MACRON.app
+
+=== PENDIENTES ===
+- [ ] Re-agregar MenuBarExtra (usando NSStatusBar manual)
+- [ ] Agregar reconocimiento de voz
+- [ ] Empaquetar .app firmada para distribucion

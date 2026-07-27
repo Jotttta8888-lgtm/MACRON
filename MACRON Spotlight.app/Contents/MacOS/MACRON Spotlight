@@ -1,0 +1,6 @@
+#!/bin/bash
+osascript <<'APPLESCRIPT'
+set userInput to text returned of (display dialog "MACRON:" default answer "" buttons {"Cancelar", "Ejecutar"} default button "Ejecutar" with title "MACRON Spotlight")
+set resultText to do shell script "cd ~/Documents/MACRON && ./macron-shortcut.sh " & quoted form of userInput
+display dialog resultText buttons {"OK"} default button "OK" with title "MACRON"
+APPLESCRIPT

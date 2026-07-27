@@ -1,16 +1,21 @@
 import SwiftUI
 import AppKit
+import AppIntents
+import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        DispatchQueue.main.async {
-            NSApp.activate(ignoringOtherApps: true)
-        }
+        // SOLO hotkey global. NADA de activate automatico.
+        HotkeyService.shared.startMonitoring()
+        MenuBarService.shared.setup()
+        // Todo lo demas desactivado para evitar robos de foco:
+        // NotificationService, CrashRecovery, SleepWake, ScreenSharing, WakeWord
     }
     func applicationDidBecomeActive(_ notification: Notification) {
-        DispatchQueue.main.async {
-            NSApp.keyWindow?.makeKey()
-        }
+        // VACIO - Nunca forzar ventana al frente
+    }
+    func applicationWillTerminate(_ notification: Notification) {
+        HotkeyService.shared.stopMonitoring()
     }
 }
 
@@ -18,28 +23,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct MACRONApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var api = MacronAPIClient.shared
-
+    @StateObject private var themeManager = ThemeManager()
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+    @State private var showSearch = false
+    @State private var showShortcuts = false
+    @State private var showSplash = true
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(api)
-                .frame(minWidth: 1100, minHeight: 750)
+            ZStack {
+                ContentView()
+                    .environmentObject(api)
+                    .environmentObject(themeManager)
+                if showSplash {
+                    SplashScreenOverlay()
+                        .transition(.opacity)
+                        .zIndex(100)
+                }
+            }
+            .sheet(isPresented: $showOnboarding) { OnboardingView(isPresented: $showOnboarding) }
+            .sheet(isPresented: $showSearch) { GlobalSearchView(isPresented: $showSearch) }
+            .sheet(isPresented: $showShortcuts) { KeyboardShortcutsHelpView(isPresented: $showShortcuts) }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    withAnimation(.easeOut(duration: 0.5)) { showSplash = false }
+                }
+            }
+            .frame(minWidth: 1100, minHeight: 750)
         }
-        .windowStyle(.automatic)
-        .commands { MacronCommands() }
-    }
-}
-
-struct MacronCommands: Commands {
-    var body: some Commands {
-        CommandMenu("MACRON") {
-            Button("Iniciar Backend") {
-                NSWorkspace.shared.open(URL(fileURLWithPath: NSHomeDirectory() + "/Documents/MACRON/start_macron.sh"))
-            }.keyboardShortcut("r", modifiers: .command)
-            Divider()
-            Button("Preferencias...") {
-                NotificationCenter.default.post(name: .showSettings, object: nil)
-            }.keyboardShortcut(",", modifiers: .command)
+        .commands {
+            CommandMenu("MACRON") {
+                Button("Buscar (Cmd+K)") { showSearch.toggle() }
+                    .keyboardShortcut("k", modifiers: .command)
+                Button("Atajos (Cmd+/)") { showShortcuts.toggle() }
+                    .keyboardShortcut("/", modifiers: .command)
+            }
         }
     }
 }
@@ -49,4 +67,9 @@ extension Notification.Name {
     static let showChat = Notification.Name("showChat")
     static let showDashboard = Notification.Name("showDashboard")
     static let showCalendar = Notification.Name("showCalendar")
+    static let wakeWordDetected = Notification.Name("wakeWordDetected")
+    static let showVoiceAction = Notification.Name("showVoiceAction")
+    static let toggleTheme = Notification.Name("toggleTheme")
+    static let deepLinkReceived = Notification.Name("deepLinkReceived")
+    static let quickActionReceived = Notification.Name("quickActionReceived")
 }

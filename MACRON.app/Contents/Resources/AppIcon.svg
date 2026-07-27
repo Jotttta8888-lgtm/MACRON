@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A84FF"/>
+      <stop offset="100%" stop-color="#0066CC"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5AC8FA"/>
+      <stop offset="100%" stop-color="#0A84FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Background rounded rect -->
+  <rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+  <!-- Inner glow circle -->
+  <circle cx="512" cy="512" r="380" fill="none" stroke="url(#glow)" stroke-width="20" opacity="0.5"/>
+  <!-- Brain/AI shape -->
+  <path d="M512 280 C380 280 280 380 280 512 C280 644 380 744 512 744 C644 744 744 644 744 512 C744 380 644 280 512 280 Z" fill="none" stroke="white" stroke-width="45" stroke-linecap="round"/>
+  <!-- Neural connections -->
+  <circle cx="512" cy="400" r="50" fill="white"/>
+  <circle cx="400" cy="512" r="50" fill="white"/>
+  <circle cx="624" cy="512" r="50" fill="white"/>
+  <circle cx="512" cy="624" r="50" fill="white"/>
+  <!-- Center core -->
+  <circle cx="512" cy="512" r="80" fill="white"/>
+  <circle cx="512" cy="512" r="40" fill="#0A84FF"/>
+</svg>

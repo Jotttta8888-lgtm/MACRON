@@ -1,23 +1,12 @@
-# Binarios y builds
-MACRON.app/Contents/MacOS/MACRON
-*.backup.*
+*.pyc
+__pycache__/
+venv/
+.env
 .DS_Store
 *.log
-MACRON_Xcode_Project/
-MACRON_v4/.build/
+logs/
 build/
 dist/
-__pycache__/
-*.pyc
-venv/
-
-# Bases de datos y logs locales
-*.db
-*.db-journal
-macron.log
-
-# Snapshots antiguos
-MACRON_SNAPSHOT_*.txt
-
-# macOS
-.DS_Store
+*.dmg
+*.zip
+.build/
