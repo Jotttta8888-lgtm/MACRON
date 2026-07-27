@@ -1,5 +1,5 @@
 MACRON v4.0.0
 Build: 2026-07-27
-Features: 47
+Features: 52
 Platform: macOS Apple Silicon (Mac NEO)
 Status: RELEASE FINAL

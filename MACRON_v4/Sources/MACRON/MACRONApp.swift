@@ -10,6 +10,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         MenuBarService.shared.setup()
         WritingToolsService.shared.setup()
         ClipboardHistoryService.shared.startMonitoring()
+        SystemMonitorService.shared.startMonitoring()
+        MeetingAssistantService.shared.startMonitoring()
         VoicePipelineService.shared.setup()
         FocusModeService.shared.startMonitoring()
         PluginSystem.shared.scanPlugins()
