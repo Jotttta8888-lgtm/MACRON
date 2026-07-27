@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACRON - Agente IA Local para macOS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            line-height: 1.6;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(ellipse at top, #1a1a3e 0%, #0a0a1a 70%);
+        }
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        .tagline {
+            font-size: 1.3rem;
+            color: #a0a0c0;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+        .cta {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+        .features {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.08);
+        }
+        .card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .card p {
+            color: #a0a0c0;
+            font-size: 0.95rem;
+        }
+        .stats {
+            background: rgba(255,255,255,0.03);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .stat h3 {
+            font-size: 3rem;
+            color: #667eea;
+        }
+        .stat p {
+            color: #a0a0c0;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="logo">🧠</div>
+        <h1>MACRON</h1>
+        <p class="tagline">El agente de inteligencia artificial 100% local para tu Mac. 52 features, cero nube, total privacidad.</p>
+        <a href="https://github.com/Jotttta8888-lgtm/MACRON/releases" class="cta">Descargar para macOS</a>
+    </section>
+
+    <section class="features">
+        <h2>52 Features que transforman tu Mac</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="icon">🧠</div>
+                <h3>IA Local</h3>
+                <p>Ejecuta modelos LLM directamente en el Neural Engine de tu Apple Silicon. Sin internet, sin filtraciones de datos.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🎙️</div>
+                <h3>Voz Offline</h3>
+                <p>Reconocimiento de voz 100% nativo y offline. Dicta comandos en espanol sin depender de servidores externos.</p>
+            </div>
+            <div class="card">
+                <div class="icon">👁️</div>
+                <h3>Vision / OCR</h3>
+                <p>Extrae texto de cualquier imagen o captura de pantalla con el framework Vision de Apple.</p>
+            </div>
+            <div class="card">
+                <div class="icon">☁️</div>
+                <h3>iCloud Sync</h3>
+                <p>Tu historial y preferencias sincronizados entre todos tus dispositivos Apple automaticamente.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🔌</div>
+                <h3>Plugin System</h3>
+                <p>Extiende MACRON con scripts Python, Swift, AppleScript o Shell. Infinitamente personalizable.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🔐</div>
+                <h3>Biometric Auth</h3>
+                <p>Touch ID y Face ID integrados. Tu agente IA reconoce solo a ti.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <h3>52</h3>
+                <p>Features</p>
+            </div>
+            <div class="stat">
+                <h3>0</h3>
+                <p>Dependencias de nube</p>
+            </div>
+            <div class="stat">
+                <h3>1.4GB</h3>
+                <p>Peso optimizado</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>MACRON v4.0.0 - Hecho con ❤️ para macOS Apple Silicon</p>
+        <p><a href="https://github.com/Jotttta8888-lgtm/MACRON" style="color:#667eea">GitHub</a></p>
+    </footer>
+</body>
+</html>
