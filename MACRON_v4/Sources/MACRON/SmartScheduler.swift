@@ -8,12 +8,28 @@ public final class SmartScheduler: @unchecked Sendable {
     private init() {}
     
     public func requestAccess(completion: @escaping (Bool) -> Void) {
-        eventStore.requestAccess(to: .event) { granted, _ in DispatchQueue.main.async { completion(granted) } }
+        if #available(macOS 14.0, *) {
+            eventStore.requestFullAccessToEvents { granted, _ in DispatchQueue.main.async { completion(granted) } }
+        } else {
+            eventStore.requestAccess(to: .event) { granted, _ in DispatchQueue.main.async { completion(granted) } }
+        }
     }
     
     public func scheduleMeeting(title: String, attendees: [String], date: Date, duration: TimeInterval = 3600) -> String {
-        guard EKEventStore.authorizationStatus(for: .event) == .authorized else {
-            return "❌ Sin permiso para Calendar. Ve a Preferencias del Sistema > Seguridad > Calendarios."
+        let authStatus: EKAuthorizationStatus
+        if #available(macOS 14.0, *) {
+            authStatus = EKEventStore.authorizationStatus(for: .event)
+        } else {
+            authStatus = EKEventStore.authorizationStatus(for: .event)
+        }
+        if #available(macOS 14.0, *) {
+            guard authStatus == .fullAccess else {
+                return "❌ Sin permiso para Calendar. Ve a Preferencias del Sistema > Seguridad > Calendarios."
+            }
+        } else {
+            guard authStatus == .authorized else {
+                return "❌ Sin permiso para Calendar. Ve a Preferencias del Sistema > Seguridad > Calendarios."
+            }
         }
         guard let calendar = eventStore.defaultCalendarForNewEvents else { return "❌ No hay calendario predeterminado." }
         let event = EKEvent(eventStore: eventStore)
@@ -36,7 +52,17 @@ public final class SmartScheduler: @unchecked Sendable {
     }
     
     public func findFreeSlots(duration: TimeInterval = 3600) -> [Date] {
-        guard EKEventStore.authorizationStatus(for: .event) == .authorized else { return [] }
+        let authStatus: EKAuthorizationStatus
+        if #available(macOS 14.0, *) {
+            authStatus = EKEventStore.authorizationStatus(for: .event)
+        } else {
+            authStatus = EKEventStore.authorizationStatus(for: .event)
+        }
+        if #available(macOS 14.0, *) {
+            guard authStatus == .fullAccess else { return [] }
+        } else {
+            guard authStatus == .authorized else { return [] }
+        }
         let now = Date()
         let tomorrow = now.addingTimeInterval(86400)
         let predicate = eventStore.predicateForEvents(withStart: now, end: tomorrow, calendars: nil)

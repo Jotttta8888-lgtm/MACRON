@@ -59,7 +59,7 @@ class SpeechService: ObservableObject {
                         self.transcript = result.bestTranscription.formattedString
                     }
                 }
-                if let error = error {
+                if error != nil {
                     Task { @MainActor in
                         self.lastError = "Error reconocimiento: \\(error.localizedDescription)"
                         self.stopRecording()

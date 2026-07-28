@@ -2,32 +2,33 @@ import Foundation
 import AppKit
 import Vision
 import CoreGraphics
+import ScreenCaptureKit
 
 public final class ScreenCaptureAI: @unchecked Sendable {
     public static let shared = ScreenCaptureAI()
     private init() {}
     
     public func captureAndRead() async -> String {
-        guard let screen = NSScreen.main else { return "❌ No se detecto pantalla." }
-        let frame = screen.frame
-        guard let image = CGWindowListCreateImage(frame, .optionOnScreenOnly, kCGNullWindowID, .bestResolution) else { return "❌ No se pudo capturar la pantalla." }
+        let displayID = CGMainDisplayID()
+        guard let image = CGDisplayCreateImage(displayID) else { return "❌ No se pudo capturar la pantalla." }
         return await performOCR(on: image)
     }
     
     public func captureActiveWindow() async -> String {
         guard let frontApp = NSWorkspace.shared.frontmostApplication else { return "❌ No hay app activa." }
         let pid = frontApp.processIdentifier
-        guard let windowList = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as? [[String: Any]] else { return "❌ No se pudo listar ventanas." }
-        for window in windowList {
-            if let windowPID = window[kCGWindowOwnerPID as String] as? Int, windowPID == pid,
-               let bounds = window[kCGWindowBounds as String] as? [String: CGFloat],
-               let x = bounds["X"], let y = bounds["Y"], let w = bounds["Width"], let h = bounds["Height"] {
-                let frame = CGRect(x: x, y: y, width: w, height: h)
-                guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, window[kCGWindowNumber as String] as! CGWindowID, .bestResolution) else { continue }
-                return await performOCR(on: image)
+        do {
+            let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+            guard let window = content.windows.first(where: { $0.owningApplication?.processID == pid }) else {
+                return "❌ Ventana no encontrada. Capturando pantalla completa..."
             }
+            let filter = SCContentFilter(desktopIndependentWindow: window)
+            let config = SCStreamConfiguration()
+            let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+            return await performOCR(on: image)
+        } catch {
+            return "❌ Error ScreenCaptureKit: \(error.localizedDescription)"
         }
-        return "❌ No se pudo capturar la ventana activa."
     }
     
     private func performOCR(on image: CGImage) async -> String {
@@ -38,7 +39,7 @@ public final class ScreenCaptureAI: @unchecked Sendable {
         let handler = VNImageRequestHandler(cgImage: image, options: [:])
         do {
             try handler.perform([request])
-            guard let observations = request.results else { return "🔍 No se detecto texto en la pantalla." }
+            guard let observations = request.results else { return "🔍 No se detecto texto." }
             let text = observations.compactMap { $0.topCandidates(1).first?.string }.joined(separator: "\n")
             return text.isEmpty ? "🔍 No se detecto texto." : "📸 **Texto detectado:**\n\n\(text)"
         } catch { return "❌ Error OCR: \(error.localizedDescription)" }
@@ -52,8 +53,8 @@ public final class ScreenCaptureAI: @unchecked Sendable {
         let range = NSRange(text.startIndex..., in: text)
         let matches = regex?.matches(in: text, options: [], range: range) ?? []
         let prices = matches.compactMap { match -> String? in guard let r = Range(match.range, in: text) else { return nil }; return String(text[r]) }
-        if prices.isEmpty { return "💰 No detecte precios en la pantalla." }
-        return "💰 **Precios detectados:** \(prices.joined(separator: ", "))"
+        if prices.isEmpty { return "💰 No detecte precios." }
+        return "💰 **Precios:** \(prices.joined(separator: ", "))"
     }
     
     public func findContact() async -> String {
@@ -67,7 +68,7 @@ public final class ScreenCaptureAI: @unchecked Sendable {
             let matches = regex?.matches(in: text, options: [], range: NSRange(text.startIndex..., in: text)) ?? []
             results.append(contentsOf: matches.compactMap { m in Range(m.range, in: text).map { String(text[$0]) } })
         }
-        if results.isEmpty { return "📇 No detecte contactos en la pantalla." }
-        return "📇 **Contactos detectados:**\n" + results.joined(separator: "\n")
+        if results.isEmpty { return "📇 No detecte contactos." }
+        return "📇 **Contactos:**\n" + results.joined(separator: "\n")
     }
 }

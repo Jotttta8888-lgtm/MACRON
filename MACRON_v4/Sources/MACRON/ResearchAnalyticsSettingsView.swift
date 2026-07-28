@@ -1,5 +1,24 @@
 import AppKit
+
 import SwiftUI
+
+struct StatCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon).font(.title2).foregroundColor(color)
+            Text(value).font(.title.bold())
+            Text(title).font(.caption).foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.controlBackgroundColor)))
+    }
+}
+
 struct ResearchView: View {
     @EnvironmentObject var api: MacronAPIClient
     @State private var query = ""

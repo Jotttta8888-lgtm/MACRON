@@ -7,7 +7,7 @@ class OfflineTranslatorService {
     func translate(_ text: String, to target: String = "en") -> String {
         let tagger = NLTagger(tagSchemes: [.language])
         tagger.string = text
-        let lang = tagger.tag(at: text.startIndex, unit: .paragraph, scheme: .language).0?.rawValue ?? "es"
+        _ = tagger.tag(at: text.startIndex, unit: .paragraph, scheme: .language).0?.rawValue ?? "es"
         
         let script = """
         tell application "Shortcuts Events"

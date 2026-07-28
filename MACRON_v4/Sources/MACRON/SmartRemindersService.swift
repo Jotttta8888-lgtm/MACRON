@@ -6,13 +6,29 @@ class SmartRemindersService {
     private let eventStore = EKEventStore()
     
     func requestAccess(completion: @escaping (Bool) -> Void) {
-        eventStore.requestAccess(to: .reminder) { granted, _ in
-            DispatchQueue.main.async { completion(granted) }
+        if #available(macOS 14.0, *) {
+            eventStore.requestFullAccessToReminders { granted, _ in
+                DispatchQueue.main.async { completion(granted) }
+            }
+        } else {
+            eventStore.requestAccess(to: .reminder) { granted, _ in
+                DispatchQueue.main.async { completion(granted) }
+            }
         }
     }
     
     func createReminder(title: String, notes: String = "", dueDate: Date? = nil) -> Bool {
-        guard EKEventStore.authorizationStatus(for: .reminder) == .authorized else { return false }
+        let status: EKAuthorizationStatus
+        if #available(macOS 14.0, *) {
+            status = EKEventStore.authorizationStatus(for: .reminder)
+        } else {
+            status = EKEventStore.authorizationStatus(for: .reminder)
+        }
+        if #available(macOS 14.0, *) {
+            guard status == .fullAccess else { return false }
+        } else {
+            guard status == .authorized else { return false }
+        }
         let reminder = EKReminder(eventStore: eventStore)
         reminder.title = title
         reminder.notes = notes

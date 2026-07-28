@@ -39,7 +39,7 @@ public final class MACRONBrain: @unchecked Sendable {
         } else {
             response = await generateLLMResponse(enriched)
             if let d = orchestrator.parseLLMDecision(response) {
-                let res = await orchestrator.execute(toolName: d.toolName, arguments: d.args)
+                let res = orchestrator.execute(toolName: d.toolName, arguments: d.args)
                 response = await generateLLMResponse("El usuario pregunto: \(text)\nEjecutaste '\(d.toolName)' y obtuviste: \(res)\nResponde al usuario.")
             }
         }
@@ -48,7 +48,7 @@ public final class MACRONBrain: @unchecked Sendable {
     }
     private func generateLLMResponse(_ prompt: String) async -> String {
         let tools = orchestrator.toolDescriptions()
-        let _full = "\(tools)\n\nSi necesitas herramienta, responde UNICAMENTE con JSON:\n```json\n{\"tool\": \"nombre\", \"args\": {\"param\": \"valor\"}}\n```\n\n\(prompt)"
+        _ = "\(tools)\n\nSi necesitas herramienta, responde UNICAMENTE con JSON:\n```json\n{\"tool\": \"nombre\", \"args\": {\"param\": \"valor\"}}\n```\n\n\(prompt)"
         // Reemplazar por: return await LLMService.shared.generate(prompt: full)
         if prompt.lowercased().contains("abre") || prompt.lowercased().contains("abrir") {
             if prompt.lowercased().contains("safari") { return "```json\n{\"tool\": \"open_app\", \"args\": {\"app_name\": \"Safari\"}}\n```" }

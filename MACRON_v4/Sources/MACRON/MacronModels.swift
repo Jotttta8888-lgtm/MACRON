@@ -67,7 +67,7 @@ struct FinderResponse: Codable {
     let error: String?
 }
 struct FinderItem: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let name: String?
     let path: String?
     let type: String?
@@ -90,13 +90,13 @@ struct SafariResponse: Codable {
     let error: String?
 }
 struct Bookmark: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let title: String?
     let url: String?
     let folder: String?
 }
 struct HistoryItem: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let title: String?
     let url: String?
     let visitCount: Int?
@@ -110,7 +110,7 @@ struct MailResponse: Codable {
     let error: String?
 }
 struct MailMessage: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let subject: String?
     let sender: String?
     let preview: String?
@@ -136,7 +136,7 @@ struct AnalyticsStats: Codable {
     let dailyUsage: [DailyUsage]?
 }
 struct DailyUsage: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let date: String?
     let count: Int?
 }
@@ -147,7 +147,7 @@ struct ResearchResponse: Codable {
     let error: String?
 }
 struct ResearchResult: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let title: String?
     let url: String?
     let snippet: String?

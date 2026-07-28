@@ -34,24 +34,24 @@ class MusicController: ObservableObject {
     
     func playPause() {
         if playerApp == "Spotify" {
-            runScript("tell application \"Spotify\" to playpause")
+            _ = runScript("tell application \"Spotify\" to playpause")
         } else if playerApp == "Apple Music" {
-            runScript("tell application \"Music\" to playpause")
+            _ = runScript("tell application \"Music\" to playpause")
         }
         updateStatus()
     }
     
     func nextTrack() {
         if playerApp == "Spotify" {
-            runScript("tell application \"Spotify\" to next track")
+            _ = runScript("tell application \"Spotify\" to next track")
         } else if playerApp == "Apple Music" {
-            runScript("tell application \"Music\" to next track")
+            _ = runScript("tell application \"Music\" to next track")
         }
         updateStatus()
     }
     
     func createPlaylist(name: String) {
-        runScript("tell application \"Music\" to make new playlist with properties {name:\"" + name + "\"}")
+        _ = runScript("tell application \"Music\" to make new playlist with properties {name:\"" + name + "\"}")
         NotificationService.shared.send(title: "MACRON Music", body: "Playlist creada: " + name)
     }
 }

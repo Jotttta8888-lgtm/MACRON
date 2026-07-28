@@ -9,7 +9,7 @@ class ClipboardHistoryService: ObservableObject {
     private let maxItems = 50
     
     struct ClipboardItem: Identifiable, Codable {
-        let id = UUID()
+        var id = UUID()
         let text: String
         let timestamp: Date
     }

@@ -7,7 +7,7 @@ class FinanceTracker: ObservableObject {
     private let dbPath = NSHomeDirectory() + "/Documents/MACRON/finance_db.json"
     
     struct Transaction: Codable {
-        let id = UUID()
+        var id = UUID()
         let description: String
         let amount: Double
         let category: String

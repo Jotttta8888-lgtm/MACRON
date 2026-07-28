@@ -6,8 +6,8 @@ struct DetailView: View {
     var body: some View {
         Group {
             switch selectedTab {
-            case 0: DashboardView()
-            case 1: ChatView()
+            case 0: DashboardView(brainState: BrainState())
+            case 1: ChatView(brainState: BrainState())
             case 2: CalendarView()
             case 3: NotesView()
             case 4: RemindersView()
@@ -18,7 +18,7 @@ struct DetailView: View {
             case 9: ResearchView()
             case 10: AnalyticsView()
             case 11: CustomCommandsView()
-            default: DashboardView()
+            default: DashboardView(brainState: BrainState())
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

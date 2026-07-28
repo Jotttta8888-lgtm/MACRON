@@ -4,7 +4,7 @@ class ScreenRecorderService {
     static let shared = ScreenRecorderService()
     
     func startRecording(to path: String? = nil) -> String {
-        let output = path ?? (NSHomeDirectory() + "/Desktop/MACRON_recording_\(Int(Date().timeIntervalSince1970)).mov")
+        _ = path ?? (NSHomeDirectory() + "/Desktop/MACRON_recording_\(Int(Date().timeIntervalSince1970)).mov")
         let script = """
         tell application "QuickTime Player"
             start (new screen recording)

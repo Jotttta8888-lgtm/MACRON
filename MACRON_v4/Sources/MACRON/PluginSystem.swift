@@ -1,7 +1,7 @@
 import Foundation
 
 struct Plugin: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let name: String
     let description: String
     let type: PluginType

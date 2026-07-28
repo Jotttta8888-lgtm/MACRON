@@ -31,7 +31,7 @@ struct DictationTextField: View {
             }
             .buttonStyle(.plain)
         }
-        .onChange(of: speechService.transcript) { newValue in
+        .onChange(of: speechService.transcript) { _, newValue in
             if isDictating && !newValue.isEmpty {
                 text = newValue
             }

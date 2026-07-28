@@ -10,7 +10,7 @@ class WeatherAdvisor: ObservableObject {
         var errorInfo: NSDictionary?
         guard let appleScript = NSAppleScript(source: script) else { return }
         let result = appleScript.executeAndReturnError(&errorInfo)
-        if let error = errorInfo {
+        if errorInfo != nil {
             if let fallback = shell("curl -s wttr.in/?format=%C+%t") {
                 currentWeather = fallback
                 outfitAdvice = generateAdvice(fallback)

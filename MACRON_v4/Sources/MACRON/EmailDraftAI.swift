@@ -13,8 +13,8 @@ public final class EmailDraftAI: @unchecked Sendable {
     
     public func draftEmail(to: String, about: String, tone: String = "formal") -> String {
         guard let template = templates[tone.lowercased()] else { return "❌ Tono '\(tone)' no disponible. Opciones: formal, informal, seguimiento, agradecimiento." }
-        var body = template.body.replacingOccurrences(of: "[nombre]", with: to).replacingOccurrences(of: "[contenido]", with: about).replacingOccurrences(of: "[remitente]", with: NSFullUserName())
-        var subject = template.subject.replacingOccurrences(of: "[tema]", with: String(about.prefix(30)))
+        let body = template.body.replacingOccurrences(of: "[nombre]", with: to).replacingOccurrences(of: "[contenido]", with: about).replacingOccurrences(of: "[remitente]", with: NSFullUserName())
+        let subject = template.subject.replacingOccurrences(of: "[tema]", with: String(about.prefix(30)))
         let encodedSubject = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let encodedBody = String(body.prefix(500)).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let mailto = "mailto:\(to)?subject=\(encodedSubject)&body=\(encodedBody)"

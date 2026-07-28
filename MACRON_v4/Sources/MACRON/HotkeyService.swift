@@ -39,7 +39,7 @@ class HotkeyService {
             &eventHandlerRef
         )
         
-        var gHotKeyID = EventHotKeyID(signature: FourCharCode(0x4D43524E), id: 1)
+        let gHotKeyID = EventHotKeyID(signature: FourCharCode(0x4D43524E), id: 1)
         RegisterEventHotKey(
             UInt32(kVK_ANSI_M),
             UInt32(cmdKey | shiftKey),

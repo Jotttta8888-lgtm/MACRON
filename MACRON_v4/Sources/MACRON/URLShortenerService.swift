@@ -34,7 +34,7 @@ class URLShortenerService: ObservableObject {
     }
     
     func generateQR(for item: ShortenedURL) {
-        QRCodeGeneratorService.shared.saveQR(
+        _ = QRCodeGeneratorService.shared.saveQR(
             QRCodeGeneratorService.shared.generateQR(text: item.short) ?? NSImage(),
             filename: "qr_" + String(item.id.uuidString.prefix(8))
         )

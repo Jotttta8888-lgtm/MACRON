@@ -29,7 +29,7 @@ class AIVisionService {
     func recognizeTextFromScreen(completion: @escaping (String) -> Void) {
         guard let screen = NSScreen.main else { completion("No se encontro pantalla"); return }
         let rect = screen.frame
-        guard let cgImage = CGWindowListCreateImage(rect, .optionOnScreenOnly, kCGNullWindowID, .bestResolution) else {
+        guard let cgImage = CGDisplayCreateImage(CGMainDisplayID()) else {
             completion("No se pudo capturar pantalla")
             return
         }
