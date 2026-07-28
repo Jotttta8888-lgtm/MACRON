@@ -19,6 +19,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         MusicRecognitionService.shared.load()
         CountdownTimerService.shared.load()
         FormFillerService.shared.load()
+        URLShortenerService.shared.load()
+        SystemBenchmarkService.shared.load()
+        TemplateManagerService.shared.load()
+        WebClipperService.shared.load()
+        FocusSessionsService.shared.load()
         // SOLO hotkey global. NADA de activate automatico.
         HotkeyService.shared.startMonitoring()
         MenuBarService.shared.setup()
