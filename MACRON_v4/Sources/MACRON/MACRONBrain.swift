@@ -48,15 +48,19 @@ public final class MACRONBrain: @unchecked Sendable {
     }
     private func generateLLMResponse(_ prompt: String) async -> String {
         let tools = orchestrator.toolDescriptions()
-        _ = "\(tools)\n\nSi necesitas herramienta, responde UNICAMENTE con JSON:\n```json\n{\"tool\": \"nombre\", \"args\": {\"param\": \"valor\"}}\n```\n\n\(prompt)"
-        // Reemplazar por: return await LLMService.shared.generate(prompt: full)
-        if prompt.lowercased().contains("abre") || prompt.lowercased().contains("abrir") {
-            if prompt.lowercased().contains("safari") { return "```json\n{\"tool\": \"open_app\", \"args\": {\"app_name\": \"Safari\"}}\n```" }
+        let systemPrompt = "Eres MACRON, un asistente AI local para macOS. Tienes acceso a estas herramientas:\n" + tools + "\n\nSi necesitas usar una herramienta, responde UNICAMENTE con JSON:\n```json\n{\"tool\": \"nombre\", \"args\": {\"param\": \"valor\"}}\n```\n\nSi no necesitas herramienta, responde directamente al usuario."
+        let response = await LLMConnector.shared.generate(prompt: prompt, systemPrompt: systemPrompt)
+        if response.hasPrefix("Error") || response.hasPrefix("URL invalida") {
+            // Fallback: si Ollama no responde, usar logica local
+            if prompt.lowercased().contains("abre") || prompt.lowercased().contains("abrir") {
+                if prompt.lowercased().contains("safari") { return "```json\n{\"tool\": \"open_app\", \"args\": {\"app_name\": \"Safari\"}}\n```" }
+            }
+            if prompt.lowercased().contains("nota") || prompt.lowercased().contains("apunta") {
+                return "```json\n{\"tool\": \"write_note\", \"args\": {\"title\": \"Nota rapida\", \"content\": \"Contenido\"}}\n```"
+            }
+            return "Entendido. Procesado con contexto de " + contextEngine.currentContext.appName + ". Ollama no disponible. ¿En que mas puedo ayudarte?"
         }
-        if prompt.lowercased().contains("nota") || prompt.lowercased().contains("apunta") {
-            return "```json\n{\"tool\": \"write_note\", \"args\": {\"title\": \"Nota rapida\", \"content\": \"Contenido\"}}\n```"
-        }
-        return "Entendido. Procesado con contexto de \(contextEngine.currentContext.appName). ¿En que mas puedo ayudarte?"
+        return response
     }
     private func setupTranscriber() {
         transcriber.onTranscript = { [weak self] text, isFinal in
