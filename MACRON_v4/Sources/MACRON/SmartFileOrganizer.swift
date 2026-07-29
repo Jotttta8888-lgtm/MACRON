@@ -1,60 +1,109 @@
 import Foundation
 
-class SmartFileOrganizer {
-    static let shared = SmartFileOrganizer()
+public final class SmartFileOrganizer: @unchecked Sendable {
+    public static let shared = SmartFileOrganizer()
+    private init() {}
     
-    let categories: [String: [String]] = [
-        "Imagenes": ["jpg", "jpeg", "png", "gif", "heic", "webp", "svg"],
-        "Documentos": ["pdf", "doc", "docx", "txt", "rtf", "pages", "md"],
-        "HojasDeCalculo": ["xls", "xlsx", "csv", "numbers"],
-        "Presentaciones": ["ppt", "pptx", "key"],
-        "Videos": ["mp4", "mov", "avi", "mkv", "wmv"],
-        "Audio": ["mp3", "wav", "aac", "m4a", "flac"],
-        "Comprimidos": ["zip", "rar", "7z", "tar", "gz"],
-        "Apps": ["dmg", "pkg", "app"],
-        "Codigo": ["swift", "py", "js", "html", "css", "json", "xml"]
-    ]
+    public enum OrganizeRule: String, CaseIterable {
+        case byType = "Por tipo"
+        case byDate = "Por fecha"
+        case bySize = "Por tamano"
+        case cleanDuplicates = "Eliminar duplicados"
+        case cleanOld = "Limpiar archivos viejos"
+    }
     
-    func organizeDirectory(_ path: String) -> String {
-        let fm = FileManager.default
-        guard let files = try? fm.contentsOfDirectory(atPath: path) else { return "Error leyendo directorio" }
+    public func organizeDesktop() -> String {
+        return organizeDirectory(path: NSHomeDirectory() + "/Desktop", rule: .byType)
+    }
+    
+    public func organizeDownloads() -> String {
+        return organizeDirectory(path: NSHomeDirectory() + "/Downloads", rule: .byDate)
+    }
+    
+    public func organizeDirectory(path: String, rule: OrganizeRule) -> String {
+        let url = URL(fileURLWithPath: path)
+        guard let files = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) else {
+            return "No se pudo acceder al directorio."
+        }
+        
         var moved = 0
+        var skipped = 0
+        
         for file in files {
-            let ext = (file as NSString).pathExtension.lowercased()
-            guard let category = categories.first(where: { $0.value.contains(ext) })?.key else { continue }
-            let categoryPath = path + "/" + category
-            try? fm.createDirectory(atPath: categoryPath, withIntermediateDirectories: true)
-            let source = path + "/" + file
-            let dest = categoryPath + "/" + file
-            try? fm.moveItem(atPath: source, toPath: dest)
-            moved += 1
+            let name = file.lastPathComponent
+            if name.hasPrefix(".") || name == "MACRON" { skipped += 1; continue }
+            
+            let destFolder: String
+            switch rule {
+            case .byType:
+                destFolder = folderForType(file.pathExtension)
+            case .byDate:
+                let attrs = try? FileManager.default.attributesOfItem(atPath: file.path)
+                let date = attrs?[.creationDate] as? Date ?? Date()
+                let fmt = DateFormatter()
+                fmt.dateFormat = "yyyy-MM"
+                destFolder = fmt.string(from: date)
+            case .bySize:
+                let attrs = try? FileManager.default.attributesOfItem(atPath: file.path)
+                let size = (attrs?[.size] as? NSNumber)?.intValue ?? 0
+                destFolder = size > 10_000_000 ? "Grandes" : "Pequenos"
+            case .cleanDuplicates:
+                continue
+            case .cleanOld:
+                continue
+            }
+            
+            let destDir = url.appendingPathComponent(destFolder)
+            try? FileManager.default.createDirectory(at: destDir, withIntermediateDirectories: true)
+            let dest = destDir.appendingPathComponent(name)
+            
+            do {
+                try FileManager.default.moveItem(at: file, to: dest)
+                moved += 1
+            } catch {
+                skipped += 1
+            }
         }
-        return "Organizados: \(moved) archivos"
+        
+        return "Organizacion completada: " + String(moved) + " archivos movidos, " + String(skipped) + " omitidos."
     }
     
-    func findDuplicates(in path: String) -> [[String]] {
-        let fm = FileManager.default
-        guard let files = try? fm.contentsOfDirectory(atPath: path) else { return [] }
-        var hashes: [String: [String]] = [:]
-        for file in files {
-            let fullPath = path + "/" + file
-            guard let data = fm.contents(atPath: fullPath) else { continue }
-            let hash = data.base64EncodedString().prefix(16)
-            hashes[String(hash), default: []].append(file)
+    public func cleanOldFiles(days: Int = 30) -> String {
+        let downloads = URL(fileURLWithPath: NSHomeDirectory() + "/Downloads")
+        guard let files = try? FileManager.default.contentsOfDirectory(at: downloads, includingPropertiesForKeys: [.creationDateKey]) else {
+            return "Error accediendo a Downloads."
         }
-        return hashes.values.filter { $0.count > 1 }
+        
+        let cutoff = Date().addingTimeInterval(TimeInterval(-days * 86400))
+        var deleted = 0
+        
+        for file in files {
+            let attrs = try? FileManager.default.attributesOfItem(atPath: file.path)
+            let date = attrs?[.creationDate] as? Date ?? Date()
+            if date < cutoff {
+                try? FileManager.default.removeItem(at: file)
+                deleted += 1
+            }
+        }
+        
+        return String(deleted) + " archivos antiguos eliminados de Downloads."
     }
     
-    func findLargeFiles(in path: String, minMB: Int = 100) -> [String] {
-        let fm = FileManager.default
-        guard let files = try? fm.contentsOfDirectory(atPath: path) else { return [] }
-        var large: [String] = []
-        for file in files {
-            let fullPath = path + "/" + file
-            guard let attrs = try? fm.attributesOfItem(atPath: fullPath),
-                  let size = attrs[.size] as? Int64 else { continue }
-            if size > minMB * 1024 * 1024 { large.append(file) }
-        }
-        return large
+    private func folderForType(_ ext: String) -> String {
+        let images = ["jpg", "jpeg", "png", "gif", "webp", "heic"]
+        let docs = ["pdf", "doc", "docx", "txt", "md", "rtf"]
+        let videos = ["mp4", "mov", "avi", "mkv"]
+        let audio = ["mp3", "m4a", "wav", "aac"]
+        let archives = ["zip", "rar", "7z", "tar", "gz"]
+        let code = ["swift", "py", "js", "html", "css", "json", "xml"]
+        
+        let lower = ext.lowercased()
+        if images.contains(lower) { return "Imagenes" }
+        if docs.contains(lower) { return "Documentos" }
+        if videos.contains(lower) { return "Videos" }
+        if audio.contains(lower) { return "Audio" }
+        if archives.contains(lower) { return "Archivos" }
+        if code.contains(lower) { return "Codigo" }
+        return "Otros"
     }
 }
