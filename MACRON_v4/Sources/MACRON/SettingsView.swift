@@ -33,7 +33,7 @@ struct MACRONSettingsView: View {
                 HStack {
                     Text("Version")
                     Spacer()
-                    Text("4.9.2 (168 features)")
+                    Text("4.9.3 (169 features)")
                         .foregroundColor(.secondary)
                 }
                 HStack {

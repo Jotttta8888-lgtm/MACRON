@@ -1,4 +1,5 @@
 import Foundation
+import EventKit
 import AppKit
 import Speech
 import UserNotifications
@@ -1306,6 +1307,15 @@ public final class MACRONBrain: @unchecked Sendable {
             task.arguments = ["-e", script]
             try? task.run()
             let msg = "Recordatorio creado: " + reminder
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Calendario real
+        if lower.contains("reunete") || lower.contains("reunion") || lower.contains("agenda") || lower.contains("crea evento") || lower.contains("programa") || lower.contains("nueva reunion") {
+            let title = CalendarService.shared.extractTitle(from: text)
+            let dateComponents = CalendarService.shared.parseNaturalDate(text: text)
+            let result = await CalendarService.shared.createEvent(title: title, dateComponents: dateComponents)
+            let msg = result
             onAIResponse?(msg); speak(msg); return msg
         }
 
