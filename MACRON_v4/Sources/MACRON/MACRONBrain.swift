@@ -150,6 +150,19 @@ public final class MACRONBrain: @unchecked Sendable {
             let msg = result
             onAIResponse?(msg); speak(msg); return msg
         }
+
+        // Screen OCR
+        if lower.contains("lee esta pantalla") || lower.contains("lea esta pantalla") || lower.contains("leer esta pantalla") || lower.contains("ocr") || lower.contains("reconoce texto") || lower.contains("extrae texto") || lower.contains("que dice aqui") || lower.contains("que dice ahi") {
+            let result = await ScreenOCRService.shared.captureAndRecognize()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("guarda captura") || lower.contains("screenshot ocr") || lower.contains("captura pantalla ocr") {
+            let result = await ScreenOCRService.shared.captureToFile()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
         
         // Limpiar downloads
         if lower.contains("limpia") && lower.contains("downloads") || lower.contains("descargas") {
