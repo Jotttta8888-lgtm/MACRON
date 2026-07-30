@@ -149,7 +149,16 @@ public final class MACRONBrain: @unchecked Sendable {
         // Diagnostico del sistema
         if lower.contains("diagnostico") || lower.contains("diagnostico del sistema") || (lower.contains("cuanto") && lower.contains("cpu")) || (lower.contains("cuanta") && lower.contains("ram")) || lower.contains("estado del sistema") {
             let health = SystemDiagnostics.shared.fullDiagnostic()
-            let msg = "Diagnostico del sistema:\nCPU: " + String(format: "%.1f", health.cpuUsage) + "%\nRAM: " + String(format: "%.1f", health.memoryUsage) + "%\nDisco: " + health.diskUsage + "\nProcesos activos: " + String(health.activeProcesses)
+            let cpuStr = String(format: "%.1f", health.cpuUsage)
+            let ramStr = String(format: "%.1f", health.memoryUsage)
+            let diskStr = String(format: "%.1f", health.diskUsage)
+            let topProc = health.topProcesses.first?.name ?? "N/A"
+            let line1 = "Diagnostico del sistema:"
+            let line2 = "CPU: " + cpuStr + "%"
+            let line3 = "RAM: " + ramStr + "%"
+            let line4 = "Disco: " + diskStr + "%"
+            let line5 = "Top proceso: " + topProc
+            let msg = line1 + "\n" + line2 + "\n" + line3 + "\n" + line4 + "\n" + line5
             onAIResponse?(msg); speak(msg); return msg
         }
         
