@@ -1275,6 +1275,95 @@ public final class MACRONBrain: @unchecked Sendable {
             }
         }
         
+        // Fase 10: Plugin Marketplace
+        if lower.contains("plugins") || lower.contains("marketplace") || lower.contains("instalar plugin") {
+            let result = await PluginService.shared.listPlugins()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("instalar plugin") {
+            let name = text.replacingOccurrences(of: "instalar plugin", with: "", options: .caseInsensitive).trimmingCharacters(in: .whitespaces)
+            let msg = await PluginService.shared.installPlugin(name: name.isEmpty ? "default" : name)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 11: HomeKit Hub
+        if lower.contains("apaga las luces") || lower.contains("enciende las luces") || lower.contains("luces") {
+            let state = lower.contains("apaga") ? "apagadas" : "encendidas"
+            let msg = await HomeKitService.shared.toggleLights(state: state)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("escena") || lower.contains("modo cine") || lower.contains("modo trabajo") {
+            let scene = lower.contains("cine") ? "Cine" : (lower.contains("trabajo") ? "Trabajo" : "Personalizada")
+            let msg = await HomeKitService.shared.setScene(name: scene)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("dispositivos homekit") || lower.contains("casa inteligente") {
+            let msg = await HomeKitService.shared.listDevices()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 12: Smart File Organizer
+        if lower.contains("organiza mi escritorio") || lower.contains("organizar escritorio") || lower.contains("limpiar escritorio") {
+            let msg = await FileOrganizerService.shared.organizeDesktop()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 13: Face ID / Biometricos
+        if lower.contains("desbloquear macron") || lower.contains("face id") || lower.contains("biometricos") {
+            let msg = await BiometricService.shared.unlock()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("verificar biometricos") {
+            let msg = await BiometricService.shared.authenticate()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 14: Multi-idioma
+        if lower.contains("traduce") || lower.contains("traducir") {
+            let text = text.replacingOccurrences(of: "traduce", with: "", options: .caseInsensitive).replacingOccurrences(of: "traducir", with: "", options: .caseInsensitive).trimmingCharacters(in: .whitespaces)
+            let msg = await TranslatorService.shared.translate(text: text.isEmpty ? "Hola mundo" : text, to: "Ingles")
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("detecta idioma") {
+            let msg = await TranslatorService.shared.detectLanguage(text: text)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 15: Backup Encriptado
+        if lower.contains("crear backup") || lower.contains("respaldar macron") || lower.contains("backup") {
+            let msg = await BackupService.shared.createBackup()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 16: Modo Focus
+        if lower.contains("modo focus") || lower.contains("no molestar") || lower.contains("concentracion") {
+            let msg = lower.contains("desactiva") ? await FocusService.shared.disableFocus() : await FocusService.shared.enableFocus()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 17: Clipboard Manager
+        if lower.contains("guardar portapapeles") || lower.contains("clipboard") || lower.contains("copiar esto") {
+            let msg = await ClipboardService.shared.saveClipboard()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("historial clipboard") || lower.contains("ver portapapeles") {
+            let msg = await ClipboardService.shared.showHistory()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+        // Fase 18: Smart Search
+        if lower.contains("busca archivo") || lower.contains("buscar archivo") || lower.contains("donde esta") {
+            let query = text.replacingOccurrences(of: "busca archivo", with: "", options: .caseInsensitive).replacingOccurrences(of: "buscar archivo", with: "", options: .caseInsensitive).replacingOccurrences(of: "donde esta", with: "", options: .caseInsensitive).trimmingCharacters(in: .whitespaces)
+            let msg = await SmartSearchService.shared.searchFiles(query: query.isEmpty ? "documento" : query)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("busca en internet") || lower.contains("buscar web") {
+            let query = text.replacingOccurrences(of: "busca en internet", with: "", options: .caseInsensitive).replacingOccurrences(of: "buscar web", with: "", options: .caseInsensitive).trimmingCharacters(in: .whitespaces)
+            let msg = await SmartSearchService.shared.searchWeb(query: query.isEmpty ? "macron ai" : query)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
         // Meeting Recorder (con fuzzy matching para typos)
         if lower.contains("graba") && (lower.contains("reunion") || lower.contains("reunon") || lower.contains("reunión")) {
             let result = await MeetingRecorderService.shared.startRecording()
