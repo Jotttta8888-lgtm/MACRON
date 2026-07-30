@@ -28,7 +28,7 @@ struct SidebarView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(brainState.isRunning ? .red : .green)
                 .controlSize(.small)
-                Text("v4.9.0 · 166 features").font(.caption2).foregroundColor(.secondary)
+                Text("v4.9.1 · 167 features").font(.caption2).foregroundColor(.secondary)
             }.padding()
         }
     }
