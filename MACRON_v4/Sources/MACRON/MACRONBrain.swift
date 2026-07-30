@@ -40,47 +40,74 @@ public final class MACRONBrain: @unchecked Sendable {
         // Abrir apps
         if lower.contains("abre") || lower.contains("abrir") {
             if lower.contains("safari") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Safari"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Safari"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Safari abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("terminal") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Terminal"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Terminal"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Terminal abierta."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("mail") || lower.contains("correo") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Mail"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Mail"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Mail abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("music") || lower.contains("musica") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Music"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Music"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Music abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("photos") || lower.contains("fotos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Photos"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Photos"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Photos abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("notes") || lower.contains("notas") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Notes abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("calendar") || lower.contains("calendario") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Calendar"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Calendar"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Calendar abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("calculadora") || lower.contains("calculator") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Calculator"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Calculator"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Calculadora abierta."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("chrome") || lower.contains("google chrome") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Google Chrome"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Google Chrome"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Chrome abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
@@ -109,7 +136,10 @@ public final class MACRONBrain: @unchecked Sendable {
         // Crear nota
         if lower.contains("nota") || lower.contains("apunta") || lower.contains("anota") || lower.contains("crea una nota") {
             let _ = orchestrator.execute(toolName: "write_note", arguments: ["title": "Nota rapida", "content": "Nota creada desde MACRON el " + DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .short)])
-            let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
+            let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
+            if res.contains("❌") || res.contains("no encontrada") {
+                onAIResponse?(res); speak(res); return res
+            }
             let msg = "Nota creada y Notes abierto."
             onAIResponse?(msg); speak(msg); return msg
         }
@@ -198,512 +228,818 @@ public final class MACRONBrain: @unchecked Sendable {
         // Más apps populares
         if lower.contains("abre") || lower.contains("abrir") {
             if lower.contains("spotify") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Spotify"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Spotify"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Spotify abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("vscode") || lower.contains("visual studio code") || lower.contains("code") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Visual Studio Code"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Visual Studio Code"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "VS Code abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("zoom") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "zoom.us"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "zoom.us"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Zoom abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("finder") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Finder"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Finder"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Finder abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("whatsapp") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "WhatsApp"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "WhatsApp"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "WhatsApp abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("telegram") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Telegram"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Telegram"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Telegram abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("discord") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Discord"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Discord"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Discord abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("slack") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Slack"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Slack"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Slack abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("obs") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "OBS Studio"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "OBS Studio"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "OBS abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("photoshop") || lower.contains("adobe photoshop") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe Photoshop 2026"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe Photoshop 2026"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Photoshop abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("premiere") || lower.contains("adobe premiere") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe Premiere Pro 2026"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe Premiere Pro 2026"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Premiere abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("after effects") || lower.contains("aftereffects") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe After Effects 2026"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe After Effects 2026"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "After Effects abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("illustrator") || lower.contains("adobe illustrator") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe Illustrator"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Adobe Illustrator"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Illustrator abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("figma") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Figma"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Figma"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Figma abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("blender") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Blender"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Blender"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Blender abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("chatgpt") || lower.contains("chat gpt") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "ChatGPT"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "ChatGPT"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "ChatGPT abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("claude") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Claude"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Claude"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Claude abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("perplexity") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Perplexity"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Perplexity"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Perplexity abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("notion") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notion"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notion"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Notion abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("arc") || lower.contains("arc browser") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Arc"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Arc"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Arc abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("brave") || lower.contains("brave browser") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Brave Browser"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Brave Browser"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Brave abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("firefox") || lower.contains("mozilla firefox") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Firefox"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Firefox"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Firefox abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("edge") || lower.contains("microsoft edge") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Edge"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Edge"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Edge abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("word") || lower.contains("microsoft word") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Word"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Word"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Word abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("excel") || lower.contains("microsoft excel") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Excel"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Excel"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Excel abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("powerpoint") || lower.contains("microsoft powerpoint") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft PowerPoint"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft PowerPoint"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "PowerPoint abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("teams") || lower.contains("microsoft teams") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Teams"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Teams"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Teams abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("outlook") || lower.contains("microsoft outlook") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Outlook"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft Outlook"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Outlook abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("onenote") || lower.contains("microsoft onenote") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft OneNote"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Microsoft OneNote"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "OneNote abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("todoist") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Todoist"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Todoist"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Todoist abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("things") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Things"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Things"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Things abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("omnifocus") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "OmniFocus"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "OmniFocus"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "OmniFocus abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("bear") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Bear"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Bear"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Bear abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("craft") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Craft"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Craft"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Craft abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("obsidian") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Obsidian"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Obsidian"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Obsidian abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("logseq") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Logseq"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Logseq"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Logseq abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("reminders") || lower.contains("recordatorios") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Reminders"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Reminders"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Recordatorios abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("contacts") || lower.contains("contactos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Contacts"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Contacts"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Contactos abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("messages") || lower.contains("mensajes") || lower.contains("imessage") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Messages"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Messages"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Mensajes abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("facetime") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "FaceTime"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "FaceTime"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "FaceTime abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("maps") || lower.contains("mapas") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Maps"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Maps"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Mapas abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("weather") || lower.contains("clima") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Weather"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Weather"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Clima abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("stocks") || lower.contains("bolsa") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Stocks"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Stocks"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Bolsa abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("home") || lower.contains("casa") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Home"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Home"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Home abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("shortcuts") || lower.contains("atajos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Shortcuts"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Shortcuts"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Atajos abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("automator") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Automator"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Automator"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Automator abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("script editor") || lower.contains("editor de scripts") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Script Editor"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Script Editor"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Editor de Scripts abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("console") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Console"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Console"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Console abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("activity monitor") || lower.contains("monitor de actividad") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Activity Monitor"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Activity Monitor"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Monitor de Actividad abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("disk utility") || lower.contains("utilidad de discos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Disk Utility"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Disk Utility"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Utilidad de Discos abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("system settings") || lower.contains("system preferences") || lower.contains("ajustes del sistema") || lower.contains("preferencias del sistema") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "System Settings"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "System Settings"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Ajustes del Sistema abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("app store") || lower.contains("tienda de apps") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "App Store"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "App Store"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "App Store abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("preview") || lower.contains("vista previa") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Preview"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Preview"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Vista Previa abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("quicktime") || lower.contains("quicktime player") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "QuickTime Player"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "QuickTime Player"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "QuickTime Player abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("garageband") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "GarageBand"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "GarageBand"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "GarageBand abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("logic pro") || lower.contains("logic pro x") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Logic Pro"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Logic Pro"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Logic Pro abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("final cut") || lower.contains("final cut pro") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Final Cut Pro"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Final Cut Pro"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Final Cut Pro abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("motion") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Motion"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Motion"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Motion abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("compressor") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Compressor"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Compressor"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Compressor abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("mainstage") || lower.contains("mainstage 3") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "MainStage 3"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "MainStage 3"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "MainStage abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("pages") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Pages"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Pages"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Pages abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("numbers") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Numbers"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Numbers"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Numbers abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("keynote") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Keynote"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Keynote"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Keynote abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("ibooks") || lower.contains("books") || lower.contains("libros") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Books"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Books"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Libros abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("podcasts") || lower.contains("podcast") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Podcasts"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Podcasts"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Podcasts abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("news") || lower.contains("noticias") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "News"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "News"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Noticias abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("tv") || lower.contains("apple tv") || lower.contains("television") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "TV"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "TV"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Apple TV abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("app store") || lower.contains("appstore") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "App Store"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "App Store"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "App Store abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("textedit") || lower.contains("text edit") || lower.contains("editor de texto") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "TextEdit"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "TextEdit"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "TextEdit abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("time machine") || lower.contains("maquina del tiempo") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Time Machine"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Time Machine"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Time Machine abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("migration assistant") || lower.contains("asistente de migracion") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Migration Assistant"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Migration Assistant"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Asistente de Migracion abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("boot camp") || lower.contains("bootcamp") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Boot Camp Assistant"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Boot Camp Assistant"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Boot Camp abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("colorSync") || lower.contains("colorsync utility") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "ColorSync Utility"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "ColorSync Utility"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "ColorSync Utility abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("grab") || lower.contains("captura") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Grab"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Grab"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Captura abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("stickies") || lower.contains("notas adhesivas") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Stickies"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Stickies"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Notas Adhesivas abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("chess") || lower.contains("ajedrez") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Chess"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Chess"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Ajedrez abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("game center") || lower.contains("centro de juegos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Game Center"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Game Center"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Game Center abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("dvd player") || lower.contains("reproductor dvd") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "DVD Player"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "DVD Player"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Reproductor DVD abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("voice memos") || lower.contains("notas de voz") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Voice Memos"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Voice Memos"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Notas de Voz abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("find my") || lower.contains("buscar") || lower.contains("encontrar") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Find My"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Find My"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Buscar abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("freeform") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Freeform"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Freeform"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Freeform abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("passkeys") || lower.contains("contrasenas") || lower.contains("passwords") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Passwords"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Passwords"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Contrasenas abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("image playground") || lower.contains("playground de imagen") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Image Playground"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Image Playground"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Image Playground abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("genmoji") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Genmoji"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Genmoji"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Genmoji abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("siri") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Siri"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Siri"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Siri abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("wallet") || lower.contains("cartera") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Wallet"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Wallet"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Cartera abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("health") || lower.contains("salud") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Health"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Health"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Salud abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("fitness") || lower.contains("ejercicio") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Fitness"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Fitness"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Ejercicio abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("translate") || lower.contains("traductor") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Translate"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Translate"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Traductor abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("measure") || lower.contains("medir") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Measure"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Measure"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Medir abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("magnifier") || lower.contains("lupa") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Magnifier"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Magnifier"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Lupa abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("shortcuts") || lower.contains("atajos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Shortcuts"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Shortcuts"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Atajos abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("tips") || lower.contains("consejos") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Tips"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Tips"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Consejos abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("feedback") || lower.contains("retroalimentacion") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Feedback Assistant"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Feedback Assistant"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Feedback Assistant abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("terminal") || lower.contains("terminal") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Terminal"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Terminal"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Terminal abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("console") || lower.contains("consola") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Console"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Console"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Consola abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("instruments") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Instruments"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Instruments"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Instruments abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("simulator") || lower.contains("simulador") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Simulator"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Simulator"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Simulador abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("reality composer") || lower.contains("realitycomposer") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Reality Composer"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Reality Composer"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Reality Composer abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("reality converter") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Reality Converter"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Reality Converter"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Reality Converter abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("create ml") || lower.contains("createml") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Create ML"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Create ML"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "Create ML abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
             if lower.contains("sf symbols") || lower.contains("sf symbols 6") {
-                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "SF Symbols 6"])
+                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "SF Symbols 6"])
+                if res.contains("❌") || res.contains("no encontrada") {
+                    onAIResponse?(res); speak(res); return res
+                }
                 let msg = "SF Symbols 6 abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }

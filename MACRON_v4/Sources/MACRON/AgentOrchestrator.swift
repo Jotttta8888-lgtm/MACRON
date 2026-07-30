@@ -85,24 +85,50 @@ public final class AgentOrchestrator: @unchecked Sendable {
             execute: { args in
                 guard let appName = args["app_name"] else { return "❌ Falta app_name" }
                 let ws = NSWorkspace.shared
-                // Buscar por bundle ID primero (si es formato com.apple.X)
+                
+                // 1. Buscar por bundle ID exacto
                 if appName.contains(".") {
                     if let url = ws.urlForApplication(withBundleIdentifier: appName) {
                         ws.open(url)
                         return "✅ App '\(appName)' abierta."
                     }
                 }
-                // Buscar por nombre de app
+                
+                // 2. Buscar por nombre con prefijo com.apple.
                 if let url = ws.urlForApplication(withBundleIdentifier: "com.apple." + appName) {
                     ws.open(url)
                     return "✅ App '\(appName)' abierta."
                 }
-                // Fallback: lanzar por nombre
-                let task = Process()
-                task.launchPath = "/usr/bin/open"
-                task.arguments = ["-a", appName]
-                try? task.run()
-                return "✅ App '\(appName)' abierta (via open -a)."
+                
+                // 3. Verificar si existe con mdfind antes de intentar abrir
+                let checkTask = Process()
+                checkTask.launchPath = "/usr/bin/mdfind"
+                checkTask.arguments = ["kMDItemDisplayName == '" + appName + "'"]
+                let checkPipe = Pipe()
+                checkTask.standardOutput = checkPipe
+                try? checkTask.run()
+                checkTask.waitUntilExit()
+                let found = String(data: checkPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                
+                if found.isEmpty {
+                    // Ultimo intento: open -a con captura de error
+                    let errPipe = Pipe()
+                    let task = Process()
+                    task.launchPath = "/usr/bin/open"
+                    task.arguments = ["-a", appName]
+                    task.standardError = errPipe
+                    try? task.run()
+                    task.waitUntilExit()
+                    let err = String(data: errPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                    if err.contains("Unable to find") || task.terminationStatus != 0 {
+                        return "❌ App '\(appName)' no encontrada en tu Mac. No esta instalada."
+                    }
+                    return "✅ App '\(appName)' abierta."
+                }
+                
+                // Si mdfind la encontro, abrirla
+                ws.open(URL(fileURLWithPath: found))
+                return "✅ App '\(appName)' abierta."
             }
         ))
         
