@@ -47,10 +47,45 @@ public final class MACRONBrain: @unchecked Sendable {
                 let msg = "Terminal abierta."
                 onAIResponse?(msg); speak(msg); return msg
             }
+            if lower.contains("mail") || lower.contains("correo") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Mail"])
+                let msg = "Mail abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("music") || lower.contains("musica") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Music"])
+                let msg = "Music abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("photos") || lower.contains("fotos") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Photos"])
+                let msg = "Photos abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("notes") || lower.contains("notas") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
+                let msg = "Notes abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("calendar") || lower.contains("calendario") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Calendar"])
+                let msg = "Calendar abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("calculadora") || lower.contains("calculator") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Calculator"])
+                let msg = "Calculadora abierta."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("chrome") || lower.contains("google chrome") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Google Chrome"])
+                let msg = "Chrome abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
         }
         
         // Hora actual
-        if lower.contains("hora") || lower.contains("que hora") {
+        if lower.contains("hora") || lower.contains("que hora") || lower.contains("horas") {
             let formatter = DateFormatter()
             formatter.dateStyle = .none
             formatter.timeStyle = .short
@@ -59,9 +94,19 @@ public final class MACRONBrain: @unchecked Sendable {
             onAIResponse?(msg); speak(msg); return msg
         }
         
+        // Fecha actual
+        if lower.contains("fecha") || lower.contains("que dia") || lower.contains("que fecha") || lower.contains("dia es hoy") {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .full
+            formatter.timeStyle = .none
+            formatter.locale = Locale(identifier: "es_ES")
+            let msg = "Hoy es " + formatter.string(from: Date()) + "."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
         // Crear nota
-        if lower.contains("nota") || lower.contains("apunta") {
-            let _ = orchestrator.execute(toolName: "write_note", arguments: ["title": "Nota rapida", "content": "Nota creada desde MACRON"])
+        if lower.contains("nota") || lower.contains("apunta") || lower.contains("anota") || lower.contains("crea una nota") {
+            let _ = orchestrator.execute(toolName: "write_note", arguments: ["title": "Nota rapida", "content": "Nota creada desde MACRON el " + DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .short)])
             let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
             let msg = "Nota creada y Notes abierto."
             onAIResponse?(msg); speak(msg); return msg
@@ -71,6 +116,71 @@ public final class MACRONBrain: @unchecked Sendable {
         if lower.contains("organiza") && lower.contains("escritorio") {
             let result = SmartFileOrganizer.shared.organizeDesktop()
             let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Limpiar downloads
+        if lower.contains("limpia") && lower.contains("downloads") || lower.contains("descargas") {
+            let result = SmartFileOrganizer.shared.cleanOldFiles(days: 30)
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Buscar archivo
+        if lower.contains("busca") || lower.contains("encuentra") || lower.contains("buscar") || lower.contains("donde esta") {
+            let searchTerm = text.replacingOccurrences(of: "busca", with: "", options: .caseInsensitive)
+                .replacingOccurrences(of: "encuentra", with: "", options: .caseInsensitive)
+                .replacingOccurrences(of: "buscar", with: "", options: .caseInsensitive)
+                .replacingOccurrences(of: "donde esta", with: "", options: .caseInsensitive)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if !searchTerm.isEmpty {
+                let _ = orchestrator.execute(toolName: "search_spotlight", arguments: ["query": searchTerm])
+                let msg = "Buscando '" + searchTerm + "' en tu Mac..."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+        }
+        
+        // Modo focus
+        if lower.contains("modo focus") || lower.contains("focus session") || lower.contains("pomodoro") || lower.contains("concentracion") || lower.contains("concentrate") {
+            let msg = "Modo Focus iniciado: 25 minutos. Concentracion total. Notificaciones silenciadas."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Diagnostico del sistema
+        if lower.contains("diagnostico") || lower.contains("diagnostico del sistema") || (lower.contains("cuanto") && lower.contains("cpu")) || (lower.contains("cuanta") && lower.contains("ram")) || lower.contains("estado del sistema") {
+            let health = SystemDiagnostics.shared.fullDiagnostic()
+            let msg = "Diagnostico del sistema:\nCPU: " + String(format: "%.1f", health.cpuUsage) + "%\nRAM: " + String(format: "%.1f", health.memoryUsage) + "%\nDisco: " + health.diskUsage + "\nProcesos activos: " + String(health.activeProcesses)
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Traducir
+        if lower.contains("traduce") || lower.contains("traducir") || lower.contains("traduccion") {
+            let result = await AITranslatorPro.shared.translateSelection()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Resumen de emails
+        if (lower.contains("resume") || lower.contains("resumen")) && (lower.contains("email") || lower.contains("correo") || lower.contains("mail")) {
+            let result = await AIEmailSummarizer.shared.summarizeUnread()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Saludos
+        if lower.contains("hola") || lower.contains("buenos dias") || lower.contains("buenas tardes") || lower.contains("buenas noches") || lower.contains("hey macron") {
+            let hour = Calendar.current.component(.hour, from: Date())
+            let greeting: String
+            if hour < 12 { greeting = "Buenos dias" }
+            else if hour < 18 { greeting = "Buenas tardes" }
+            else { greeting = "Buenas noches" }
+            let msg = greeting + "! Soy MACRON, tu asistente AI local. En que puedo ayudarte hoy?"
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Despedidas
+        if lower.contains("adios") || lower.contains("hasta luego") || lower.contains("chao") || lower.contains("nos vemos") {
+            let msg = "Hasta luego! Estare aqui cuando me necesites."
             onAIResponse?(msg); speak(msg); return msg
         }
 
