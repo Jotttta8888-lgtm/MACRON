@@ -907,18 +907,19 @@ public final class MACRONBrain: @unchecked Sendable {
                 .replacingOccurrences(of: "mas", with: "+")
                 .replacingOccurrences(of: "menos", with: "-")
                 .trimmingCharacters(in: .whitespacesAndNewlines)
+            let inputPipe = Pipe()
+            let outputPipe = Pipe()
             let task = Process()
             task.launchPath = "/usr/bin/bc"
-            let pipe = Pipe()
-            task.standardInput = Pipe()
-            task.standardOutput = pipe
+            task.standardInput = inputPipe
+            task.standardOutput = outputPipe
             try? task.run()
             if let inputData = (expression + "\n").data(using: .utf8) {
-                task.standardInput?.fileHandleForWriting.write(inputData)
-                task.standardInput?.fileHandleForWriting.closeFile()
+                inputPipe.fileHandleForWriting.write(inputData)
+                inputPipe.fileHandleForWriting.closeFile()
             }
             task.waitUntilExit()
-            if let result = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !result.isEmpty {
+            if let result = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !result.isEmpty {
                 let msg = "El resultado es " + result + "."
                 onAIResponse?(msg); speak(msg); return msg
             }
