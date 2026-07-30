@@ -55,15 +55,24 @@ public final class AgentOrchestrator: @unchecked Sendable {
     }
     
     public func parseLLMDecision(_ raw: String) -> (toolName: String, args: [String: String])? {
-        if let jsonStart = raw.range(of: "```json"),
-           let jsonEnd = raw.range(of: "```", range: jsonStart.upperBound..<raw.endIndex) {
-            let jsonStr = String(raw[jsonStart.upperBound..<jsonEnd.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
-            if let data = jsonStr.data(using: .utf8),
-               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let toolName = dict["tool"] as? String,
-               let args = dict["args"] as? [String: String] {
-                return (toolName, args)
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        var jsonStr = trimmed
+        
+        // Quitar bloques markdown si existen
+        if let jsonStart = trimmed.range(of: "```json") {
+            if let jsonEnd = trimmed.range(of: "```", range: jsonStart.upperBound..<trimmed.endIndex) {
+                jsonStr = String(trimmed[jsonStart.upperBound..<jsonEnd.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
             }
+        }
+        
+        // Verificar que sea JSON valido
+        guard jsonStr.hasPrefix("{"), jsonStr.hasSuffix("}") else { return nil }
+        
+        if let data = jsonStr.data(using: .utf8),
+           let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let toolName = dict["tool"] as? String,
+           let args = dict["args"] as? [String: String] {
+            return (toolName, args)
         }
         return nil
     }
@@ -76,11 +85,24 @@ public final class AgentOrchestrator: @unchecked Sendable {
             execute: { args in
                 guard let appName = args["app_name"] else { return "❌ Falta app_name" }
                 let ws = NSWorkspace.shared
-                if let url = ws.urlForApplication(withBundleIdentifier: appName) {
+                // Buscar por bundle ID primero (si es formato com.apple.X)
+                if appName.contains(".") {
+                    if let url = ws.urlForApplication(withBundleIdentifier: appName) {
+                        ws.open(url)
+                        return "✅ App '\(appName)' abierta."
+                    }
+                }
+                // Buscar por nombre de app
+                if let url = ws.urlForApplication(withBundleIdentifier: "com.apple." + appName) {
                     ws.open(url)
                     return "✅ App '\(appName)' abierta."
                 }
-                return "❌ App '\(appName)' no encontrada."
+                // Fallback: lanzar por nombre
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-a", appName]
+                try? task.run()
+                return "✅ App '\(appName)' abierta (via open -a)."
             }
         ))
         

@@ -32,6 +32,48 @@ public final class MACRONBrain: @unchecked Sendable {
     }
     public func processUserMessage(_ text: String, source: MessageSource = .text) async -> String {
         onUserTranscript?(text)
+        // Router local para comandos simples (mas rapido y preciso que LLM)
+        let lower = text.lowercased()
+        
+        // Abrir apps
+        if lower.contains("abre") || lower.contains("abrir") {
+            if lower.contains("safari") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Safari"])
+                let msg = "Safari abierto."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+            if lower.contains("terminal") {
+                let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Terminal"])
+                let msg = "Terminal abierta."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+        }
+        
+        // Hora actual
+        if lower.contains("hora") || lower.contains("que hora") {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .none
+            formatter.timeStyle = .short
+            formatter.locale = Locale(identifier: "es_ES")
+            let msg = "Son las " + formatter.string(from: Date()) + "."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Crear nota
+        if lower.contains("nota") || lower.contains("apunta") {
+            let _ = orchestrator.execute(toolName: "write_note", arguments: ["title": "Nota rapida", "content": "Nota creada desde MACRON"])
+            let _ = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Notes"])
+            let msg = "Nota creada y Notes abierto."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        
+        // Organizar escritorio
+        if lower.contains("organiza") && lower.contains("escritorio") {
+            let result = SmartFileOrganizer.shared.organizeDesktop()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
         let enriched = contextEngine.enrichPrompt(text)
         var response: String
         if useReasoning, needsReasoning(text) {
@@ -40,7 +82,11 @@ public final class MACRONBrain: @unchecked Sendable {
             response = await generateLLMResponse(enriched)
             if let d = orchestrator.parseLLMDecision(response) {
                 let res = orchestrator.execute(toolName: d.toolName, arguments: d.args)
-                response = await generateLLMResponse("El usuario pregunto: \(text)\nEjecutaste '\(d.toolName)' y obtuviste: \(res)\nResponde al usuario.")
+                let followUpSystem = "Eres MACRON. Responde SIEMPRE en espanol natural, corto y util. MAXIMO 2 frases. NO uses JSON. NO uses codigo."
+                response = await LLMConnector.shared.generate(
+                    prompt: "El usuario dijo: \"" + text + "\"\nEjecutaste la accion y obtuviste: " + res + "\nResponde al usuario en espanol natural.",
+                    systemPrompt: followUpSystem
+                )
             }
         }
         onAIResponse?(response); speak(response)
@@ -48,7 +94,7 @@ public final class MACRONBrain: @unchecked Sendable {
     }
     private func generateLLMResponse(_ prompt: String) async -> String {
         let tools = orchestrator.toolDescriptions()
-        let systemPrompt = "Eres MACRON, un asistente AI local para macOS. Tienes acceso a estas herramientas:\n" + tools + "\n\nSi necesitas usar una herramienta, responde UNICAMENTE con JSON:\n```json\n{\"tool\": \"nombre\", \"args\": {\"param\": \"valor\"}}\n```\n\nSi no necesitas herramienta, responde directamente al usuario."
+        let systemPrompt = "Eres MACRON, un asistente AI amigable para macOS. Tienes acceso a estas herramientas:\n" + tools + "\n\nINSTRUCCIONES CRITICAS:\n1. Si necesitas usar una herramienta, responde UNICAMENTE con JSON PLANO (sin markdown, sin texto extra):\n{\"tool\": \"nombre\", \"args\": {\"param\": \"valor\"}}\n2. Si NO necesitas herramienta, responde directamente al usuario en ESPANOL NATURAL y AMIGABLE.\n3. NUNCA mezcles JSON con texto explicativo."
         let response = await LLMConnector.shared.generate(prompt: prompt, systemPrompt: systemPrompt)
         if response.hasPrefix("Error") || response.hasPrefix("URL invalida") {
             // Fallback: si Ollama no responde, usar logica local
