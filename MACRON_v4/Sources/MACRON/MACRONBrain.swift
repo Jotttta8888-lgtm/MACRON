@@ -2,6 +2,7 @@ import Foundation
 import AppKit
 import Speech
 import UserNotifications
+import AVFoundation
 
 public final class MACRONBrain: @unchecked Sendable {
     public static let shared = MACRONBrain()
@@ -16,6 +17,7 @@ public final class MACRONBrain: @unchecked Sendable {
     public var onSystemMessage: ((String) -> Void)?
     public var onUserTranscript: ((String) -> Void)?
     public var onAIResponse: ((String) -> Void)?
+    private let synthesizer = AVSpeechSynthesizer()
     private init() { setupTranscriber(); setupNotifications() }
     public func boot() {
         guard !isRunning else { return }
@@ -241,7 +243,14 @@ public final class MACRONBrain: @unchecked Sendable {
         let triggers = ["compara","analiza","investiga","busca","encuentra","resumen","resume","explica paso a paso","por que","como funciona","planifica","organiza","decide","calcula","multi-paso"]
         return triggers.contains { text.lowercased().contains($0) }
     }
-    private func speak(_ text: String) { onSystemMessage?("🗣️ MACRON dice: \(text)") }
+    private func speak(_ text: String) {
+        onSystemMessage?("🗣️ MACRON dice: \(text)")
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: "es-ES")
+        utterance.rate = 0.5
+        utterance.pitchMultiplier = 1.0
+        synthesizer.speak(utterance)
+    }
     private func setupNotifications() {
         let focus = UNNotificationAction(identifier: "focus_start", title: "Iniciar Focus", options: [])
         let dismiss = UNNotificationAction(identifier: "dismiss", title: "Descartar", options: [])
