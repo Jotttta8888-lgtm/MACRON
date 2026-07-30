@@ -1275,6 +1275,39 @@ public final class MACRONBrain: @unchecked Sendable {
             }
         }
         
+
+        // Voice Clone — ORDEN IMPORTANTE: activar primero, luego entrenar
+        if lower.contains("activa voice clone") || lower.contains("usa mi voz") || lower.contains("modo voice clone") || lower.contains("activar voz clonada") {
+            if await VoiceCloneService.shared.isTrained {
+                let msg = "✅ Voice Clone activado. Ahora hablo con tu voz."
+                onAIResponse?(msg); speak(msg); return msg
+            } else {
+                let msg = "🎙️ Voice Clone no está entrenado. Escribe 'Entrena tu voz' primero."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+        }
+        if lower.contains("entrena tu voz") || lower.contains("entrenar tu voz") || lower.contains("entrenar voz") || lower.contains("clona mi voz") || lower.contains("clona tu voz") {
+            let status = await VoiceCloneService.shared.getTrainingStatus()
+            let msg = status + " Escribe 'Grabar muestra 1' para empezar."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("grabar muestra") || lower.contains("grabar sample") || lower.contains("grabar audio") || lower.contains("iniciar grabacion") {
+            let idx = lower.contains("2") ? 2 : (lower.contains("3") ? 3 : 1)
+            let result = await VoiceCloneService.shared.startRecording(sampleIndex: idx)
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("detener grabacion") || lower.contains("stop recording") || lower.contains("terminar muestra") || lower.contains("parar grabacion") || lower.contains("detener muestra") {
+            let result = await VoiceCloneService.shared.stopRecording()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("borra mi voz") || lower.contains("elimina voice clone") || lower.contains("reset voz") || lower.contains("borrar perfil de voz") {
+            await VoiceCloneService.shared.deleteVoiceProfile()
+            let msg = "🗑️ Perfil de voz eliminado. Puedes entrenar de nuevo con 'Entrena tu voz'."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
         // Calendario real
         if (lower.contains("reunete") || lower.contains("reunion") || lower.contains("agenda") || lower.contains("crea evento") || lower.contains("nueva reunion") || lower.contains("programa")) && (lower.contains("manana") || lower.contains("hoy") || lower.contains("proxima") || lower.contains("semana")) {
             let script = """
@@ -1307,6 +1340,39 @@ public final class MACRONBrain: @unchecked Sendable {
             task.arguments = ["-e", script]
             try? task.run()
             let msg = "Recordatorio creado: " + reminder
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+
+        // Voice Clone — ORDEN IMPORTANTE: activar primero, luego entrenar
+        if lower.contains("activa voice clone") || lower.contains("usa mi voz") || lower.contains("modo voice clone") || lower.contains("activar voz clonada") {
+            if await VoiceCloneService.shared.isTrained {
+                let msg = "✅ Voice Clone activado. Ahora hablo con tu voz."
+                onAIResponse?(msg); speak(msg); return msg
+            } else {
+                let msg = "🎙️ Voice Clone no está entrenado. Escribe 'Entrena tu voz' primero."
+                onAIResponse?(msg); speak(msg); return msg
+            }
+        }
+        if lower.contains("entrena tu voz") || lower.contains("entrenar tu voz") || lower.contains("entrenar voz") || lower.contains("clona mi voz") || lower.contains("clona tu voz") {
+            let status = await VoiceCloneService.shared.getTrainingStatus()
+            let msg = status + " Escribe 'Grabar muestra 1' para empezar."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("grabar muestra") || lower.contains("grabar sample") || lower.contains("grabar audio") || lower.contains("iniciar grabacion") {
+            let idx = lower.contains("2") ? 2 : (lower.contains("3") ? 3 : 1)
+            let result = await VoiceCloneService.shared.startRecording(sampleIndex: idx)
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("detener grabacion") || lower.contains("stop recording") || lower.contains("terminar muestra") || lower.contains("parar grabacion") || lower.contains("detener muestra") {
+            let result = await VoiceCloneService.shared.stopRecording()
+            let msg = result
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("borra mi voz") || lower.contains("elimina voice clone") || lower.contains("reset voz") || lower.contains("borrar perfil de voz") {
+            await VoiceCloneService.shared.deleteVoiceProfile()
+            let msg = "🗑️ Perfil de voz eliminado. Puedes entrenar de nuevo con 'Entrena tu voz'."
             onAIResponse?(msg); speak(msg); return msg
         }
 
