@@ -1,10 +1,18 @@
 import SwiftUI
+
 struct SidebarView: View {
     @Binding var selectedTab: Int
     @ObservedObject var brainState: BrainState
-    let items = [("Dashboard", "house.fill"), ("Chat", "bubble.left.fill"), ("Features", "square.grid.2x2.fill"), ("Tools", "wrench.fill"), ("Settings", "gear")]
+    let items = [
+        ("Dashboard", "house.fill"),
+        ("Chat", "bubble.left.fill"),
+        ("Features", "square.grid.2x2.fill"),
+        ("Tools", "wrench.fill"),
+        ("Settings", "gear")
+    ]
+
     var body: some View {
-        List(0..<items.count, id: \.self) { index in
+        List(0..<items.count, id: \ .self) { index in
             Button { selectedTab = index } label: {
                 HStack {
                     Image(systemName: items[index].1).frame(width: 24)
@@ -13,7 +21,8 @@ struct SidebarView: View {
                     if index == 0 && brainState.isRunning {
                         Circle().fill(Color.green).frame(width: 6, height: 6)
                     }
-                }.padding(.vertical, 4)
+                }
+                .padding(.vertical, 4)
             }
             .buttonStyle(.plain)
             .foregroundColor(selectedTab == index ? .accentColor : .primary)
@@ -28,8 +37,11 @@ struct SidebarView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(brainState.isRunning ? .red : .green)
                 .controlSize(.small)
-                Text("v5.0.0 · 180 features").font(.caption2).foregroundColor(.secondary)
-            }.padding()
+                Text(VersionManager.displayVersion)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
         }
     }
 }

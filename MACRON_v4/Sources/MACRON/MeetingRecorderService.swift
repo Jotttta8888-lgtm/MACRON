@@ -80,7 +80,7 @@ public actor MeetingRecorderService {
     
     private func createCalendarEvent(for audioURL: URL) {
         let status = EKEventStore.authorizationStatus(for: .event)
-        guard status == .fullAccess || status == .authorized else { return }
+        guard status == .fullAccess else { return }
         
         guard let calendar = eventStore.defaultCalendarForNewEvents else { return }
         

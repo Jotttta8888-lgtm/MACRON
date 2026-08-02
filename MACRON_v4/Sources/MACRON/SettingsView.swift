@@ -8,7 +8,7 @@ struct MACRONSettingsView: View {
     @AppStorage("macron_useProactive") private var useProactive = true
     @AppStorage("macron_darkMode") private var darkMode = true
     @AppStorage("macron_ttsRate") private var ttsRate: Double = 0.5
-    
+
     var body: some View {
         Form {
             Section("Brain") {
@@ -22,8 +22,9 @@ struct MACRONSettingsView: View {
             Section("Voz") {
                 TextField("Wake Word", text: $wakeWord)
                     .onChange(of: wakeWord) { _, newValue in MACRONBrain.shared.wakeWord = newValue }
+                let ttsPercent = Int(ttsRate * 100)
                 Slider(value: $ttsRate, in: 0.3...0.8, step: 0.05) {
-                    Text("Velocidad TTS: " + String(Int(ttsRate * 100)) + "%")
+                    Text("Velocidad TTS: \(ttsPercent)%")
                 }
             }
             Section("Apariencia") {
@@ -33,7 +34,7 @@ struct MACRONSettingsView: View {
                 HStack {
                     Text("Version")
                     Spacer()
-                    Text("5.0.0 (180 features)")
+                    Text(VersionManager.fullVersion)
                         .foregroundColor(.secondary)
                 }
                 HStack {

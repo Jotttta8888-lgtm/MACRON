@@ -19,7 +19,7 @@ public final class MACRONBrain: @unchecked Sendable {
     public var onUserTranscript: ((String) -> Void)?
     public var onAIResponse: ((String) -> Void)?
     private let synthesizer = AVSpeechSynthesizer()
-    private init() { setupTranscriber(); setupNotifications() }
+    private init() { setupTranscriber(); setupNotifications(); setupPlugins(); setupAutonomous() }
     public func boot() {
         guard !isRunning else { return }
         isRunning = true
@@ -35,8 +35,90 @@ public final class MACRONBrain: @unchecked Sendable {
     }
     public func processUserMessage(_ text: String, source: MessageSource = .text) async -> String {
         onUserTranscript?(text)
+        
+        // Registrar interaccion sincronamente (sin Task para evitar race condition)
+        await AutonomousEngine.shared.countInteraction(text: text)
+        
         // Router local para comandos simples (mas rapido y preciso que LLM)
         let lower = text.lowercased()
+        if lower.contains("estadisticas") || lower.contains("stats") || lower.contains("mi uso") {
+            let msg = await AutonomousEngine.shared.getStats()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("rutina") || lower.contains("rutinas") || lower.contains("habitos") {
+            let msg = await AutonomousEngine.shared.getSuggestedRoutine()
+            if msg.isEmpty {
+                onAIResponse?("📭 Aun no tengo rutinas aprendidas. Sigue usando MACRON y aprendere."); speak("Aun no tengo rutinas aprendidas"); return "Aun no tengo rutinas aprendidas"
+            }
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("modo autonomo") || lower.contains("activar autonomia") {
+            await AutonomousEngine.shared.resetSession()
+            await AutonomousEngine.shared.startThinking()
+            let msg = "🤖 Modo autonomo activado. Estoy aprendiendo de tus patrones."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("desactivar autonomia") || lower.contains("modo manual") {
+            await AutonomousEngine.shared.stopThinking()
+            let msg = "🛑 Modo autonomo desactivado. Solo respondere cuando me hables."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+
+        if lower.contains("dashboard") || lower.contains("estado") || lower.contains("status") {
+            let msg = await DashboardService.shared.getStatus()
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("plugins") || lower.contains("lista plugins") || lower.contains("mis plugins") {
+            let list = await PluginSystem.shared.list()
+            let msg = list.isEmpty ? "📭 Sin plugins" : "🔌 Plugins MACRON v5.2.0:\n" + list.joined(separator: "\n")
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
+
+        if lower.contains("bitcoin") || lower.contains("ethereum") || lower.contains("crypto") || lower.contains("precio") {
+            let msg = await PluginSystem.shared.execute(id: "crypto", input: text)
+            onAIResponse?(msg); speak(msg)
+            Task { [weak self] in
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                guard let self = self else { return }
+                if let proactive = await AutonomousEngine.shared.evaluateProactivityOnly() {
+                    await MainActor.run {
+                        self.onAIResponse?(proactive)
+                        self.speak(proactive)
+                    }
+                }
+            }
+            return msg
+        }
+
+
+        if lower.contains("weather") || lower.contains("clima") || lower.contains("tiempo") {
+            let city = text.replacingOccurrences(of: "clima de", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "clima en", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "clima", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "tiempo en", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "tiempo de", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "tiempo", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "weather in", with: "", options: .caseInsensitive)
+                             .replacingOccurrences(of: "weather", with: "", options: .caseInsensitive)
+                             .trimmingCharacters(in: .whitespacesAndNewlines)
+            let msg = await PluginSystem.shared.execute(id: "weather", input: city.isEmpty ? "Bogota" : city)
+            onAIResponse?(msg); speak(msg)
+            // Trigger proactivo con delay despues de la respuesta
+            Task { [weak self] in
+                try? await Task.sleep(nanoseconds: 3_000_000_000) // 3 segundos
+                guard let self = self else { return }
+                if let proactive = await AutonomousEngine.shared.evaluateProactivityOnly() {
+                    await MainActor.run {
+                        self.onAIResponse?(proactive)
+                        self.speak(proactive)
+                    }
+                }
+            }
+            return msg
+        }
+
         
         // Abrir apps
         if lower.contains("abre") || lower.contains("abrir") {
@@ -569,14 +651,7 @@ public final class MACRONBrain: @unchecked Sendable {
                 let msg = "Mapas abierto."
                 onAIResponse?(msg); speak(msg); return msg
             }
-            if lower.contains("weather") || lower.contains("clima") {
-                let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Weather"])
-                if res.contains("❌") || res.contains("no encontrada") {
-                    onAIResponse?(res); speak(res); return res
-                }
-                let msg = "Clima abierto."
-                onAIResponse?(msg); speak(msg); return msg
-            }
+
             if lower.contains("stocks") || lower.contains("bolsa") {
                 let res = orchestrator.execute(toolName: "open_app", arguments: ["app_name": "Stocks"])
                 if res.contains("❌") || res.contains("no encontrada") {
@@ -1409,6 +1484,26 @@ public final class MACRONBrain: @unchecked Sendable {
         }
         
         // Recordatorios
+        // Memoria / SecondBrain
+        if lower.contains("que recuerdas") || lower.contains("mi memoria") || lower.contains("contexto actual") {
+            let ctx = await MemoryService.shared.getContext()
+            let msg = ctx.isEmpty ? "🤔 No tengo memoria todavia. Habla conmigo para que aprenda." : "🧠 " + ctx
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("borra memoria") || lower.contains("olvida todo") || lower.contains("reset memoria") {
+            await MemoryService.shared.clear()
+            let msg = "🗑️ Memoria borrada. Empiezo de cero."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("modo autonomo") || lower.contains("piensa solo") || lower.contains("activa autonomo") {
+            let msg = "🧠 Modo autonomo ACTIVADO. Ahora recuerdo contexto entre conversaciones."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("desactiva autonomo") || lower.contains("modo manual") || lower.contains("para de pensar") {
+            let msg = "🧠 Modo autonomo DESACTIVADO. Espero tus comandos."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
         if lower.contains("recuerdame") || lower.contains("recordatorio") || lower.contains("recuerda") {
             let reminder = text
                 .replacingOccurrences(of: "recuerdame", with: "", options: .caseInsensitive)
@@ -1437,12 +1532,37 @@ public final class MACRONBrain: @unchecked Sendable {
             onAIResponse?(msg); speak(msg); return msg
         }
 
+        // Memoria / SecondBrain
+        if lower.contains("que recuerdas") || lower.contains("mi memoria") || lower.contains("contexto actual") {
+            let ctx = await MemoryService.shared.getContext()
+            let msg = ctx.isEmpty ? "🤔 No tengo memoria todavia. Habla conmigo para que aprenda." : "🧠 " + ctx
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("borra memoria") || lower.contains("olvida todo") || lower.contains("reset memoria") {
+            await MemoryService.shared.clear()
+            let msg = "🗑️ Memoria borrada. Empiezo de cero."
+            onAIResponse?(msg); speak(msg); return msg
+        }
+        if lower.contains("me llamo ") || lower.contains("trabajo en ") || lower.contains("soy ") || lower.contains("vivo en ") || lower.contains("me gusta ") {
+            Task { 
+                await SecondBrainService.shared.learnDirect(from: text)
+            }
+            let msg = "🧠 Hecho anotado. ¿Algo mas que quieras que recuerde?"
+            onAIResponse?(msg); speak(msg); return msg
+        }
+
         let enriched = contextEngine.enrichPrompt(text)
         var response: String
         if useReasoning, needsReasoning(text) {
             response = await reasoning.reason(about: enriched, llmGenerate: generateLLMResponse)
+            Task { 
+                await SecondBrainService.shared.learn(from: text, and: response)
+            }
         } else {
             response = await generateLLMResponse(enriched)
+            Task { 
+                await SecondBrainService.shared.learn(from: text, and: response)
+            }
             if let d = orchestrator.parseLLMDecision(response) {
                 let res = orchestrator.execute(toolName: d.toolName, arguments: d.args)
                 let followUpSystem = "Eres MACRON. Responde SIEMPRE en espanol natural, corto y util. MAXIMO 2 frases. NO uses JSON. NO uses codigo."
@@ -1471,6 +1591,22 @@ public final class MACRONBrain: @unchecked Sendable {
         }
         return response
     }
+        private func setupAutonomous() {
+        Task {
+            await AutonomousEngine.shared.startThinking()
+            print("🤖 Autonomia activada")
+        }
+
+    }
+    
+    public func getAutonomousStats() async -> String {
+        return await AutonomousEngine.shared.getStats()
+    }
+    
+    public func getRoutineSuggestion() async -> String {
+        return await AutonomousEngine.shared.getSuggestedRoutine()
+    }
+    
     private func setupTranscriber() {
         transcriber.onTranscript = { [weak self] text, isFinal in
             guard let self = self, isFinal else { return }
@@ -1493,6 +1629,23 @@ public final class MACRONBrain: @unchecked Sendable {
         utterance.pitchMultiplier = 1.0
         synthesizer.speak(utterance)
     }
+    
+    private func setupPlugins() {
+        Task {
+            await PluginSystem.shared.register(WeatherPlugin())
+            await PluginSystem.shared.register(CryptoPlugin())
+            await PluginSystem.shared.register(TranslatePlugin())
+            print("🔌 Plugins cargados")
+        }
+    }
+    
+    private func setupIntegrations() {
+        Task {
+            let health = await IntegrationHub.shared.healthCheck()
+            print("🏥 Health Check: \(health)")
+        }
+    }
+    
     private func setupNotifications() {
         let focus = UNNotificationAction(identifier: "focus_start", title: "Iniciar Focus", options: [])
         let dismiss = UNNotificationAction(identifier: "dismiss", title: "Descartar", options: [])
@@ -1500,3 +1653,6 @@ public final class MACRONBrain: @unchecked Sendable {
     }
     public enum MessageSource: Sendable { case voice, text, proactive, shortcut }
 }
+
+
+
