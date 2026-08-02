@@ -1621,7 +1621,7 @@ public final class MACRONBrain: @unchecked Sendable {
         let triggers = ["compara","analiza","investiga","busca","encuentra","resumen","resume","explica paso a paso","por que","como funciona","planifica","organiza","decide","calcula","multi-paso"]
         return triggers.contains { text.lowercased().contains($0) }
     }
-    private func speak(_ text: String) {
+    internal func speak(_ text: String) {
         onSystemMessage?("🗣️ MACRON dice: \(text)")
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: "es-ES")
